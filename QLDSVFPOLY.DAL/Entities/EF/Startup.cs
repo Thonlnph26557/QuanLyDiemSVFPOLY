@@ -14,7 +14,7 @@ namespace QLDSVFPOLY.DTO.Entities.EF
         {
             var optionsBuilder = new DbContextOptionsBuilder<QLSVDbContext>();
 
-            optionsBuilder.UseSqlServer(@"SERVER=FX580VN\SQLEXPRESS;DATABASE=QLSV_DB;Integrated Security=True;Encrypt=False;");
+            optionsBuilder.UseSqlServer(@"SERVER=FX580VN\SQLEXPRESS;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
 
             return new QLSVDbContext(optionsBuilder.Options);
             //Source=FX580VN\SQLEXPRESS;Persist Security Info=True;User ID=thaoph;Password=***********

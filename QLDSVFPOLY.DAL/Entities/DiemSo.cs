@@ -12,27 +12,21 @@ namespace QLDSVFPOLY.DTO.Entities
         {
         }
 
-        public DiemSo(Guid idChiTietLopHoc, Guid idSinhVien, string tenDiemSo, double trongSo, double diem, DateTime ngayTao, int trangThai)
+        public DiemSo(Guid id, double trongSo, double tenDiemSo, DateTime ngayTao, int trangThai)
         {
-            IdChiTietLopHoc = idChiTietLopHoc;
-            IdSinhVien = idSinhVien;
-            TenDiemSo = tenDiemSo;
+            Id = id;
             TrongSo = trongSo;
-            Diem = diem;
+            TenDiemSo = tenDiemSo;
             NgayTao = ngayTao;
             TrangThai = trangThai;
         }
 
-        public Guid IdChiTietLopHoc { get; set; }
-        public Guid IdSinhVien { get; set; }
-        public string TenDiemSo { get; set; }
+        public Guid Id { get; set; }
         public double TrongSo { get; set; }
-        public double Diem { get; set; }
+        public double TenDiemSo { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 
-
-        public SinhVien SinhVien { get; set; }
-        public ChiTietLopHoc ChiTietLopHoc { get; set; }
+        public List<ChiTietDiemSo> ChiTietDiemSos { get; set; }
     }
 }
