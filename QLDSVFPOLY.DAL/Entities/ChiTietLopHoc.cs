@@ -46,8 +46,6 @@ namespace QLDSVFPOLY.DTO.Entities
 
         public KiHoc KiHoc { get; set; }
 
-        public SinhVien SinhVien { get; set; }
-
-        public List<DiemSo> DiemSos { get; set; }
+        public List<ChiTietDiemSo> ChiTietDiemSos { get; set; }
     }
 }

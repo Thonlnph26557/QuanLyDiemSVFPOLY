@@ -14,14 +14,11 @@ namespace QLDSVFPOLY.DTO.Configurations
         public void Configure(EntityTypeBuilder<DiemSo> builder)
         {
             builder.ToTable("DiemSo");
-            builder.HasKey(x => new { x.IdSinhVien, x.IdChiTietLopHoc });
+            builder.HasKey(x => x.Id);
             builder.Property(x => x.TenDiemSo).IsUnicode(true).IsRequired().HasMaxLength(50);
             builder.Property(x => x.TrongSo).IsRequired();
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
-
-            builder.HasOne(sv => sv.SinhVien).WithMany(ds => ds.DiemSos).HasForeignKey(x => x.IdSinhVien).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(sv => sv.ChiTietLopHoc).WithMany(ds => ds.DiemSos).HasForeignKey(x => x.IdChiTietLopHoc).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

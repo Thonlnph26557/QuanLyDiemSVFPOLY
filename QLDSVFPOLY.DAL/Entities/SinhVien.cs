@@ -27,6 +27,6 @@ namespace QLDSVFPOLY.DTO.Entities
         public Guid IdChuyenNganh { get; set; }
 
         public ChuyenNganh ChuyenNganh { get; set; }
-        public List<DiemSo> DiemSos { get; set; }
+        public List<ChiTietDiemSo> ChiTietDiemSos { get; set; }
     }
 }
