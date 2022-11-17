@@ -21,14 +21,11 @@ namespace QLDSVFPOLY.DTO.Configurations
             builder.Property(x => x.DuongDanAnh).HasColumnType("varchar(max)").IsRequired();
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
-
-            builder.Property(x => x.IdChuyenNganh).IsRequired();
+            builder.Property(x => x.IdChuyenNganh).IsRequired(false);
 
             builder.HasOne(dt => dt.DaoTao).WithMany(cn => cn.ChuyenNganhs).HasForeignKey(cn => cn.IdDaoTao).OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(cn1 => cn1.ChuyenNganhDQ).WithMany(cn => cn.ChuyenNganhs).HasForeignKey(cn => cn.IdChuyenNganh).OnDelete(DeleteBehavior.NoAction);
-
-            //
         }
     }
 }

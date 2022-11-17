@@ -31,7 +31,6 @@ namespace QLDSVFPOLY.DTO.Configurations
             builder.Property(x => x.DuongDanAnh).HasColumnType("varchar(max)").IsRequired();
             builder.Property(x => x.IdChuyenNganh).IsRequired();
 
-
             builder.HasOne(dt => dt.ChuyenNganh).WithMany(sv => sv.SinhViens).HasForeignKey(cn => cn.IdChuyenNganh);
         }
     }

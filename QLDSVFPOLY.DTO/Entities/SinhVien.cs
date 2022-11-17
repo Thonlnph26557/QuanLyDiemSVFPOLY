@@ -8,6 +8,30 @@ namespace QLDSVFPOLY.DTO.Entities
 {
     public class SinhVien
     {
+        public SinhVien()
+        {
+        }
+
+        public SinhVien(Guid id, string ma, string ho, string tenDem, string ten, int gioiTinh, DateTime ngaySinh, string diaChi, string soDienThoai, string email, string tenDangNhap, string matKhau, string duongDanAnh, DateTime ngayTao, int trangThai, Guid idChuyenNganh)
+        {
+            Id = id;
+            Ma = ma;
+            Ho = ho;
+            TenDem = tenDem;
+            Ten = ten;
+            GioiTinh = gioiTinh;
+            NgaySinh = ngaySinh;
+            DiaChi = diaChi;
+            SoDienThoai = soDienThoai;
+            Email = email;
+            TenDangNhap = tenDangNhap;
+            MatKhau = matKhau;
+            DuongDanAnh = duongDanAnh;
+            NgayTao = ngayTao;
+            TrangThai = trangThai;
+            IdChuyenNganh = idChuyenNganh;
+        }
+
         public Guid Id { get; set; }
         public string Ma { get; set; }
         public string Ho { get; set; }
@@ -27,6 +51,6 @@ namespace QLDSVFPOLY.DTO.Entities
         public Guid IdChuyenNganh { get; set; }
 
         public ChuyenNganh ChuyenNganh { get; set; }
-        public List<DiemSo> DiemSos { get; set; }
+        public List<ChiTietDiemSo> ChiTietDiemSos { get; set; }
     }
 }

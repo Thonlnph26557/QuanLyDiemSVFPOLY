@@ -31,7 +31,7 @@ namespace QLDSVFPOLY.DTO.Entities
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 
-        public Guid IdChuyenNganh { get; set; }
+        public Guid? IdChuyenNganh { get; set; }
         public Guid IdDaoTao { get; set; }
 
         public DaoTao DaoTao { get; set; }
@@ -39,9 +39,8 @@ namespace QLDSVFPOLY.DTO.Entities
         public List<SinhVien> SinhViens { get; set; }
         public List<MonHoc> MonHocs { get; set; }
 
-        //de day de deej quy
+        //phần này sử dụng cho đệ quy
         public List<ChuyenNganh> ChuyenNganhs { get; set; }
         public ChuyenNganh ChuyenNganhDQ { get; set; }
-
     }
 }

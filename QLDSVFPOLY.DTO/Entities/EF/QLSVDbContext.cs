@@ -21,6 +21,7 @@ namespace QLDSVFPOLY.DTO.Entities.EF
             modelBuilder.ApplyConfiguration(new ChiTietLopHocConfigurations());
             modelBuilder.ApplyConfiguration(new LopHocConfigurations());
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
+            modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
         }
 
         //DbSet
@@ -28,18 +29,12 @@ namespace QLDSVFPOLY.DTO.Entities.EF
         public DbSet<MonHoc> MonHocs { get; set; }
         public DbSet<ChuyenNganh> ChuyenNganhs { get; set; }
         public DbSet<SinhVien> SinhViens { get; set; }
-
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    // Thực hiện các ràng buộc kết nối
-        //    base.OnConfiguring(optionsBuilder.
-        //        UseSqlServer(@"Data Source=FX580VN\SQLEXPRESS;Initial Catalog=DuAn;Persist Security Info=True;User ID=thaoph;Password=123"));
-        //}
+        public DbSet<GiangVien> GiangViens { get; set; }
+        public DbSet<LopHoc> LopHocs { get; set; }
+        public DbSet<KiHoc> KiHocs { get; set; }
+        public DbSet<DiemSo> DiemSos { get; set; }
+        public DbSet<ChiTietDiemSo> ChiTietDiemSos { get; set; }
+        public DbSet<ChiTietLopHoc> ChiTietLopHocs { get; set; }
     }
-
-
-
-
 }
 
