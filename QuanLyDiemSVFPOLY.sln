@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4F811A
 		changelog.txt = changelog.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLSVFPOLY.Utilities", "E.Utilities\QLSVFPOLY.Utilities.csproj", "{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{452AC2B4-4080-4939-8D86-7C3CFC058E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{452AC2B4-4080-4939-8D86-7C3CFC058E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{452AC2B4-4080-4939-8D86-7C3CFC058E87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,7 +49,6 @@ Global
 		{91F65CAB-6294-444F-AA70-FC3CE649B1DE} = {4F811A5E-0327-4872-B669-1AE9F856E263}
 		{E5132FEB-05A4-4C5C-985C-A3C6F691F701} = {4F811A5E-0327-4872-B669-1AE9F856E263}
 		{452AC2B4-4080-4939-8D86-7C3CFC058E87} = {4F811A5E-0327-4872-B669-1AE9F856E263}
-		{7CA16ADE-6F6D-4054-92BD-49DCD5EF6E60} = {4F811A5E-0327-4872-B669-1AE9F856E263}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {753C5964-FCFF-4659-B674-E17D35BCE7F4}
