@@ -9,32 +9,6 @@ namespace QLDSVFPOLY.DTO.Entities
 {
     public class GiangVien
     {
-
-        public GiangVien()
-        {
-
-        }
-
-        public GiangVien(Guid id, string ma, Guid idDaoTao, string ho, string tenDem, string ten, int gioiTinh, DateTime ngaySinh, string diaChi, string soDienThoai, string email, string tenDangNhap, string matKhau, string duongDanAnh, DateTime ngayTao, int trangThai)
-        {
-            Id = id;
-            Ma = ma;
-            IdDaoTao = idDaoTao;
-            Ho = ho;
-            TenDem = tenDem;
-            Ten = ten;
-            GioiTinh = gioiTinh;
-            NgaySinh = ngaySinh;
-            DiaChi = diaChi;
-            SoDienThoai = soDienThoai;
-            Email = email;
-            TenDangNhap = tenDangNhap;
-            MatKhau = matKhau;
-            DuongDanAnh = duongDanAnh;
-            NgayTao = ngayTao;
-            TrangThai = trangThai;
-        }
-
         public Guid Id { get; set; }
 
         public string Ma { get; set; }

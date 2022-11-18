@@ -1,0 +1,9 @@
+﻿Tôi sẽ viết thay đổi trong Project vào đây nếu có thể
+
+18_11: 
+	- Mẫu Repos > Service của DaoTao
+	- Thay đổi một số models: 
+		+ Xóa constructors
+		+ Diemso
+			* TenDiemSo > TenDauDiem
+		

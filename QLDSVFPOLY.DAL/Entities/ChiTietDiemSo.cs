@@ -8,20 +8,6 @@ namespace QLDSVFPOLY.DTO.Entities
 {
     public class ChiTietDiemSo
     {
-        public ChiTietDiemSo()
-        {
-        }
-
-        public ChiTietDiemSo(Guid idChiTietLopHoc, Guid idSinhVien, Guid idDiemSo, double diem, DateTime ngayTao, int trangThai)
-        {
-            IdChiTietLopHoc = idChiTietLopHoc;
-            IdSinhVien = idSinhVien;
-            IdDiemSo = idDiemSo;
-            Diem = diem;
-            NgayTao = ngayTao;
-            TrangThai = trangThai;
-        }
-
         public Guid IdChiTietLopHoc { get; set; }
         public Guid IdSinhVien { get; set; }
         public Guid IdDiemSo { get; set; }
