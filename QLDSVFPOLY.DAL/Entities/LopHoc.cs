@@ -8,21 +8,6 @@ namespace QLDSVFPOLY.DTO.Entities
 {
     public class LopHoc
     {
-
-        public LopHoc()
-        {
-
-        }
-
-        public LopHoc(Guid id, string ma, Guid idDaoTao, DateTime ngayTao, int trangThai)
-        {
-            Id = id;
-            Ma = ma;
-            IdDaoTao = idDaoTao;
-            NgayTao = ngayTao;
-            TrangThai = trangThai;
-
-        }
         public Guid Id { get; set; }
         public string Ma { get; set; }
         public Guid IdDaoTao { get; set; }

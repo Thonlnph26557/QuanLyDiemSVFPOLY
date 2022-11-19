@@ -10,8 +10,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QLDSVFPOLY.Blazor", "QLDSVFPOLY.Blazor\QLDSVFPOLY.Blazor.csproj", "{F6C3CB41-B031-429B-B576-B37D3F8E45D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QLDSVFPOLY.API", "QLDSVFPOLY.API\QLDSVFPOLY.API.csproj", "{452AC2B4-4080-4939-8D86-7C3CFC058E87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91F65CAB-6294-444F-AA70-FC3CE649B1DE} = {91F65CAB-6294-444F-AA70-FC3CE649B1DE}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4F811A5E-0327-4872-B669-1AE9F856E263}"
+	ProjectSection(SolutionItems) = preProject
+		changelog.txt = changelog.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

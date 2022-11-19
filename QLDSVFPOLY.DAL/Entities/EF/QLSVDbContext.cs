@@ -11,6 +11,10 @@ namespace QLDSVFPOLY.DTO.Entities.EF
         {
         }
 
+        public QLSVDbContext()
+        {
+        }
+
         //Config
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

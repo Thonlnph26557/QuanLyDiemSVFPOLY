@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.DTO.Entities
+//Đổi tên namespace đúng model
+namespace QLDSVFPOLY.BUS.ViewModels.DaoTao
 {
-    public class DaoTao
+    //> public
+    public class DaoTaoCreateVM
     {
         public Guid Id { get; set; }
         public string Ma { get; set; }
@@ -17,9 +19,5 @@ namespace QLDSVFPOLY.DTO.Entities
         public string MatKhau { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
-
-        public List<ChuyenNganh> ChuyenNganhs { get; set; }
-        public List<LopHoc> LopHocs { get; set; }
-        public List<GiangVien> GiangViens { get; set; }
     }
 }

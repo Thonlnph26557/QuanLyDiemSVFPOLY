@@ -8,22 +8,6 @@ namespace QLDSVFPOLY.DTO.Entities
 {
     public class ChuyenNganh
     {
-        public ChuyenNganh()
-        {
-        }
-
-        public ChuyenNganh(Guid id, string ma, string tenNganhHoc, string duongDanAnh, DateTime ngayTao, int trangThai, Guid idChuyenNganh, Guid idDaoTao)
-        {
-            Id = id;
-            Ma = ma;
-            TenNganhHoc = tenNganhHoc;
-            DuongDanAnh = duongDanAnh;
-            NgayTao = ngayTao;
-            TrangThai = trangThai;
-            IdChuyenNganh = idChuyenNganh;
-            IdDaoTao = idDaoTao;
-        }
-
         public Guid Id { get; set; }
         public string Ma { get; set; }
         public string TenNganhHoc { get; set; }
