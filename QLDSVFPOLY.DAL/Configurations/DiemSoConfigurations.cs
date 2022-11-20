@@ -15,7 +15,7 @@ namespace QLDSVFPOLY.DTO.Configurations
         {
             builder.ToTable("DiemSo");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.TenDiemSo).IsUnicode(true).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.TenDauDiem).IsUnicode(true).IsRequired().HasMaxLength(50);
             builder.Property(x => x.TrongSo).IsRequired();
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
