@@ -22,7 +22,7 @@ namespace QLDSVFPOLY.DTO.Configurations
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
 
-            builder.Property(x => x.IdChuyenNganh).IsRequired();
+            builder.Property(x => x.IdChuyenNganh);
 
             builder.HasOne(dt => dt.DaoTao).WithMany(cn => cn.ChuyenNganhs).HasForeignKey(cn => cn.IdDaoTao).OnDelete(DeleteBehavior.NoAction);
 

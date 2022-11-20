@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QLDSVFPOLY.DTO.Configurations;
+using QLDSVFPOLY.DTO.Extensions;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
@@ -28,6 +29,7 @@ namespace QLDSVFPOLY.DTO.Entities.EF
             modelBuilder.ApplyConfiguration(new LopHocConfigurations());
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
+            modelBuilder.SeedData();
         }
 
         //DbSet

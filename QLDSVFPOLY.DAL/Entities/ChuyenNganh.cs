@@ -15,7 +15,7 @@ namespace QLDSVFPOLY.DTO.Entities
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 
-        public Guid IdChuyenNganh { get; set; }
+        public Guid? IdChuyenNganh { get; set; }
         public Guid IdDaoTao { get; set; }
 
         public DaoTao DaoTao { get; set; }
