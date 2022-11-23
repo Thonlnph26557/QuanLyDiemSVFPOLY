@@ -24,6 +24,14 @@ namespace QLDSVFPOLY.API.Controllers
             return Ok(listChiTietLopHoc);
         }
 
+        
+        [HttpGet("allActive")]
+        public async Task<IActionResult> GetAllActiveKiHoc()
+        {
+            var listKiHoc = await _iChiTietLopHocServices.GetAllActiveAsyncChiTietLopHoc(null);
+            return Ok(listKiHoc);
+        }
+
         //GetById ??? 
         [HttpGet]
         [Route("{id}")]
