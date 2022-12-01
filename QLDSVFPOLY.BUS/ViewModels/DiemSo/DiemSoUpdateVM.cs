@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.BUS.ViewModels.LopHoc
+namespace QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
 {
-    //> public
-    public class LopHocCreateVM
+    public class DiemSoUpdateVM
     {
-        public Guid Id { get; set; }
-        public string? Ma { get; set; }
-        public Guid IdDaoTao { get; set; }
+        public double TrongSo { get; set; }
+        public string TenDiemSo { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
     }
