@@ -9,7 +9,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
     public class DiemSoUpdateVM
     {
         public double TrongSo { get; set; }
-        public string TenDiemSo { get; set; }
+        public string TenDauDiem { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
     }

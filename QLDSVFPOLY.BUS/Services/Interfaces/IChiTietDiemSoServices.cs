@@ -1,5 +1,4 @@
 ﻿using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
-using QLDSVFPOLY.DTO.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

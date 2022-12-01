@@ -25,9 +25,9 @@ namespace QLDSVFPOLY.API.Controllers
             if (searchVm.Ma == null
                 && searchVm.SoDienThoai == null
                 && searchVm.Ten == null
-                && searchVm.TenDangNhap == null)
+                )
             {
-                await _iGiangVienServices.GetAllAsync(null);
+                listGiangVienSearch = await _iGiangVienServices.GetAllAsync(null);
             }
 
             return Ok(listGiangVienSearch);
@@ -42,7 +42,7 @@ namespace QLDSVFPOLY.API.Controllers
             if (searchVm.Ma == null
                 && searchVm.SoDienThoai == null
                 && searchVm.Ten == null
-                && searchVm.TenDangNhap == null)
+                )
             {
                 await _iGiangVienServices.GetAllActiveAsync(null);
             }

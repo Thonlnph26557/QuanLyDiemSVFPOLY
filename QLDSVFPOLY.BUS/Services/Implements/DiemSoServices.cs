@@ -2,7 +2,7 @@
 using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
-using QLDSVFPOLY.DTO.Entities;
+using QLDSVFPOLY.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
@@ -42,7 +42,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 {
                     Id = temp.Id,
                     TrongSo = temp.TrongSo,
-                    TenDiemSo = temp.TenDiemSo,
+                    TenDauDiem = temp.TenDauDiem,
                     NgayTao = temp.NgayTao,
                     TrangThai = temp.TrangThai,
                 });
@@ -53,7 +53,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 return listDiemSoVM;
             }
             //Tìm kiếm, tìm theo trạng thái, trọng số, tên điểm
-            return listDiemSoVM.Where(c => c.TenDiemSo.ToLower().Contains(obj.TenDiemSo.ToLower())
+            return listDiemSoVM.Where(c => c.TenDauDiem.ToLower().Contains(obj.TenDauDiem.ToLower())
             || c.TrangThai == obj.TrangThai
             || c.TrongSo == obj.TrongSo).ToList();
         }
@@ -73,7 +73,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                     {
                         Id = temp.Id,
                         TrongSo = temp.TrongSo,
-                        TenDiemSo = temp.TenDiemSo,
+                        TenDauDiem = temp.TenDauDiem,
                         NgayTao = temp.NgayTao,
                         TrangThai = temp.TrangThai,
                     });
@@ -85,7 +85,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 return listDiemSoVM;
             }
             //Tìm kiếm, tìm theo trạng thái, trọng số, tên điểm
-            return listDiemSoVM.Where(c => c.TenDiemSo.ToLower().Contains(obj.TenDiemSo.ToLower())
+            return listDiemSoVM.Where(c => c.TenDauDiem.ToLower().Contains(obj.TenDauDiem.ToLower())
             || c.TrangThai == obj.TrangThai
             || c.TrongSo == obj.TrongSo).ToList();
         }
@@ -100,7 +100,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 Id = temp.Id,
                 TrongSo = temp.TrongSo,
-                TenDiemSo = temp.TenDiemSo,
+                TenDauDiem = temp.TenDauDiem,
                 NgayTao = temp.NgayTao,
                 TrangThai = temp.TrangThai,
             };
@@ -116,7 +116,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 Id = obj.Id,
                 TrongSo = obj.TrongSo,
-                TenDiemSo = obj.TenDiemSo,
+                TenDauDiem = obj.TenDauDiem,
                 NgayTao = obj.NgayTao,
                 TrangThai = obj.TrangThai,
             };
@@ -136,7 +136,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             var temp = new DiemSo()
             {
                 NgayTao = obj.NgayTao,
-                TenDiemSo = obj.TenDiemSo,
+                TenDauDiem = obj.TenDauDiem,
                 TrongSo = obj.TrongSo,
                 TrangThai = obj.TrangThai
             };

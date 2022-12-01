@@ -183,15 +183,10 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             temp.Ma = updateVm.Ma;
             temp.IdDaoTao = updateVm.IdDaoTao;
-            temp.Ho = updateVm.Ho;
-            temp.TenDem = updateVm.TenDem;
-            temp.Ten = updateVm.Ten;
             temp.GioiTinh = updateVm.GioiTinh;
             temp.NgaySinh = updateVm.NgaySinh;
             temp.DiaChi = updateVm.DiaChi;
             temp.SoDienThoai = updateVm.SoDienThoai;
-            temp.Email = updateVm.Email;
-            temp.TenDangNhap = updateVm.TenDangNhap;
             temp.MatKhau = updateVm.MatKhau;
             temp.DuongDanAnh = updateVm.DuongDanAnh;
             temp.NgayTao = updateVm.NgayTao;

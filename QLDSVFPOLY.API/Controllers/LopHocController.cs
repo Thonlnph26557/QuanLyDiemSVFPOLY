@@ -18,25 +18,6 @@ namespace QLDSVFPOLY.API.Controllers
             _iLopHocServices = lopHocServices;
         }
 
-
-        ////Controller gọi đến GetAll() khi tìm kiếm để Load lại list 
-        ////có thể dùng trong việc tìm kiếm, (Load lại list sau khi tìm kiếm)
-        //[HttpGet]
-        //public async Task<IActionResult> GetListLopHoc([FromQuery] LopHocSearchVM search)
-        //{
-        //    var obj = await _iLopHocServices.GetAllAsyncLopHoc(search);
-
-        //    var result = obj.Select(c => new LopHocVM
-        //    {
-        //        Id = c.Id,
-        //        IdDaoTao = c.IdDaoTao,
-        //        Ma = c.Ma,
-        //        NgayTao = c.NgayTao,
-        //        TrangThai = c.TrangThai,
-        //    }).ToList();
-        //    return Ok(result);
-        //}
-
         //Gọi đến GetAll(null)
         [HttpGet("all")]
         public async Task<IActionResult> GetAllLopHoc([FromQuery] LopHocSearchVM searchVm)
@@ -46,7 +27,7 @@ namespace QLDSVFPOLY.API.Controllers
             //khong check dc null cua NgayTao...
             if (searchVm.Ma == null)
             {
-                await _iLopHocServices.GetAllAsync(searchVm);
+                listLopHocSearch = await _iLopHocServices.GetAllAsync(searchVm);
             }
 
             return Ok(listLopHocSearch);
@@ -61,7 +42,7 @@ namespace QLDSVFPOLY.API.Controllers
             //khong check dc null cua NgayTao...
             if (searchVm.Ma == null)
             {
-                await _iLopHocServices.GetAllActiveAsync(searchVm);
+                listLopHocSearch = await _iLopHocServices.GetAllActiveAsync(searchVm);
             }
 
             return Ok(listLopHocSearch);
