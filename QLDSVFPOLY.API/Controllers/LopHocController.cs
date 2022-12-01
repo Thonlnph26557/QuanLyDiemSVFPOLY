@@ -27,7 +27,7 @@ namespace QLDSVFPOLY.API.Controllers
             //khong check dc null cua NgayTao...
             if (searchVm.Ma == null)
             {
-                listLopHocSearch = await _iLopHocServices.GetAllAsync(searchVm);
+                listLopHocSearch = await _iLopHocServices.GetAllAsync(null);
             }
 
             return Ok(listLopHocSearch);
@@ -42,7 +42,7 @@ namespace QLDSVFPOLY.API.Controllers
             //khong check dc null cua NgayTao...
             if (searchVm.Ma == null)
             {
-                listLopHocSearch = await _iLopHocServices.GetAllActiveAsync(searchVm);
+                listLopHocSearch = await _iLopHocServices.GetAllActiveAsync(null);
             }
 
             return Ok(listLopHocSearch);
