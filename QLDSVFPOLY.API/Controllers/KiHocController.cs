@@ -16,16 +16,16 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllKiHoc()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var listKiHoc = await _iKiHocServices.GetAllAsyncKiHoc(null);
+            var listKiHoc = await _iKiHocServices.GetAllAsync(null);
             return Ok(listKiHoc);
         }
 
         [HttpGet("allActive")]
-        public async Task<IActionResult> GetAllActiveKiHoc()
+        public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listKiHoc = await _iKiHocServices.GetAllActiveAsyncKiHoc(null);
+            var listKiHoc = await _iKiHocServices.GetAllActiveAsync(null);
             return Ok(listKiHoc);
         }
 
@@ -35,15 +35,15 @@ namespace QLDSVFPOLY.API.Controllers
         //GetById
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetKiHocById(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var kiHoc = await _iKiHocServices.GetByIdAsyncKiHoc(id);
+            var kiHoc = await _iKiHocServices.GetByIdAsync(id);
             return Ok(kiHoc);   
         }
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateKiHoc([FromBody] KiHocCreateViewmodel kiHoc)
+        public async Task<IActionResult> CreateAsync([FromBody] KiHocCreateViewmodel kiHoc)
         {
             if (kiHoc == null) return BadRequest();
             var newKiHoc = await _iKiHocServices.CreateAsync(kiHoc);
@@ -53,7 +53,7 @@ namespace QLDSVFPOLY.API.Controllers
         //Controller đc gọi khi update obj
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateKiHoc(Guid id, [FromBody] KiHocUpdateViewmodel kiHoc)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] KiHocUpdateViewmodel kiHoc)
         {
             var result = await _iKiHocServices.UpdateAsync(id, kiHoc);
             return Ok(result);
@@ -61,7 +61,7 @@ namespace QLDSVFPOLY.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteKiHoc(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var result = await _iKiHocServices.RemoveAsync(id);
             return Ok(result);
