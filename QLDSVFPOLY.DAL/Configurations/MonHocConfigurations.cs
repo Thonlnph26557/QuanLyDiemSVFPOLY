@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using QLDSVFPOLY.DTO.Entities;
+using QLDSVFPOLY.DAL.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace QLDSVFPOLY.DTO.Configurations
+namespace QLDSVFPOLY.DAL.Configurations
 {
     public class MonHocConfigurations : IEntityTypeConfiguration<MonHoc>
     {

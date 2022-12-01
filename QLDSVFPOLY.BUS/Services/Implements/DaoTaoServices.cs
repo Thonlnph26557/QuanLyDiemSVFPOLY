@@ -1,6 +1,6 @@
 ﻿using QLDSVFPOLY.DAL.Repositories.Interfaces;
 using QLDSVFPOLY.DAL.Repositories.Implements;
-using QLDSVFPOLY.DTO.Entities;
+using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

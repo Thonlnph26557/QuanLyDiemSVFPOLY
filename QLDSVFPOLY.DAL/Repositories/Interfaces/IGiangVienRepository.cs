@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.DAL.Repositories.Interfaces
 {
-    public interface IMonHocRepository
+    public interface IGiangVienRepository
     {
-        Task<List<MonHoc>> GetAllAsync();
-        Task<MonHoc> CreateAsync(MonHoc obj);
-        Task<MonHoc> UpdateAsync(MonHoc obj);
-        Task<MonHoc> RemoveAsync(Guid id);
+        Task<List<GiangVien>> GetAllAsync();
+
+        Task<GiangVien> CreateAsync(GiangVien createVm);
+        Task<GiangVien> UpdateAsync(GiangVien updateVm);
+        Task<GiangVien> RemoveAsync(Guid id);
+
         Task SaveChangesAsync();
     }
 }

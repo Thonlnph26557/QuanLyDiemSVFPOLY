@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
-using QLDSVFPOLY.DTO.Entities;
-using QLDSVFPOLY.DTO.Entities.EF;
+using QLDSVFPOLY.DAL.Entities;
+using QLDSVFPOLY.DAL.Entities.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;

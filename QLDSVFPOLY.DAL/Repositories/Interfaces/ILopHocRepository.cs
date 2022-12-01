@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.DAL.Repositories.Interfaces
 {
-    public interface IMonHocRepository
+    public interface ILopHocRepository
     {
-        Task<List<MonHoc>> GetAllAsync();
-        Task<MonHoc> CreateAsync(MonHoc obj);
-        Task<MonHoc> UpdateAsync(MonHoc obj);
-        Task<MonHoc> RemoveAsync(Guid id);
+        Task<List<LopHoc>> GetAllAsync();
+
+        Task<LopHoc> CreateAsync(LopHoc createVm);
+        Task<LopHoc> UpdateAsync(LopHoc updateVm);
+        Task<LopHoc> RemoveAsync(Guid id);
+
         Task SaveChangesAsync();
     }
 }

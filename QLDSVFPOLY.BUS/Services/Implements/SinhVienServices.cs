@@ -2,7 +2,7 @@
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
-using QLDSVFPOLY.DTO.Entities;
+using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
-using QLDSVFPOLY.DTO.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -12,13 +11,11 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly ISinhVienServices _sinhVienServices;
-        private QLSVDbContext _qLSVDbContext;
 
         //
         public SinhViensController(ISinhVienServices sinhVienServices)
         {
             _sinhVienServices = sinhVienServices;
-            _qLSVDbContext = new QLSVDbContext();
         }
 
         //

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.DaoTao;
-using QLDSVFPOLY.DTO.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -12,13 +11,11 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly IDaoTaoServices _daoTaoServices;
-        private QLSVDbContext _qLSVDbContext;
 
         //
         public DaoTaosController(IDaoTaoServices daoTaoServices)
         {
             _daoTaoServices = daoTaoServices;
-            _qLSVDbContext = new QLSVDbContext();
         }
 
         //
