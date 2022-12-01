@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using QLDSVFPOLY.DTO.Entities;
+using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.DTO.Configurations
+namespace QLDSVFPOLY.DAL.Configurations
 {
     public class DiemSoConfigurations : IEntityTypeConfiguration<DiemSo>
     {

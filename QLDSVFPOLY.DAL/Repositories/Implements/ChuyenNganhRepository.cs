@@ -1,5 +1,5 @@
-﻿using QLDSVFPOLY.DTO.Entities.EF;
-using QLDSVFPOLY.DTO.Entities;
+﻿using QLDSVFPOLY.DAL.Entities.EF;
+using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

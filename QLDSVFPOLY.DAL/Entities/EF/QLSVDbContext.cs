@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QLDSVFPOLY.DTO.Configurations;
+using QLDSVFPOLY.DAL.Configurations;
 using QLDSVFPOLY.DTO.Extensions;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace QLDSVFPOLY.DTO.Entities.EF
+namespace QLDSVFPOLY.DAL.Entities.EF
 {
     public class QLSVDbContext : DbContext
     {
-        public QLSVDbContext(DbContextOptions options) : base(options)
+        public QLSVDbContext()
         {
         }
 
-        public QLSVDbContext()
+        public QLSVDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -31,6 +31,13 @@ namespace QLDSVFPOLY.DTO.Entities.EF
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
             modelBuilder.SeedData();
         }
+
+        //thay đổi đường dẫn để kết nối SQL
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"SERVER=FX580VN\SQLEXPRESS;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
+        }
+
 
         //DbSet
         public DbSet<DaoTao> DaoTaos { get; set; }

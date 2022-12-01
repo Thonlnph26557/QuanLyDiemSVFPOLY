@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.DaoTao;
 using QLDSVFPOLY.BUS.ViewModels.MonHoc;
-using QLDSVFPOLY.DTO.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -13,13 +12,11 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly IMonHocServices _monHocServices;
-        private QLSVDbContext _qLSVDbContext;
 
         //
         public MonHocsController(IMonHocServices monHocServices)
         {
             _monHocServices = monHocServices;
-            _qLSVDbContext = new QLSVDbContext();
         }
 
         //

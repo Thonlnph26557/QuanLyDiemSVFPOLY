@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.DTO.Entities
+namespace QLDSVFPOLY.DAL.Entities
 {
     public class GiangVien
     {
