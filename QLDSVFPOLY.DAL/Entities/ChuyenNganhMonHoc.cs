@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.DAL.Entities
 {
-    public class DiemSo
+    public class ChuyenNganhMonHoc
     {
-        public Guid Id { get; set; }
+        public Guid IdChuyenNganh { get; set; }
         public Guid IdMonHoc { get; set; }
-        public double TrongSo { get; set; }
-        public string TenDauDiem { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 
-        public List<ChiTietDiemSo> ChiTietDiemSos { get; set; }
+
+        public ChuyenNganh ChuyenNganh { get; set; }
         public MonHoc MonHoc { get; set; }
     }
 }

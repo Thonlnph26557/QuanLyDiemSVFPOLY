@@ -15,10 +15,9 @@ namespace QLDSVFPOLY.DAL.Entities
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 
-        public Guid IdChuyenNganh { get; set; }
 
-
-        public ChuyenNganh ChuyenNganh { get; set; }
+        public List<ChuyenNganhMonHoc> ChuyenNganhMonHocs { get; set; }
         public List<ChiTietLopHoc> ChiTietLopHocs { get; set; }
+        public List<DiemSo> DiemSos { get; set; }
     }
 }

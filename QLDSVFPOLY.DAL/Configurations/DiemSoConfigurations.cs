@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
 using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace QLDSVFPOLY.DAL.Configurations
             builder.Property(x => x.TrongSo).IsRequired();
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
+
+            builder.HasOne(x => x.MonHoc).WithMany(x => x.DiemSos).HasForeignKey(x => x.IdMonHoc);
         }
     }
 }

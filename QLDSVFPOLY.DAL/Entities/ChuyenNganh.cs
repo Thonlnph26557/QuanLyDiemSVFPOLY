@@ -21,7 +21,7 @@ namespace QLDSVFPOLY.DAL.Entities
         public DaoTao DaoTao { get; set; }
 
         public List<SinhVien> SinhViens { get; set; }
-        public List<MonHoc> MonHocs { get; set; }
+        public List<ChuyenNganhMonHoc> ChuyenNganhMonHocs { get; set; }
 
         //de day de deej quy
         public List<ChuyenNganh> ChuyenNganhs { get; set; }

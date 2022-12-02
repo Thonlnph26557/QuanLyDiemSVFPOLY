@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QLDSVFPOLY.DAL.Configurations;
-using QLDSVFPOLY.DTO.Extensions;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
@@ -29,13 +28,14 @@ namespace QLDSVFPOLY.DAL.Entities.EF
             modelBuilder.ApplyConfiguration(new LopHocConfigurations());
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
-            modelBuilder.SeedData();
+            modelBuilder.ApplyConfiguration(new ChuyenNganhMonHocConfigurations());
+            //modelBuilder.SeedData();
         }
 
         //thay đổi đường dẫn để kết nối SQL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"SERVER=FX580VN\SQLEXPRESS;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
+            optionsBuilder.UseSqlServer(@"SERVER=DESKTOP-BDIPTIR;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
         }
 
 

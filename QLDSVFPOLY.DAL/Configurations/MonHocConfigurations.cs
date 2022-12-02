@@ -20,9 +20,6 @@ namespace QLDSVFPOLY.DAL.Configurations
             builder.Property(x => x.Ten).IsUnicode().IsRequired().HasMaxLength(50);
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
-            builder.Property(x => x.IdChuyenNganh).IsRequired();
-
-            builder.HasOne(cn => cn.ChuyenNganh).WithMany(mh => mh.MonHocs).HasForeignKey(mh => mh.IdChuyenNganh);
         }
     }
 }
