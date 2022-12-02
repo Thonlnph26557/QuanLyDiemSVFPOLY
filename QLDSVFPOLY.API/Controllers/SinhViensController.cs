@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
+using QLDSVFPOLY.DAL.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -11,46 +13,57 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly ISinhVienServices _sinhVienServices;
+        private QLSVDbContext _qLSVDbContext;
 
         //
         public SinhViensController(ISinhVienServices sinhVienServices)
         {
             _sinhVienServices = sinhVienServices;
+            _qLSVDbContext = new QLSVDbContext();
         }
 
         //
-        [HttpGet]
+        [HttpGet("active")]
         public async Task<IActionResult> GetListSinhVienList([FromQuery] SinhVienSearchVM search)
         {
             var objCollection = await _sinhVienServices.GetAllActiveAsync(search);
 
-            var result = objCollection.Select(c => new SinhVienVM
+            if (search.Ma == null
+                && search.Ho == null
+                && search.TenDem == null
+                && search.Ten == null
+                && search.GioiTinh == 0
+                && search.DiaChi == null
+                && search.SoDienThoai == null
+                && search.Email == null
+                && search.TrangThai == 0
+                && search.IdChuyenNganh == null)
             {
-                Id = c.Id,
-                Ma = c.Ma,
-                Ho = c.Ho,
-                TenDem = c.TenDem,
-                Ten = c.Ten,
-                GioiTinh = c.GioiTinh,
-                NgaySinh = c.NgaySinh,
-                DiaChi = c.DiaChi,
-                SoDienThoai = c.SoDienThoai,
-                Email = c.Email,
-                TenDangNhap = c.TenDangNhap,
-                MatKhau = c.MatKhau,
-                DuongDanAnh = c.DuongDanAnh,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-                IdChuyenNganh = c.IdChuyenNganh,
-            }).ToList();
-            return Ok(result);
+                objCollection = await _sinhVienServices.GetAllActiveAsync(null);
+            }
+
+            return Ok(objCollection);
         }
 
         //
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllSinhVien()
+        public async Task<IActionResult> GetAllSinhVien([FromQuery] SinhVienSearchVM search)
         {
-            var objCollection = await _sinhVienServices.GetAllAsync(null);
+            var objCollection = await _sinhVienServices.GetAllAsync(search);
+
+            if (search.Ma == null
+                && search.Ho == null
+                && search.TenDem == null
+                && search.Ten == null
+                && search.GioiTinh == 0
+                && search.DiaChi == null
+                && search.SoDienThoai == null
+                && search.Email == null
+                && search.TrangThai == 0
+                && search.IdChuyenNganh == null)
+            {
+                objCollection = await _sinhVienServices.GetAllActiveAsync(null);
+            }
 
             return Ok(objCollection);
         }
@@ -84,5 +97,14 @@ namespace QLDSVFPOLY.API.Controllers
             var result = await _sinhVienServices.UpdateAsync(IdSinhVien, request);
             return Ok(result);
         }
+
+        //
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveAsync(Guid id)
+        {
+            var temp = await _sinhVienServices.RemoveAsync(id);
+            return Ok(temp);
+        }
+
     }
 }

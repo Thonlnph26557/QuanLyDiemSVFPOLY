@@ -15,20 +15,24 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class DaoTaoServices : IDaoTaoServices
     {
+        //
         IDaoTaoRepository _repos;
 
         List<DaoTao> _listDaoTao;
 
+        //
         public DaoTaoServices()
         {
             _repos = new DaoTaoRepository();
         }
 
+        //
         private async Task GetListDaoTaoAsync()
         {
             _listDaoTao = await _repos.GetAllAsync();
         }
 
+        //
         public async Task<List<DaoTaoVM>> GetAllAsync(DaoTaoSearchVM obj)
         {
             await GetListDaoTaoAsync();
@@ -120,7 +124,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> CreateAsync(DaoTaoCreateVM obj)
         {
-            obj.Id = Guid.NewGuid();
+
             var temp = new DaoTao()
             {
                 Id = Guid.NewGuid(),
@@ -130,37 +134,51 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 Email = obj.Email,
                 TenDangNhap = obj.TenDangNhap,
                 MatKhau = obj.MatKhau,
-                NgayTao = obj.NgayTao,
+                NgayTao = DateTime.Now,
                 TrangThai = obj.TrangThai,
             };
+
             await _repos.CreateAsync(temp);
             await _repos.SaveChangesAsync();
+
             var listDaoTao = await _repos.GetAllAsync();
-            if (listDaoTao.Any(c => obj.Id == c.Id)) return true;
+
+            if (listDaoTao.Any(c => temp.Id == c.Id)) return true;
+
             return false;
         }
 
         public async Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj)
         {
             var listDaoTao = await _repos.GetAllAsync();
+
             if (!listDaoTao.Any(c => c.Id == id)) return false;
+
             var temp = new DaoTao()
             {
+                Ma = obj.Ma,
                 DiaChi = obj.DiaChi,
                 SoDienThoai = obj.SoDienThoai,
+                Email = obj.Email,
+                TenDangNhap = obj.TenDangNhap,
                 MatKhau = obj.MatKhau,
                 TrangThai = obj.TrangThai,
             };
+
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();
+
             return true;
         }
         public async Task<bool> RemoveAsync(Guid id)
         {
             var listDaoTao = await _repos.GetAllAsync();
+
             if (!listDaoTao.Any(c => c.Id == id)) return false;
+
             await _repos.RemoveAsync(id);
             await _repos.SaveChangesAsync();
+
             return true;
         }
     }
