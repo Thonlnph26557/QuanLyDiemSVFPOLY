@@ -13,51 +13,58 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class MonHocServices : IMonHocServices
     {
+        //
         IMonHocRepository _repos;
         List<MonHoc> _listMonHoc;
+
+        //
         public MonHocServices()
         {
             _repos = new MonHocRepository();
         }
+
+        //
         private async Task GetListMonHocAsync()
         {
             _listMonHoc = await _repos.GetAllAsync();
         }
 
-        public async Task<bool> CreateAsync(MonHocCreateVM obj)
+        //
+        public async Task<List<MonHocVM>> GetAllAsync(MonHocSearchVM obj)
         {
-            obj.Id = Guid.NewGuid();
-            var temp = new MonHoc()
+            await GetListMonHocAsync();
+
+            List<MonHocVM> listMonHocVM = new List<MonHocVM>();
+
+            foreach (var temp in _listMonHoc)
             {
-                Id = Guid.NewGuid(),
-                Ma = obj.Ma,
-                Ten = obj.Ten,
-                DuongDanAnh = obj.DuongDanAnh,
-                NgayTao = obj.NgayTao,
-                TrangThai = obj.TrangThai,
-                IdChuyenNganh = obj.IdChuyenNganh,
-            };
-            await _repos.CreateAsync(temp);
-            await _repos.SaveChangesAsync();
-            var listMonHoc = await _repos.GetAllAsync();
-            if (listMonHoc.Any(c => obj.Id == c.Id)) return true;
-            return false;
+                listMonHocVM.Add(new MonHocVM()
+                {
+                    Id = temp.Id,
+                    Ma = temp.Ma,
+                    Ten = temp.Ten,
+                    DuongDanAnh = temp.DuongDanAnh,
+                    NgayTao = temp.NgayTao,
+                    TrangThai = temp.TrangThai,
+                    IdChuyenNganh = temp.IdChuyenNganh,
+                });
+            }
+
+            if (obj == null)
+            {
+                return listMonHocVM;
+            }
+            return listMonHocVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
-        public async Task<bool> RemoveAsync(Guid id)
-        {
-            var listMonHoc = await _repos.GetAllAsync();
-            if (!listMonHoc.Any(c => c.Id == id)) return false;
-            await _repos.RemoveAsync(id);
-            await _repos.SaveChangesAsync();
-            return true;
-        }
-
+        //
         //Active = (TrangThai != 0)
         public async Task<List<MonHocVM>> GetAllActiveAsync(MonHocSearchVM obj)
         {
             await GetListMonHocAsync();
+
             List<MonHocVM> listMonHocVM = new List<MonHocVM>();
+
             foreach(var temp in _listMonHoc)
             {
                 //Kiểm tra TrangThai
@@ -82,35 +89,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return listMonHocVM.Where(c =>c.Ma == obj.Ma).ToList();
         }
 
-        public async Task<List<MonHocVM>> GetAllAsync(MonHocSearchVM obj)
-        {
-           await GetListMonHocAsync();
-            List<MonHocVM> listMonHocVM = new List<MonHocVM>();
-            foreach(var temp in _listMonHoc)
-            {
-                listMonHocVM.Add(new MonHocVM()
-                {
-                    Id = temp.Id,
-                    Ma = temp.Ma,
-                    Ten = temp.Ten,
-                    DuongDanAnh = temp.DuongDanAnh,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                    IdChuyenNganh = temp.IdChuyenNganh,
-                });
-            }
-
-            if(obj == null)
-            {
-                return listMonHocVM;
-            }
-            return listMonHocVM.Where(c => c.Ma == obj.Ma).ToList();
-        }
-
+        //
         public async Task<MonHocVM> GetByIdAsync(Guid id)
         {
             await GetListMonHocAsync();
+
             MonHoc temp = _listMonHoc.FirstOrDefault(c => c.Id == id);
+
             MonHocVM result = new MonHocVM()
             {
                 Id = temp.Id,
@@ -124,20 +109,64 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return result;
         }
 
+        //
+        public async Task<bool> CreateAsync(MonHocCreateVM obj)
+        {
+            var temp = new MonHoc()
+            {
+                Id = Guid.NewGuid(),
+                Ma = obj.Ma,
+                Ten = obj.Ten,
+                DuongDanAnh = obj.DuongDanAnh,
+                NgayTao = DateTime.Now,
+                TrangThai = obj.TrangThai,
+                IdChuyenNganh = obj.IdChuyenNganh,
+            };
+
+            await _repos.CreateAsync(temp);
+            await _repos.SaveChangesAsync();
+
+            var listMonHoc = await _repos.GetAllAsync();
+
+            if (listMonHoc.Any(c => temp.Id == c.Id)) return true;
+
+            return false;
+        }
+
+        //
         public async Task<bool> UpdateAsync(Guid id, MonHocUpdateVM obj)
         {
             var listMonHoc = await _repos.GetAllAsync();
+
             if (!listMonHoc.Any(c => c.Id == id)) return false;
+
             var temp = new MonHoc()
             {
+                Ma = obj.Ma,
                 Ten = obj.Ten,
                 DuongDanAnh = obj.DuongDanAnh,
                 TrangThai = obj.TrangThai,
                 IdChuyenNganh = obj.IdChuyenNganh,
             };
+
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();
+
             return true;
         }
-    }    
+
+        //
+        public async Task<bool> RemoveAsync(Guid id)
+        {
+            var listMonHoc = await _repos.GetAllAsync();
+
+            if (!listMonHoc.Any(c => c.Id == id)) return false;
+
+            await _repos.RemoveAsync(id);
+            await _repos.SaveChangesAsync();
+
+            return true;
+        }
+
+    }
 }

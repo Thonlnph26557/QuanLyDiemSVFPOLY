@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.DaoTao;
 using QLDSVFPOLY.BUS.ViewModels.MonHoc;
+using QLDSVFPOLY.DAL.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -12,37 +14,46 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly IMonHocServices _monHocServices;
+        private QLSVDbContext _qLSVDbContext;
 
         //
         public MonHocsController(IMonHocServices monHocServices)
         {
             _monHocServices = monHocServices;
+            _qLSVDbContext = new QLSVDbContext();
         }
 
         //
-        [HttpGet]
+        [HttpGet("active")]
         public async Task<IActionResult> GetListMonHocList([FromQuery] MonHocSearchVM search)
         {
             var objCollection = await _monHocServices.GetAllActiveAsync(search);
 
-            var result = objCollection.Select(c => new MonHocVM
+            if (search.Ma == null
+                && search.Ten == null
+                && search.TrangThai == 0
+                && search.IdChuyenNganh == null
+                )
             {
-                Id = c.Id,
-                Ma = c.Ma,
-                Ten = c.Ten,
-                DuongDanAnh = c.DuongDanAnh,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-                IdChuyenNganh = c.IdChuyenNganh,
-            }).ToList();
-            return Ok(result);
+                objCollection = await _monHocServices.GetAllActiveAsync(null);
+            }
+            return Ok(objCollection);
         }
 
         //
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllMonHoc()
+        public async Task<IActionResult> GetAllMonHoc([FromQuery] MonHocSearchVM search)
         {
-            var objCollection = await _monHocServices.GetAllAsync(null);
+            var objCollection = await _monHocServices.GetAllAsync(search);
+
+            if (search.Ma == null
+                && search.Ten == null
+                && search.TrangThai == 0
+                && search.IdChuyenNganh == null
+                )
+            {
+                objCollection = await _monHocServices.GetAllActiveAsync(null);
+            }
 
             return Ok(objCollection);
         }
@@ -76,5 +87,14 @@ namespace QLDSVFPOLY.API.Controllers
             var result = await _monHocServices.UpdateAsync(IdMonHoc, request);
             return Ok(result);
         }
+
+        //
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveAsync(Guid id)
+        {
+            var temp = await _monHocServices.RemoveAsync(id);
+            return Ok(temp);
+        }
+
     }
 }
