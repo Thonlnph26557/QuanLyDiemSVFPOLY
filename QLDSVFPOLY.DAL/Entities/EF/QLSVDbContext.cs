@@ -29,6 +29,7 @@ namespace QLDSVFPOLY.DAL.Entities.EF
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChuyenNganhMonHocConfigurations());
+            modelBuilder.ApplyConfiguration(new NhanVienDaoTaoConfigurations());
             //modelBuilder.SeedData();
         }
 
