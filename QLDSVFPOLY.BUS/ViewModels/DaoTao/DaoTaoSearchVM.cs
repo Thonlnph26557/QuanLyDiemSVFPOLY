@@ -13,6 +13,6 @@ namespace QLDSVFPOLY.BUS.ViewModels.DaoTao
         public string? DiaChi { get; set; }
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
-        public int TrangThai { get; set; }
+        public int? TrangThai { get; set; }
     }
 }

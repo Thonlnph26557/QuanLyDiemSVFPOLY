@@ -14,6 +14,7 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<DaoTaoVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(DaoTaoCreateVM obj);
         Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj);
+        Task<bool> UpdateRemoveAsync(Guid id);
         Task<bool> RemoveAsync(Guid id);
     }
 }

@@ -15,7 +15,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
     {
         //
         ISinhVienRepository _repos;
-        List<SinhVien> _listSinhVien;
+        List<SinhVien> _listSinhViens;
 
         //
         public SinhVienServices()
@@ -26,7 +26,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         private async Task GetListSinhVienAsync()
         {
-            _listSinhVien = await _repos.GetAllAsync();
+            _listSinhViens = await _repos.GetAllAsync();
         }
 
         //
@@ -36,74 +36,116 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<SinhVienVM> listSinhVienVM = new List<SinhVienVM>();
 
-            foreach (var temp in _listSinhVien)
+            listSinhVienVM = _listSinhViens.Select(c => new SinhVienVM()          
             {
-                listSinhVienVM.Add(new SinhVienVM()
-                {
-                    Id = temp.Id,
-                    Ma = temp.Ma,
-                    Ho = temp.Ho,
-                    TenDem = temp.TenDem,
-                    Ten = temp.Ten,
-                    GioiTinh = temp.GioiTinh,
-                    NgaySinh = temp.NgaySinh,
-                    DiaChi = temp.DiaChi,
-                    SoDienThoai = temp.SoDienThoai,
-                    Email = temp.Email,
-                    TenDangNhap = temp.TenDangNhap,
-                    MatKhau = temp.MatKhau,
-                    DuongDanAnh = temp.DuongDanAnh,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                    IdChuyenNganh = temp.IdChuyenNganh,
-                });
-            }
+                    Id = c.Id,
+                    Ma = c.Ma,
+                    Ho = c.Ho,
+                    TenDem = c.TenDem,
+                    Ten = c.Ten,
+                    GioiTinh = c.GioiTinh,
+                    NgaySinh = c.NgaySinh,
+                    DiaChi = c.DiaChi,
+                    SoDienThoai = c.SoDienThoai,
+                    Email = c.Email,
+                    TenDangNhap = c.TenDangNhap,
+                    MatKhau = c.MatKhau,
+                    DuongDanAnh = c.DuongDanAnh,
+                    NgayTao = c.NgayTao,
+                    TrangThai = c.TrangThai,
+                    IdChuyenNganh = c.IdChuyenNganh,
+            }).ToList();
+            
 
-            if (obj == null)
+            if (obj.Ma != null ||
+                obj.Ho != null ||
+                obj.TenDem != null ||
+                obj.Ten != null ||
+                obj.GioiTinh != null ||
+                obj.DiaChi != null ||
+                obj.SoDienThoai != null ||
+                obj.Email != null ||
+                obj.TrangThai != null 
+                //obj.IdChuyenNganh != null 
+                )
+            {
+                return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.Ho.Contains(obj.Ho)
+                                                    || c.TenDem.Contains(obj.TenDem)
+                                                    || c.Ten.Contains(obj.Ten)
+                                                    || c.GioiTinh==(obj.GioiTinh)
+                                                    || c.DiaChi.Contains(obj.DiaChi)
+                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
+                                                    || c.Email.Contains(obj.Email)
+                                                    || c.TrangThai==(obj.TrangThai)
+                                                    //|| c.IdChuyenNganh.Contains(obj.IdChuyenNganh)
+                                                    ).ToList();
+            }
+            else
             {
                 return listSinhVienVM;
             }
-            return listSinhVienVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
+
         //
+        //Active = (TrangThai != 0)
         public async Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM obj)
         {
             await GetListSinhVienAsync();
 
             List<SinhVienVM> listSinhVienVM = new List<SinhVienVM>();
 
-            foreach (var temp in _listSinhVien)
+            //Kiểm tra TrangThai
+            listSinhVienVM = _listSinhViens.Where(c => c.TrangThai != 0).Select(c => new SinhVienVM()
             {
-                //Kiểm tra TrangThai
-                if (temp.TrangThai != 0)
-                {
-                    listSinhVienVM.Add(new SinhVienVM()
-                    {
-                        Id = temp.Id,
-                        Ma = temp.Ma,
-                        Ho = temp.Ho,
-                        TenDem = temp.TenDem,
-                        Ten = temp.Ten,
-                        GioiTinh = temp.GioiTinh,
-                        NgaySinh = temp.NgaySinh,
-                        DiaChi = temp.DiaChi,
-                        SoDienThoai = temp.SoDienThoai,
-                        Email = temp.Email,
-                        TenDangNhap = temp.TenDangNhap,
-                        MatKhau = temp.MatKhau,
-                        DuongDanAnh = temp.DuongDanAnh,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                        IdChuyenNganh = temp.IdChuyenNganh,
-                    });
-                }
+                Id = c.Id,
+                Ma = c.Ma,
+                Ho = c.Ho,
+                TenDem = c.TenDem,
+                Ten = c.Ten,
+                GioiTinh = c.GioiTinh,
+                NgaySinh = c.NgaySinh,
+                DiaChi = c.DiaChi,
+                SoDienThoai = c.SoDienThoai,
+                Email = c.Email,
+                TenDangNhap = c.TenDangNhap,
+                MatKhau = c.MatKhau,
+                DuongDanAnh = c.DuongDanAnh,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+                IdChuyenNganh = c.IdChuyenNganh,
+            }).ToList();
+
+
+            if (obj.Ma != null ||
+                obj.Ho != null ||
+                obj.TenDem != null ||
+                obj.Ten != null ||
+                obj.GioiTinh != null ||
+                obj.DiaChi != null ||
+                obj.SoDienThoai != null ||
+                obj.Email != null ||
+                obj.TrangThai != null
+                //obj.IdChuyenNganh != null 
+                )
+            {
+                return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.Ho.Contains(obj.Ho)
+                                                    || c.TenDem.Contains(obj.TenDem)
+                                                    || c.Ten.Contains(obj.Ten)
+                                                    || c.GioiTinh == (obj.GioiTinh)
+                                                    || c.DiaChi.Contains(obj.DiaChi)
+                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
+                                                    || c.Email.Contains(obj.Email)
+                                                    || c.TrangThai == (obj.TrangThai)
+                                                    //|| c.IdChuyenNganh.Contains(obj.IdChuyenNganh)
+                                                    ).ToList();
             }
-            if (obj == null)
+            else
             {
                 return listSinhVienVM;
             }
-            return listSinhVienVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
         //
@@ -111,7 +153,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListSinhVienAsync();
 
-            SinhVien temp = _listSinhVien.FirstOrDefault(c => c.Id == id);
+            SinhVien temp = _listSinhViens.FirstOrDefault(c => c.Id == id);
 
             SinhVienVM result = new SinhVienVM()
             {
@@ -175,23 +217,39 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             if (!listSinhVien.Any(c => c.Id == id)) return false;
 
-            var temp = new SinhVien()
-            {
-                Ma = obj.Ma,
-                Ho = obj.Ho,
-                TenDem = obj.TenDem,
-                Ten = obj.Ten,
-                GioiTinh = obj.GioiTinh,
-                NgaySinh = obj.NgaySinh,
-                DiaChi = obj.DiaChi,
-                SoDienThoai = obj.SoDienThoai,
-                Email = obj.Email,
-                TenDangNhap = obj.TenDangNhap,
-                MatKhau = obj.MatKhau,
-                DuongDanAnh = obj.DuongDanAnh,
-                TrangThai = obj.TrangThai,
-                IdChuyenNganh = obj.IdChuyenNganh,
-            };
+            var temp = listSinhVien.FirstOrDefault(c => c.Id == id);
+
+                temp.Ma = obj.Ma;
+                temp.Ho = obj.Ho;
+                temp.TenDem = obj.TenDem;
+                temp.Ten = obj.Ten;
+                temp.GioiTinh = obj.GioiTinh;
+                temp.NgaySinh = obj.NgaySinh;
+                temp.DiaChi = obj.DiaChi;
+                temp.SoDienThoai = obj.SoDienThoai;
+                temp.Email = obj.Email;
+                temp.TenDangNhap = obj.TenDangNhap;
+                temp.MatKhau = obj.MatKhau;
+                temp.DuongDanAnh = obj.DuongDanAnh;
+                temp.TrangThai = obj.TrangThai;
+                temp.IdChuyenNganh = obj.IdChuyenNganh;
+
+            await _repos.UpdateAsync(temp);
+            await _repos.SaveChangesAsync();
+            return true;
+        }
+
+        //
+        public async Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            var listSinhVien = await _repos.GetAllAsync();
+
+            if (!listSinhVien.Any(c => c.Id == id)) return false;
+
+            var temp = listSinhVien.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();
             return true;

@@ -22,11 +22,11 @@ namespace QLDSVFPOLY.API.Controllers
             _qLSVDbContext = new QLSVDbContext();
         }
 
-        //
+        //lấy ra danh sách đào tạo còn hoạt động kết hợp tìm kiếm
         [HttpGet("active")]
-        public async Task<IActionResult> GetListDaoTaoList([FromQuery] DaoTaoSearchVM search)
+        public async Task<IActionResult> GetAllDaoTaoActive([FromQuery] DaoTaoSearchVM search)
         {
-            var objCollection = await _daoTaoServices.GetAllActiveAsync(search);
+            var listDaoTaoSearch = await _daoTaoServices.GetAllActiveAsync(search);
 
             if (search.Ma == null 
                 && search.DiaChi == null
@@ -35,17 +35,17 @@ namespace QLDSVFPOLY.API.Controllers
                 && search.TrangThai == 0
                 )
             {
-                objCollection = await _daoTaoServices.GetAllActiveAsync(null);
+                listDaoTaoSearch = await _daoTaoServices.GetAllActiveAsync(null);
             }
 
-            return Ok(objCollection);
+            return Ok(listDaoTaoSearch);
         }
 
         //
         [HttpGet("all")]
         public async Task<IActionResult> GetAllDaoTao([FromQuery] DaoTaoSearchVM search)
         {
-            var objCollection = await _daoTaoServices.GetAllAsync(search);
+            var listDaoTaoSearch = await _daoTaoServices.GetAllAsync(search);
 
             if (search.Ma == null
                 && search.DiaChi == null
@@ -54,39 +54,39 @@ namespace QLDSVFPOLY.API.Controllers
                 && search.TrangThai == 0
                 )
             {
-                objCollection = await _daoTaoServices.GetAllAsync(null);
+                listDaoTaoSearch = await _daoTaoServices.GetAllAsync(null);
             }
 
-            return Ok(objCollection);
+            return Ok(listDaoTaoSearch);
         }
 
-        //
+        // GetById ??? 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetDaoTaoListById(Guid IdDaoTao)
+        public async Task<IActionResult> GetDaoTaoById(Guid IdDaoTao)
         {
-            var lecturerModel = await _daoTaoServices.GetByIdAsync(IdDaoTao);
-            return Ok(lecturerModel);
+            var daoTao = await _daoTaoServices.GetByIdAsync(IdDaoTao);
+            return Ok(daoTao);
         }
 
-        //
+        //Controller dc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateDaoTao([FromBody] DaoTaoCreateVM request)
+        public async Task<IActionResult> CreateDaoTao([FromBody] DaoTaoCreateVM daoTao)
         {
-            if (request == null)
+            if (daoTao == null)
                 return BadRequest();
 
-            var newRole = await _daoTaoServices.CreateAsync(request);
+            var newDaoTao = await _daoTaoServices.CreateAsync(daoTao);
 
-            return Ok(newRole);
+            return Ok(newDaoTao);
         }
 
-        //
+        //Controller dc gọi khi update obj
         [HttpPut]
         [Route("{IdDaoTao}")]
-        public async Task<IActionResult> UpdateDaoTao(Guid IdDaoTao, [FromBody] DaoTaoUpdateVM request)
+        public async Task<IActionResult> UpdateDaoTao(Guid IdDaoTao, [FromBody] DaoTaoUpdateVM daoTao)
         {
-            var result = await _daoTaoServices.UpdateAsync(IdDaoTao, request);
+            var result = await _daoTaoServices.UpdateAsync(IdDaoTao, daoTao);
             return Ok(result);
         }
 
@@ -94,7 +94,7 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync(Guid id)
         {
-            var temp = await _daoTaoServices.RemoveAsync(id);
+            var temp = await _daoTaoServices.UpdateRemoveAsync(id);
             return Ok(temp);
         }
 

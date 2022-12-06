@@ -22,11 +22,11 @@ namespace QLDSVFPOLY.API.Controllers
             _qLSVDbContext = new QLSVDbContext();
         }
 
-        //
+        //lấy ra danh sách sinh viên còn hoạt động kết hợp tìm kiếm
         [HttpGet("active")]
-        public async Task<IActionResult> GetListSinhVienList([FromQuery] SinhVienSearchVM search)
+        public async Task<IActionResult> GetAllSinhVienActive([FromQuery] SinhVienSearchVM search)
         {
-            var objCollection = await _sinhVienServices.GetAllActiveAsync(search);
+            var listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(search);
 
             if (search.Ma == null
                 && search.Ho == null
@@ -39,17 +39,17 @@ namespace QLDSVFPOLY.API.Controllers
                 && search.TrangThai == 0
                 && search.IdChuyenNganh == null)
             {
-                objCollection = await _sinhVienServices.GetAllActiveAsync(null);
+                listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(null);
             }
 
-            return Ok(objCollection);
+            return Ok(listSinhVienSearch);
         }
 
         //
         [HttpGet("all")]
         public async Task<IActionResult> GetAllSinhVien([FromQuery] SinhVienSearchVM search)
         {
-            var objCollection = await _sinhVienServices.GetAllAsync(search);
+            var listSinhVienSearch = await _sinhVienServices.GetAllAsync(search);
 
             if (search.Ma == null
                 && search.Ho == null
@@ -62,47 +62,47 @@ namespace QLDSVFPOLY.API.Controllers
                 && search.TrangThai == 0
                 && search.IdChuyenNganh == null)
             {
-                objCollection = await _sinhVienServices.GetAllActiveAsync(null);
+                listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(null);
             }
 
-            return Ok(objCollection);
+            return Ok(listSinhVienSearch);
         }
 
-        //
+        // GetById ??? 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetSinhVienistById(Guid IdSinhVien)
+        public async Task<IActionResult> GetSinhVienById(Guid IdSinhVien)
         {
-            var lecturerModel = await _sinhVienServices.GetByIdAsync(IdSinhVien);
-            return Ok(lecturerModel);
+            var sinhVien = await _sinhVienServices.GetByIdAsync(IdSinhVien);
+            return Ok(sinhVien);
         }
 
-        //
+        //Controller dc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateSinhVien([FromBody] SinhVienCreateVM request)
+        public async Task<IActionResult> CreateSinhVien([FromBody] SinhVienCreateVM sinhVien)
         {
-            if (request == null)
+            if (sinhVien == null)
                 return BadRequest();
 
-            var newRole = await _sinhVienServices.CreateAsync(request);
+            var newSinhVien = await _sinhVienServices.CreateAsync(sinhVien);
 
-            return Ok(newRole);
+            return Ok(newSinhVien);
         }
 
-        //
+        //Controller dc gọi khi update obj
         [HttpPut]
         [Route("{IdSinhVien}")]
-        public async Task<IActionResult> UpdateSinhVien(Guid IdSinhVien, [FromBody] SinhVienUpdateVM request)
+        public async Task<IActionResult> UpdateSinhVien(Guid IdSinhVien, [FromBody] SinhVienUpdateVM sinhVien)
         {
-            var result = await _sinhVienServices.UpdateAsync(IdSinhVien, request);
+            var result = await _sinhVienServices.UpdateAsync(IdSinhVien, sinhVien);
             return Ok(result);
         }
 
         //
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAsync(Guid id)
+        public async Task<IActionResult> DeleteSinhVien(Guid id)
         {
-            var temp = await _sinhVienServices.RemoveAsync(id);
+            var temp = await _sinhVienServices.UpdateRemoveAsync(id);
             return Ok(temp);
         }
 
