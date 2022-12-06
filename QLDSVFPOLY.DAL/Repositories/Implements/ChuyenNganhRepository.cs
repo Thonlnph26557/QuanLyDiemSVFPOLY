@@ -38,6 +38,15 @@ namespace QLDSVFPOLY.DAL.Repositories.Implements
             return await (Task.FromResult(_dbContext.ChuyenNganhs.Update(obj).Entity));
         }
 
+        public async Task<ChuyenNganh> CreateChuyenNganhHep(ChuyenNganh obj, Guid IdChuyenNganh)
+        {
+            obj = new ChuyenNganh();
+            obj.IdChuyenNganh = IdChuyenNganh;
+
+            return (await _dbContext.ChuyenNganhs.AddAsync(obj)).Entity;
+        }
+
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();

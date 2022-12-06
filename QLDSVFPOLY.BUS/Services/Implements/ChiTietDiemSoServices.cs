@@ -14,8 +14,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
     public class ChiTietDiemSoServices : IChiTietDiemSoServices
     {
         IChiTietDiemSoRepository _iChiTietDiemSoRepository;
-        //IChiTietLopHocRepository _iChiTietLopHocRepository;
-        //ISinhVienRepository _iSinhVienRepository;
 
         List<ChiTietDiemSo> _listCTDiemSo;
 
@@ -23,34 +21,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         public ChiTietDiemSoServices()
         {
             _iChiTietDiemSoRepository = new ChiTietDiemSoRepository();
-            //_iChiTietLopHocRepository = new ChiTietLopHocRepository();
-            //_iSinhVienRepository = new SinhVienRepository();
         }
-        //public List<ChiTietDiemSoViewModel> GetAll()
-        //{
-        //    List<ChiTietDiemSoViewModel> _lstNhanVien = new List<ChiTietDiemSoViewModel>();
-        //    _lstNhanVien = (from a in _iChiTietDiemSoRepository.GetAll()
-        //                    join b in _iSinhVienRepository.GetAll() on a.IdSinhVien equals b.Id
-        //                    join c in _iChiTietLopHocRepository.GetAllChiTietLopHoc() on a.IdChiTietLopHoc equals c.Id
-        //                    select new ChiTietDiemSoViewModel()
-        //                    {
-        //                        Diem = a.Diem,
-        //                        TrangThai = a.TrangThai,
-        //                        NgayTao = a.NgayTao,
-        //                        TenLopHocCT = c.LopHoc.Ma,
-        //                        TenSinhVien = b.Ten
-        //                    }).ToList();
-
-        //    return _lstNhanVien;
-        //}
-
-        //public List<ChiTietDiemSoViewModel> GetAll(ChiTietDiemSoSearchViewModel ctDiemSearch)
-        //{
-        //    if (ctDiemSearch == null) return GetAll();
-
-        //    return GetAll().Where(x => x.Diem == ctDiemSearch.Diem
-        //    || x.TrangThai == ctDiemSearch.TrangThai).ToList();
-        //}
 
         private async Task GetListCTDiemSoAsync()
         {
@@ -62,59 +33,60 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListCTDiemSoAsync();
 
-            List<ChiTietDiemSoVM> listCTDiemSoVM = new List<ChiTietDiemSoVM>();
-
-            foreach (var temp in _listCTDiemSo)
+            List<ChiTietDiemSoVM> listCTDiemSoVM = _listCTDiemSo.Select(c => new ChiTietDiemSoVM
             {
-                listCTDiemSoVM.Add(new ChiTietDiemSoVM()
-                {
-                    IdDiemSo = temp.IdDiemSo,
-                    IdSinhVien = temp.IdSinhVien,
-                    IdChiTietLopHoc = temp.IdChiTietLopHoc,
-                    Diem = temp.Diem,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                });
-            }
+                IdChiTietLopHoc = c.IdChiTietLopHoc,
+                IdSinhVien = c.IdSinhVien,
+                IdDiemSo = c.IdDiemSo,
+                Diem = c.Diem,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).ToList();
 
-            if (obj == null)
+            if (obj.IdChiTietLopHoc == null
+                && obj.IdSinhVien == null
+                && obj.IdDiemSo == null
+                && obj.TrangThai == 0)
             {
                 return listCTDiemSoVM;
             }
-            //Tìm kiếm, tìm theo trạng thái, điểm
-            return listCTDiemSoVM.Where(c => c.Diem == obj.Diem
-            || c.TrangThai == obj.TrangThai).ToList();
+
+            return listCTDiemSoVM.Where(c =>
+                c.IdChiTietLopHoc == obj.IdChiTietLopHoc
+                || c.IdSinhVien == obj.IdSinhVien
+                || c.IdDiemSo == obj.IdDiemSo
+                || c.TrangThai == obj.TrangThai
+                ).ToList();
+
         }
 
         public async Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM obj)
         {
             await GetListCTDiemSoAsync();
 
-            List<ChiTietDiemSoVM> listCTDiemSoVM = new List<ChiTietDiemSoVM>();
-
-            foreach (var temp in _listCTDiemSo)
+            List<ChiTietDiemSoVM> listCTDiemSoVM = _listCTDiemSo.Select(c => new ChiTietDiemSoVM
             {
-                //Kiểm tra TrangThai
-                if (temp.TrangThai != 0)
-                {
-                    listCTDiemSoVM.Add(new ChiTietDiemSoVM()
-                    {
-                        IdDiemSo = temp.IdDiemSo,
-                        IdSinhVien = temp.IdSinhVien,
-                        IdChiTietLopHoc = temp.IdChiTietLopHoc,
-                        Diem = temp.Diem,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                    });
-                }
-            }
+                IdChiTietLopHoc = c.IdChiTietLopHoc,
+                IdSinhVien = c.IdSinhVien,
+                IdDiemSo = c.IdDiemSo,
+                Diem = c.Diem,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).Where(c => c.TrangThai != 0).ToList();
 
-            if (obj == null)
+            if (obj.IdChiTietLopHoc == null
+                && obj.IdSinhVien == null
+                && obj.IdDiemSo == null
+                && obj.TrangThai == 0)
             {
                 return listCTDiemSoVM;
             }
-            return listCTDiemSoVM.Where(c => c.Diem == obj.Diem
-            || c.TrangThai == obj.TrangThai).ToList();
+            return listCTDiemSoVM.Where(c =>
+                c.IdChiTietLopHoc == obj.IdChiTietLopHoc
+                || c.IdSinhVien == obj.IdSinhVien
+                || c.IdDiemSo == obj.IdDiemSo
+                || c.TrangThai == obj.TrangThai
+                ).ToList();
         }
 
         public async Task<ChiTietDiemSoVM> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
@@ -138,19 +110,15 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return result;
         }
 
-        public async Task<bool> CreateAsync(ChiTietDiemSoCreateViewModel obj, Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
+        public async Task<bool> CreateAsync(ChiTietDiemSoCreateVM obj)
         {
-            obj.IdSinhVien = idSinhVien;
-            obj.IdChiTietLopHoc = idLopHoc;
-            obj.IdSinhVien = idDiemSo;
-
             var temp = new ChiTietDiemSo()
             {
                 IdChiTietLopHoc = obj.IdChiTietLopHoc,
                 IdSinhVien = obj.IdSinhVien,
                 Diem = obj.Diem,
                 IdDiemSo = obj.IdDiemSo,
-                NgayTao = obj.NgayTao,
+                NgayTao = DateTime.Now,
                 TrangThai = obj.TrangThai,
             };
             await _iChiTietDiemSoRepository.CreateAsync(temp);
@@ -166,20 +134,22 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> UpdateAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien, ChiTietDiemSoUpdateVM obj)
         {
-            var listDiemSo = await _iChiTietDiemSoRepository.GetAllChiTietDiemSoAsync();
+            await GetListCTDiemSoAsync();
 
-            if (!listDiemSo.Any(c => c.IdDiemSo == idDiemSo
+            var temp = _listCTDiemSo.FirstOrDefault(c =>
+            c.IdSinhVien == idSinhVien
             && c.IdSinhVien == idSinhVien
-            && c.IdChiTietLopHoc == idLopHoc)) return false;
+            && c.IdChiTietLopHoc == idLopHoc);
 
-            var temp = new ChiTietDiemSo()
+            if (temp == null) return false;
+            else
             {
-                IdChiTietLopHoc = idLopHoc,
-                IdSinhVien = idSinhVien,
-                Diem = obj.Diem,
-                IdDiemSo = idDiemSo,
-                TrangThai = obj.TrangThai
-            };
+                temp.Diem = obj.Diem;
+                temp.IdSinhVien = obj.IdSinhVien;
+                temp.IdDiemSo = obj.IdDiemSo;
+                temp.IdChiTietLopHoc = obj.IdChiTietLopHoc;
+            }
+
             await _iChiTietDiemSoRepository.UpdateAsync(temp);
             await _iChiTietDiemSoRepository.SaveChangesAsync();
             return true;
@@ -187,13 +157,15 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> RemoveAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
         {
-            var listDiemSo = await _iChiTietDiemSoRepository.GetAllChiTietDiemSoAsync();
+            await GetListCTDiemSoAsync();
 
-            if (!listDiemSo.Any(c => c.IdDiemSo == idDiemSo
+            var temp = _listCTDiemSo.FirstOrDefault(c =>
+            c.IdSinhVien == idSinhVien
             && c.IdSinhVien == idSinhVien
-            && c.IdChiTietLopHoc == idLopHoc)) return false;
+            && c.IdChiTietLopHoc == idLopHoc);
 
-            await _iChiTietDiemSoRepository.DeleteAsync(idDiemSo, idLopHoc, idSinhVien);
+            temp.TrangThai = 0;
+
             await _iChiTietDiemSoRepository.SaveChangesAsync();
             return true;
         }

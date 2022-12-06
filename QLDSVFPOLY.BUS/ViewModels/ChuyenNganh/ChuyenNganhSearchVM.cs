@@ -10,7 +10,6 @@ namespace QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
     {
         public string? Ma { get; set; }
         public string? TenNganhHoc { get; set; }
-        public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
     }
 }

@@ -10,4 +10,12 @@
     <PackageReference Include="MudBlazor" Version="6.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QLDSVFPOLY.BUS\QLDSVFPOLY.BUS.csproj" />
+  </ItemGroup>
+
 </Project>

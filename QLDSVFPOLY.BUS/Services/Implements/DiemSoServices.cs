@@ -25,74 +25,69 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         }
 
 
-        private async Task GetListDiemSopAsync()
+        private async Task GetListDiemSoAsync()
         {
             _listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
         }
 
         public async Task<List<DiemSoVM>> GetAllAsync(DiemSoSearchVM obj)
         {
-            await GetListDiemSopAsync();
+            await GetListDiemSoAsync();
 
-            List<DiemSoVM> listDiemSoVM = new List<DiemSoVM>();
-
-            foreach (var temp in _listDiemSo)
+            List<DiemSoVM> listDiemSoVM = _listDiemSo.Select(c => new DiemSoVM
             {
-                listDiemSoVM.Add(new DiemSoVM()
-                {
-                    Id = temp.Id,
-                    TrongSo = temp.TrongSo,
-                    TenDauDiem = temp.TenDauDiem,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                });
-            }
+                Id = c.Id,
+                TrongSo = c.TrongSo,
+                TenDauDiem = c.TenDauDiem,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).ToList();
 
-            if (obj == null)
+            if (obj.TrongSo == 0
+                && obj.TenDauDiem == null
+                && obj.TrangThai == 0)
             {
                 return listDiemSoVM;
             }
-            //Tìm kiếm, tìm theo trạng thái, trọng số, tên điểm
-            return listDiemSoVM.Where(c => c.TenDauDiem.ToLower().Contains(obj.TenDauDiem.ToLower())
+
+            return listDiemSoVM.Where(c =>
+            c.TrongSo == obj.TrongSo
+            || c.TenDauDiem == obj.TenDauDiem
             || c.TrangThai == obj.TrangThai
-            || c.TrongSo == obj.TrongSo).ToList();
+            ).ToList();
+
         }
 
         public async Task<List<DiemSoVM>> GetAllActiveAsync(DiemSoSearchVM obj)
         {
-            await GetListDiemSopAsync();
+            await GetListDiemSoAsync();
 
-            List<DiemSoVM> listDiemSoVM = new List<DiemSoVM>();
-
-            foreach (var temp in _listDiemSo)
+            List<DiemSoVM> listDiemSoVM = _listDiemSo.Select(c => new DiemSoVM
             {
-                //Kiểm tra TrangThai
-                if (temp.TrangThai != 0)
-                {
-                    listDiemSoVM.Add(new DiemSoVM()
-                    {
-                        Id = temp.Id,
-                        TrongSo = temp.TrongSo,
-                        TenDauDiem = temp.TenDauDiem,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                    });
-                }
-            }
+                Id = c.Id,
+                TrongSo = c.TrongSo,
+                TenDauDiem = c.TenDauDiem,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).ToList();
 
-            if (obj == null)
+            if (obj.TrongSo == 0
+                && obj.TenDauDiem == null
+                && obj.TrangThai == 0)
             {
                 return listDiemSoVM;
             }
-            //Tìm kiếm, tìm theo trạng thái, trọng số, tên điểm
-            return listDiemSoVM.Where(c => c.TenDauDiem.ToLower().Contains(obj.TenDauDiem.ToLower())
+
+            return listDiemSoVM.Where(c =>
+            c.TrongSo.ToString().Contains(obj.TrongSo.ToString())
+            || c.TenDauDiem.Contains(obj.TenDauDiem)
             || c.TrangThai == obj.TrangThai
-            || c.TrongSo == obj.TrongSo).ToList();
+            ).ToList();
         }
 
         public async Task<DiemSoVM> GetByIdAsync(Guid id)
         {
-            await GetListDiemSopAsync();
+            await GetListDiemSoAsync();
 
             DiemSo temp = _listDiemSo.FirstOrDefault(c => c.Id == id);
 
@@ -131,15 +126,20 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM obj)
         {
-            var listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
-            if (!listDiemSo.Any(c => c.Id == id)) return false;
-            var temp = new DiemSo()
+            await GetListDiemSoAsync();
+
+            var temp = _listDiemSo.FirstOrDefault(c => c.Id == id);
+            if (temp == null)
             {
-                NgayTao = obj.NgayTao,
-                TenDauDiem = obj.TenDauDiem,
-                TrongSo = obj.TrongSo,
-                TrangThai = obj.TrangThai
-            };
+                return false;
+            }
+            else
+            {
+                temp.TrongSo = obj.TrongSo;
+                temp.TenDauDiem = obj.TenDauDiem;
+                temp.TrangThai = obj.TrangThai;
+            }
+
             await _iDiemSoRepository.UpdateAsync(temp);
             await _iDiemSoRepository.SaveChangesAsync();
             return true;
@@ -147,9 +147,12 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> RemoveAsync(Guid id)
         {
-            var listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
-            if (!listDiemSo.Any(c => c.Id == id)) return false;
-            await _iDiemSoRepository.DeleteAsync(id);
+            await GetListDiemSoAsync();
+
+            var temp = _listDiemSo.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
             await _iDiemSoRepository.SaveChangesAsync();
             return true;
         }

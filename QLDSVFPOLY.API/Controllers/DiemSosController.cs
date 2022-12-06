@@ -2,29 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
-using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh;
+using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
 
 namespace QLDSVFPOLY.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChuyenNganhController : ControllerBase
+    public class DiemSosController : ControllerBase
     {
-        IChuyenNganhServices _sv;
-        public ChuyenNganhController()
+        IDiemSoServices _sv;
+        public DiemSosController()
         {
-            _sv = new ChuyenNganhServices();
+            _sv = new DiemSoServices();
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] ChuyenNganhSearchVM obj)
+        public async Task<IActionResult> GetAllAsync([FromQuery] DiemSoSearchVM obj)
         {
             var list = await _sv.GetAllAsync(obj);
             return Ok(list);
         }
 
         [HttpGet("allactive")]
-        public async Task<IActionResult> GetAllActiveAsync([FromQuery] ChuyenNganhSearchVM obj)
+        public async Task<IActionResult> GetAllActiveAsync([FromQuery] DiemSoSearchVM obj)
         {
             var list = await _sv.GetAllActiveAsync(obj);
             return Ok(list);
@@ -38,7 +38,7 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ChuyenNganhCreateVM obj)
+        public async Task<IActionResult> CreateAsync([FromBody] DiemSoCreateVM obj)
         {
             if (obj == null) return BadRequest();
             var temp = await _sv.CreateAsync(obj);
@@ -46,7 +46,7 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChuyenNganhUpdateVM obj)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] DiemSoUpdateVM obj)
         {
             var temp = await _sv.UpdateAsync(id, obj);
             return Ok(temp);
