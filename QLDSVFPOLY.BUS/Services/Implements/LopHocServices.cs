@@ -32,26 +32,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListLopHocAsync();
 
-            List<LopHocVM> listLopHocViewmodel = new List<LopHocVM>();
-
-            foreach (var temp in _listLopHocs)
+            List<LopHocVM> listLopHocViewmodel = _listLopHocs.Select(c => new LopHocVM()
             {
-                listLopHocViewmodel.Add(new LopHocVM()
-                {
-                    Id = temp.Id,
-                    Ma = temp.Ma,
-                    IdDaoTao = temp.IdDaoTao,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai
-                });
+                Id = c.Id,
+                Ma = c.Ma,
+                IdDaoTao = c.IdDaoTao,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).ToList();
+
+            //Tìm kiếm theo Mã, TT, Ngày tạo
+            if (searchVm.Ma != null)
+            {
+                return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
+            }
+            if (searchVm.TrangThai != null)
+            {
+                return listLopHocViewmodel.Where(c => c.TrangThai == searchVm.TrangThai).ToList();
+            }
+            if (searchVm.NgayTao != null)
+            {
+                return listLopHocViewmodel.Where(c => c.NgayTao == searchVm.NgayTao).ToList();
             }
 
-            if (searchVm == null)
-            {
-                return listLopHocViewmodel;
-            }
-            //Tìm kiếm, tôi chỉ tìm theo Mã trc
-            return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
+            return listLopHocViewmodel;
         }
 
         //
@@ -60,31 +64,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListLopHocAsync();
 
-            List<LopHocVM> listLopHocViewmodel = new List<LopHocVM>();
-
-
-            foreach (var temp in _listLopHocs)
+            List<LopHocVM> listLopHocViewmodel = _listLopHocs.Where(c => c.TrangThai != 0).Select(c => new LopHocVM()
             {
-                //Kiểm tra TrangThai
-                if (temp.TrangThai != 0)
-                {
-                    listLopHocViewmodel.Add(new LopHocVM()
-                    {
-                        Id = temp.Id,
-                        Ma = temp.Ma,
-                        IdDaoTao = temp.IdDaoTao,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai
-                    });
-                }
+                Id = c.Id,
+                Ma = c.Ma,
+                IdDaoTao = c.IdDaoTao,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai
+            }).ToList();
+
+            //Tìm kiếm theo Mã, TT, Ngày tạo
+            if (searchVm.Ma != null)
+            {
+                return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
+            }
+            if (searchVm.TrangThai != null)
+            {
+                return listLopHocViewmodel.Where(c => c.TrangThai == searchVm.TrangThai).ToList();
+            }
+            if (searchVm.NgayTao != null)
+            {
+                return listLopHocViewmodel.Where(c => c.NgayTao == searchVm.NgayTao).ToList();
             }
 
-            if (searchVm == null)
-            {
-                return listLopHocViewmodel;
-            }
-            //Tìm kiếm, tôi chỉ tìm theo Mã trc
-            return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
+            return listLopHocViewmodel;
         }
 
         //
@@ -124,7 +127,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _iLopHocRepositories.SaveChangesAsync();
 
             var _listLopHocs = await _iLopHocRepositories.GetAllAsync();
-            if (_listLopHocs.Any(c => createVm.Id == c.Id)) return true;
+            if (_listLopHocs.Any(c => temp.Id == c.Id)) return true;
 
             return false;
         }
@@ -154,6 +157,20 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _iLopHocRepositories.RemoveAsync(id);
             await _iLopHocRepositories.SaveChangesAsync();
 
+            return true;
+        }
+
+        public async Task<bool> UpdateTrangThaiAsync(Guid id)
+        {
+            var _listLopHocs = await _iLopHocRepositories.GetAllAsync();
+            if (!_listLopHocs.Any(c => c.Id == id)) return false;
+
+            var temp = _listLopHocs.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _iLopHocRepositories.UpdateAsync(temp);
+            await _iLopHocRepositories.SaveChangesAsync();
             return true;
         }
     }

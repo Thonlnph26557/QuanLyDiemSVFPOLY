@@ -17,5 +17,6 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<bool> CreateAsync(LopHocCreateVM createVm);
         Task<bool> UpdateAsync(Guid id, LopHocUpdateVM updateVm);
         Task<bool> RemoveAsync(Guid id);
+        Task<bool> UpdateTrangThaiAsync(Guid id);
     }
 }
