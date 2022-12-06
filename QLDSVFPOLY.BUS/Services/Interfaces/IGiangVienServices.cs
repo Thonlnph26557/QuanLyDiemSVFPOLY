@@ -16,6 +16,7 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<bool> CreateAsync(GiangVienCreateVM createVm);
         Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM updateVm);
         Task<bool> RemoveAsync(Guid id);
+        Task<bool> UpdateTrangThaiAsync(Guid id);
 
     }
 }
