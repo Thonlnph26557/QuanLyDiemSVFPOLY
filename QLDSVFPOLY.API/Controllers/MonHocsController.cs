@@ -23,68 +23,66 @@ namespace QLDSVFPOLY.API.Controllers
             _qLSVDbContext = new QLSVDbContext();
         }
 
-        //
+        //lấy ra danh sách môn học còn hoạt động kết hợp tìm kiếm
         [HttpGet("active")]
-        public async Task<IActionResult> GetListMonHocList([FromQuery] MonHocSearchVM search)
+        public async Task<IActionResult> GetAllMonHocActive([FromQuery] MonHocSearchVM search)
         {
-            var objCollection = await _monHocServices.GetAllActiveAsync(search);
+            var listMonHocSearch = await _monHocServices.GetAllActiveAsync(search);
 
             if (search.Ma == null
                 && search.Ten == null
                 && search.TrangThai == 0
-                && search.IdChuyenNganh == null
                 )
             {
-                objCollection = await _monHocServices.GetAllActiveAsync(null);
+                listMonHocSearch = await _monHocServices.GetAllActiveAsync(null);
             }
-            return Ok(objCollection);
+            return Ok(listMonHocSearch);
         }
 
         //
         [HttpGet("all")]
         public async Task<IActionResult> GetAllMonHoc([FromQuery] MonHocSearchVM search)
         {
-            var objCollection = await _monHocServices.GetAllAsync(search);
+            var listMonHocSearch = await _monHocServices.GetAllAsync(search);
 
             if (search.Ma == null
                 && search.Ten == null
                 && search.TrangThai == 0
-                && search.IdChuyenNganh == null
                 )
             {
-                objCollection = await _monHocServices.GetAllActiveAsync(null);
+                listMonHocSearch = await _monHocServices.GetAllActiveAsync(null);
             }
 
-            return Ok(objCollection);
+            return Ok(listMonHocSearch);
         }
 
-        //
+        // GetById ??? 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetMonHocListById(Guid IdMonHoc)
+        public async Task<IActionResult> GetMonHocById(Guid IdMonHoc)
         {
-            var lecturerModel = await _monHocServices.GetByIdAsync(IdMonHoc);
-            return Ok(lecturerModel);
+            var monHoc = await _monHocServices.GetByIdAsync(IdMonHoc);
+            return Ok(monHoc);
         }
 
-        //
+        //Controller dc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateMonHoc([FromBody] MonHocCreateVM request)
+        public async Task<IActionResult> CreateMonHoc([FromBody] MonHocCreateVM monHoc)
         {
-            if (request == null)
+            if (monHoc == null)
                 return BadRequest();
 
-            var newRole = await _monHocServices.CreateAsync(request);
+            var newMonHoc = await _monHocServices.CreateAsync(monHoc);
 
-            return Ok(newRole);
+            return Ok(newMonHoc);
         }
 
-        //
+        //Controller dc gọi khi update obj
         [HttpPut]
         [Route("{IdMonHoc}")]
-        public async Task<IActionResult> UpdateMonHoc(Guid IdMonHoc, [FromBody] MonHocUpdateVM request)
+        public async Task<IActionResult> UpdateMonHoc(Guid IdMonHoc, [FromBody] MonHocUpdateVM monHoc)
         {
-            var result = await _monHocServices.UpdateAsync(IdMonHoc, request);
+            var result = await _monHocServices.UpdateAsync(IdMonHoc, monHoc);
             return Ok(result);
         }
 
@@ -92,7 +90,7 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync(Guid id)
         {
-            var temp = await _monHocServices.RemoveAsync(id);
+            var temp = await _monHocServices.UpdateRemoveAsync(id);
             return Ok(temp);
         }
 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 
 namespace QLDSVFPOLY.BUS.Services.Implements
 {
@@ -15,7 +16,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
     {
         //
         IMonHocRepository _repos;
-        List<MonHoc> _listMonHoc;
+        List<MonHoc> _listMonHocs;
 
         //
         public MonHocServices()
@@ -26,7 +27,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         private async Task GetListMonHocAsync()
         {
-            _listMonHoc = await _repos.GetAllAsync();
+            _listMonHocs = await _repos.GetAllAsync();
         }
 
         //
@@ -36,25 +37,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<MonHocVM> listMonHocVM = new List<MonHocVM>();
 
-            foreach (var temp in _listMonHoc)
+            listMonHocVM = _listMonHocs.Select(c => new MonHocVM()
             {
-                listMonHocVM.Add(new MonHocVM()
-                {
-                    Id = temp.Id,
-                    Ma = temp.Ma,
-                    Ten = temp.Ten,
-                    DuongDanAnh = temp.DuongDanAnh,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                    IdChuyenNganh = temp.IdChuyenNganh,
-                });
-            }
+                Id = c.Id,
+                Ma = c.Ma,
+                Ten = c.Ten,
+                DuongDanAnh = c.DuongDanAnh,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
 
-            if (obj == null)
+            if (obj.Ma != null ||
+                obj.Ten != null ||
+                obj.TrangThai != null
+                )
+            {
+                return listMonHocVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.Ten.Contains(obj.Ten)
+                                                    || c.TrangThai == (obj.TrangThai)
+                                                    ).ToList();
+            }
+            else
             {
                 return listMonHocVM;
             }
-            return listMonHocVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
         //
@@ -65,28 +71,32 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<MonHocVM> listMonHocVM = new List<MonHocVM>();
 
-            foreach(var temp in _listMonHoc)
+            //Kiểm tra TrangThai
+            listMonHocVM = _listMonHocs.Where(c => c.TrangThai != 0).Select(c => new MonHocVM()
             {
-                //Kiểm tra TrangThai
-                if(temp.TrangThai != 0)
-                {
-                    listMonHocVM.Add(new MonHocVM()
-                    {
-                        Id = temp.Id,
-                        Ma = temp.Ma,
-                        Ten = temp.Ten,
-                        DuongDanAnh = temp.DuongDanAnh,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                        IdChuyenNganh = temp.IdChuyenNganh,
-                    });
-                }
-            }
-            if(obj == null)
+                Id = c.Id,
+                Ma = c.Ma,
+                Ten = c.Ten,
+                DuongDanAnh = c.DuongDanAnh,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
+        
+            if (obj.Ma != null ||
+                obj.Ten != null ||
+                obj.TrangThai != null
+                )
+            {
+                return listMonHocVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.Ten.Contains(obj.Ten)
+                                                    || c.TrangThai == (obj.TrangThai)
+                                                    ).ToList();
+    }
+            else
             {
                 return listMonHocVM;
             }
-            return listMonHocVM.Where(c =>c.Ma == obj.Ma).ToList();
+
         }
 
         //
@@ -94,7 +104,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListMonHocAsync();
 
-            MonHoc temp = _listMonHoc.FirstOrDefault(c => c.Id == id);
+            MonHoc temp = _listMonHocs.FirstOrDefault(c => c.Id == id);
 
             MonHocVM result = new MonHocVM()
             {
@@ -104,7 +114,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 DuongDanAnh = temp.DuongDanAnh,
                 NgayTao = temp.NgayTao,
                 TrangThai = temp.TrangThai,
-                IdChuyenNganh = temp.IdChuyenNganh,
             };
             return result;
         }
@@ -120,7 +129,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 DuongDanAnh = obj.DuongDanAnh,
                 NgayTao = DateTime.Now,
                 TrangThai = obj.TrangThai,
-                IdChuyenNganh = obj.IdChuyenNganh,
             };
 
             await _repos.CreateAsync(temp);
@@ -140,14 +148,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             if (!listMonHoc.Any(c => c.Id == id)) return false;
 
-            var temp = new MonHoc()
-            {
-                Ma = obj.Ma,
-                Ten = obj.Ten,
-                DuongDanAnh = obj.DuongDanAnh,
-                TrangThai = obj.TrangThai,
-                IdChuyenNganh = obj.IdChuyenNganh,
-            };
+            var temp = listMonHoc.FirstOrDefault(c => c.Id == id);
+
+                temp.Ma = obj.Ma;
+                temp.Ten = obj.Ten;
+                temp.DuongDanAnh = obj.DuongDanAnh;
+                temp.TrangThai = obj.TrangThai;
+
+            await _repos.UpdateAsync(temp);
+            await _repos.SaveChangesAsync();
+
+            return true;
+        }
+
+
+        //
+        public async Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            var listMonHoc = await _repos.GetAllAsync();
+
+            if (!listMonHoc.Any(c => c.Id == id)) return false;
+
+            var temp = listMonHoc.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
 
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();

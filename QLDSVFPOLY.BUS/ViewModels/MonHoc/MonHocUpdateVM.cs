@@ -13,8 +13,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.MonHoc
         public string? Ten { get; set; }
         public string? DuongDanAnh { get; set; }
         //public DateTime NgayTao { get; set; }
-        public int TrangThai { get; set; }
-        public Guid IdChuyenNganh { get; set; }
+        public int? TrangThai { get; set; }
 
     }
 }

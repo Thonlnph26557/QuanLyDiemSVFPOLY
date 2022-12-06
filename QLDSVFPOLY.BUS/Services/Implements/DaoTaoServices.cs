@@ -10,6 +10,7 @@ using QLDSVFPOLY.BUS.ViewModels.DaoTao;
 using System.Net.WebSockets;
 using System.ComponentModel;
 using QLDSVFPOLY.BUS.Services.Interfaces;
+using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 
 namespace QLDSVFPOLY.BUS.Services.Implements
 {
@@ -18,7 +19,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         IDaoTaoRepository _repos;
 
-        List<DaoTao> _listDaoTao;
+        List<DaoTao> _listDaoTaos;
 
         //
         public DaoTaoServices()
@@ -29,7 +30,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         private async Task GetListDaoTaoAsync()
         {
-            _listDaoTao = await _repos.GetAllAsync();
+            _listDaoTaos = await _repos.GetAllAsync();
         }
 
         //
@@ -39,31 +40,40 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<DaoTaoVM> listDaoTaoVM = new List<DaoTaoVM>();
 
-            foreach(var temp in _listDaoTao)
+            listDaoTaoVM = _listDaoTaos.Select(c => new DaoTaoVM()
             {
-                listDaoTaoVM.Add(new DaoTaoVM()
-                {
-                    Id = temp.Id,
-                    Ma = temp.Ma,
-                    DiaChi = temp.DiaChi,
-                    SoDienThoai = temp.SoDienThoai,
-                    Email = temp.Email,
-                    TenDangNhap = temp.TenDangNhap,
-                    MatKhau = temp.MatKhau,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                });
-            }
+                Id = c.Id,
+                Ma = c.Ma,
+                DiaChi = c.DiaChi,
+                SoDienThoai = c.SoDienThoai,
+                Email = c.Email,
+                TenDangNhap = c.TenDangNhap,
+                MatKhau = c.MatKhau,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
 
-            if(obj == null)
+            if (obj.Ma != null ||
+                obj.DiaChi != null ||
+                obj.SoDienThoai != null ||
+                obj.Email != null ||
+                obj.TrangThai != null
+                )
+            {
+                return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.DiaChi.Contains(obj.DiaChi)
+                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
+                                                    || c.Email.Contains(obj.Email)
+                                                    || c.TrangThai == (obj.TrangThai)
+                                                    ).ToList();
+            }
+            else
             {
                 return listDaoTaoVM;
             }
-            //Tìm kiếm, tôi chỉ tìm theo Mã trc
-            return listDaoTaoVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
-
+        //
         //Active = (TrangThai != 0)
         public async Task<List<DaoTaoVM>> GetAllActiveAsync(DaoTaoSearchVM obj)
         {
@@ -71,39 +81,46 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<DaoTaoVM> listDaoTaoVM = new List<DaoTaoVM>();
 
-            foreach (var temp in _listDaoTao)
+            //Kiểm tra TrangThai
+            listDaoTaoVM = _listDaoTaos.Where(c => c.TrangThai != 0).Select(c => new DaoTaoVM()
             {
-                //Kiểm tra TrangThai
-                if(temp.TrangThai != 0)
-                {
-                    listDaoTaoVM.Add(new DaoTaoVM()
-                    {
-                        Id = temp.Id,
-                        Ma = temp.Ma,
-                        DiaChi = temp.DiaChi,
-                        SoDienThoai = temp.SoDienThoai,
-                        Email = temp.Email,
-                        TenDangNhap = temp.TenDangNhap,
-                        MatKhau = temp.MatKhau,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                    });
-                }
-            }
+                Id = c.Id,
+                Ma = c.Ma,
+                DiaChi = c.DiaChi,
+                SoDienThoai = c.SoDienThoai,
+                Email = c.Email,
+                TenDangNhap = c.TenDangNhap,
+                MatKhau = c.MatKhau,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
 
-            if (obj == null)
+            if (obj.Ma != null ||
+                obj.DiaChi != null ||
+                obj.SoDienThoai != null ||
+                obj.Email != null ||
+                obj.TrangThai != null
+                )
+            {
+                return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                    || c.DiaChi.Contains(obj.DiaChi)
+                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
+                                                    || c.Email.Contains(obj.Email)
+                                                    || c.TrangThai == (obj.TrangThai)
+                                                    ).ToList();
+            }
+            else
             {
                 return listDaoTaoVM;
             }
-            //Tìm kiếm, tôi chỉ tìm theo Mã trc
-            return listDaoTaoVM.Where(c => c.Ma == obj.Ma).ToList();
         }
 
+        //
         public async Task<DaoTaoVM> GetByIdAsync(Guid id)
         {
             await GetListDaoTaoAsync();
 
-            DaoTao temp = _listDaoTao.FirstOrDefault(c => c.Id == id);
+            DaoTao temp = _listDaoTaos.FirstOrDefault(c => c.Id == id);
 
             DaoTaoVM result = new DaoTaoVM()
             {
@@ -122,6 +139,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         }
 
 
+        //
         public async Task<bool> CreateAsync(DaoTaoCreateVM obj)
         {
 
@@ -148,28 +166,47 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return false;
         }
 
+        //
         public async Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj)
         {
             var listDaoTao = await _repos.GetAllAsync();
 
             if (!listDaoTao.Any(c => c.Id == id)) return false;
 
-            var temp = new DaoTao()
-            {
-                Ma = obj.Ma,
-                DiaChi = obj.DiaChi,
-                SoDienThoai = obj.SoDienThoai,
-                Email = obj.Email,
-                TenDangNhap = obj.TenDangNhap,
-                MatKhau = obj.MatKhau,
-                TrangThai = obj.TrangThai,
-            };
+            var temp = listDaoTao.FirstOrDefault(c => c.Id == id);
+
+                temp.Ma = obj.Ma;
+                temp.DiaChi = obj.DiaChi;
+                temp.SoDienThoai = obj.SoDienThoai;
+                temp.Email = obj.Email;
+                temp.TenDangNhap = obj.TenDangNhap;
+                temp.MatKhau = obj.MatKhau;
+                temp.TrangThai = obj.TrangThai;
 
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();
 
             return true;
         }
+
+        //
+        public async Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            var listDaoTao = await _repos.GetAllAsync();
+
+            if (!listDaoTao.Any(c => c.Id == id)) return false;
+
+            var temp = listDaoTao.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _repos.UpdateAsync(temp);
+            await _repos.SaveChangesAsync();
+
+            return true;
+        }
+
+        //
         public async Task<bool> RemoveAsync(Guid id)
         {
             var listDaoTao = await _repos.GetAllAsync();

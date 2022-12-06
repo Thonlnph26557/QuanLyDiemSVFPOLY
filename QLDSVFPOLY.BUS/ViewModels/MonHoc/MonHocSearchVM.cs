@@ -11,8 +11,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.MonHoc
         //public Guid? Id { get; set; }
         public string? Ma { get; set; }
         public string? Ten { get; set; }
-        public int TrangThai { get; set; }
-        public Guid? IdChuyenNganh { get; set; }
+        public int? TrangThai { get; set; }
 
     }
 }

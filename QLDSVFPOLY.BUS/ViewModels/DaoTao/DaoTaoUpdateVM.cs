@@ -16,6 +16,6 @@ namespace QLDSVFPOLY.BUS.ViewModels.DaoTao
         public string? TenDangNhap { get; set; }
         public string? MatKhau { get; set; }
         //public DateTime NgayTao { get; set; }
-        public int TrangThai { get; set; }
+        public int? TrangThai { get; set; }
     }
 }
