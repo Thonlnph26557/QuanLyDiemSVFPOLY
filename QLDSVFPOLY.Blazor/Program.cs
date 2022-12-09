@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using QLDSVFPOLY.Blazor.Data;
 using MudBlazor.Services;
+using QLDSVFPOLY.Blazor.Repository.Interfaces;
+using QLDSVFPOLY.Blazor.Repository.Implements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,19 @@ builder.Services.AddScoped(c => new HttpClient
     BaseAddress = new Uri("https://localhost:7258"),
 });
 builder.Services.AddMudServices();
+builder.Services.AddTransient<IMonHocRepo, MonHocRepo>();
+builder.Services.AddTransient<IChuyenNganhRepo, ChuyenNganhRepo>();
+builder.Services.AddTransient<IChuyenNganhMonHocRepos, ChuyenNganhMonHocRepos>();
+builder.Services.AddTransient<IKiHocRepos, KiHocRepos>();
+builder.Services.AddTransient<IMonHocRepo, MonHocRepo>();
+builder.Services.AddTransient<ILopHocRepos, LopHocRepos>();
+builder.Services.AddTransient<IGiangVienRepos, GiangVienRepos>();
+builder.Services.AddTransient<IDiemSoRepos, DiemSoRepos>();
+builder.Services.AddTransient<IChiTietLopHocRepos, ChiTietLopHocRepos>();
+builder.Services.AddTransient<IChiTietDiemSoRepo, ChiTietDiemSoRepo>();
+builder.Services.AddTransient<ITaiKhoanRepo, TaiKhoanRepo>();
+builder.Services.AddTransient<ISinhVienRepo, SinhVienRepo>();
+builder.Services.AddTransient<INhanVienDaoTaoRepos, NhanVienDaoTaoRepos>();
 //
 
 var app = builder.Build();

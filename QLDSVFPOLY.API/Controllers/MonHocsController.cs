@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
-using QLDSVFPOLY.BUS.ViewModels.DaoTao;
 using QLDSVFPOLY.BUS.ViewModels.MonHoc;
-using QLDSVFPOLY.DAL.Entities.EF;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -14,29 +11,11 @@ namespace QLDSVFPOLY.API.Controllers
     {
         //
         private readonly IMonHocServices _monHocServices;
-        private QLSVDbContext _qLSVDbContext;
 
         //
         public MonHocsController(IMonHocServices monHocServices)
         {
             _monHocServices = monHocServices;
-            _qLSVDbContext = new QLSVDbContext();
-        }
-
-        //lấy ra danh sách môn học còn hoạt động kết hợp tìm kiếm
-        [HttpGet("active")]
-        public async Task<IActionResult> GetAllMonHocActive([FromQuery] MonHocSearchVM search)
-        {
-            var listMonHocSearch = await _monHocServices.GetAllActiveAsync(search);
-
-            if (search.Ma == null
-                && search.Ten == null
-                && search.TrangThai == 0
-                )
-            {
-                listMonHocSearch = await _monHocServices.GetAllActiveAsync(null);
-            }
-            return Ok(listMonHocSearch);
         }
 
         //
@@ -44,17 +23,18 @@ namespace QLDSVFPOLY.API.Controllers
         public async Task<IActionResult> GetAllMonHoc([FromQuery] MonHocSearchVM search)
         {
             var listMonHocSearch = await _monHocServices.GetAllAsync(search);
-
-            if (search.Ma == null
-                && search.Ten == null
-                && search.TrangThai == 0
-                )
-            {
-                listMonHocSearch = await _monHocServices.GetAllActiveAsync(null);
-            }
-
             return Ok(listMonHocSearch);
         }
+
+        //lấy ra danh sách môn học còn hoạt động kết hợp tìm kiếm
+        [HttpGet("allactive")]
+        public async Task<IActionResult> GetAllMonHocActive([FromQuery] MonHocSearchVM search)
+        {
+            var listMonHocSearch = await _monHocServices.GetAllActiveAsync(search);
+            return Ok(listMonHocSearch);
+        }
+
+        
 
         // GetById ??? 
         [HttpGet]
@@ -79,10 +59,10 @@ namespace QLDSVFPOLY.API.Controllers
 
         //Controller dc gọi khi update obj
         [HttpPut]
-        [Route("{IdMonHoc}")]
-        public async Task<IActionResult> UpdateMonHoc(Guid IdMonHoc, [FromBody] MonHocUpdateVM monHoc)
+        [Route("{Id}")]
+        public async Task<IActionResult> UpdateMonHoc(Guid Id, [FromBody] MonHocUpdateVM monHoc)
         {
-            var result = await _monHocServices.UpdateAsync(IdMonHoc, monHoc);
+            var result = await _monHocServices.UpdateAsync(Id, monHoc);
             return Ok(result);
         }
 

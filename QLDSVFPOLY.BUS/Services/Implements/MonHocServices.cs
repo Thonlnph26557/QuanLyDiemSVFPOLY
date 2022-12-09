@@ -47,20 +47,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai,
             }).ToList();
 
-            if (obj.Ma != null ||
-                obj.Ten != null ||
-                obj.TrangThai != null
-                )
-            {
-                return listMonHocVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.Ten.Contains(obj.Ten)
-                                                    || c.TrangThai == (obj.TrangThai)
-                                                    ).ToList();
-            }
-            else
-            {
                 return listMonHocVM;
-            }
         }
 
         //
@@ -81,21 +68,20 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
             }).ToList();
-        
-            if (obj.Ma != null ||
-                obj.Ten != null ||
-                obj.TrangThai != null
-                )
-            {
-                return listMonHocVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.Ten.Contains(obj.Ten)
-                                                    || c.TrangThai == (obj.TrangThai)
-                                                    ).ToList();
-    }
-            else
-            {
-                return listMonHocVM;
-            }
+
+            //        if (obj.Ma != null ||
+            //            obj.Ten != null
+            //            )
+            //        {
+            //            return listMonHocVM.Where(c => 
+            //                c.Ma.Contains(obj.Ma)
+            //                || c.Ten.Contains(obj.Ten)
+            //            ).ToList();
+            //}
+            //        else
+            //        {
+            return listMonHocVM;
+            //        }
 
         }
 

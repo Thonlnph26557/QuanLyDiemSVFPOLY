@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
 {
-    public class ChiTietDiemSoCreateViewModel 
+    public class ChiTietDiemSoCreateVM
     {
         public Guid IdChiTietLopHoc { get; set; }
         public Guid IdSinhVien { get; set; }

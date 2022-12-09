@@ -7,8 +7,8 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
         Task<List<NhanVienDaoTaoVM>> GetAllAsync(NhanVienDaoTaoSearchVM obj);
         Task<List<NhanVienDaoTaoVM>> GetAllActiveAsync(NhanVienDaoTaoSearchVM obj);
         Task<NhanVienDaoTaoVM> GetByIdAsync(Guid id);
-        Task<int> CreateAsync(NhanVienDaoTaoCreateVM obj);
-        Task<int> UpdateAsync(Guid id, NhanVienDaoTaoUpdateVM obj);
-        Task<int> RemoveAsync(Guid id);
+        Task<bool> CreateAsync(NhanVienDaoTaoCreateVM obj);
+        Task<bool> UpdateAsync(Guid id, NhanVienDaoTaoUpdateVM obj);
+        Task<bool> RemoveAsync(Guid id);
     }
 }

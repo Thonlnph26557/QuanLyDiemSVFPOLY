@@ -1,0 +1,43 @@
+﻿@page "/taikhoan/doimatkhau"
+@layout EmptyMudLayout
+@using QLDSVFPOLY.BUS.ViewModels.TaiKhoan
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@inject NavigationManager _navManager
+@inject ITaiKhoanRepo _repo
+
+<MudContainer class="d-flex justify-center align-center w-70 h-75">
+    <EditForm Model="@_dmkVM">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <MudGrid class="justify-center">
+            <MudItem>
+                <MudCard class="p-4" Style="border: 1px solid grey; min-width: 20vw;">
+                    <MudCardContent>
+                        @*<MudText Typo="Typo.h5">Đổi mật khẩu</MudText>*@
+                        <MudTextField Label="Tài khoản" @bind-Value="_dmkVM.TaiKhoan" For="() => _dmkVM.TaiKhoan"></MudTextField>
+                        <MudTextField Label="Mật khẩu" @bind-Value="_dmkVM.MatKhau" For="() => _dmkVM.MatKhau" InputType="InputType.Password"></MudTextField>
+                        <MudTextField Label="Nhập lại mật khẩu" @bind-Value="_dmkVM.NhapLaiMatKhau" For="() => _dmkVM.NhapLaiMatKhau" InputType="InputType.Password"></MudTextField>
+                        <MudSelect T="string" Label="Chức vụ" @bind-Value="_dmkVM.ChucVu" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem Value="@("DaoTao")">Đào tạo</MudSelectItem>
+                            <MudSelectItem Value="@("NhanVienDaoTao")">Nhân viên đào tạo</MudSelectItem>
+                            <MudSelectItem Value="@("GiangVien")">Giảng viên</MudSelectItem>
+                            <MudSelectItem Value="@("SinhVien")">Sinh viên</MudSelectItem>
+                        </MudSelect>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="DoiMatKhauAsync">Đổi mật khẩu</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</MudContainer>
+
+@code {
+    DoiMatKhauVM _dmkVM = new DoiMatKhauVM();
+    private async Task DoiMatKhauAsync() {
+        bool result = await _repo.UpdateAsync(_dmkVM);
+        if(result) {
+            _navManager.NavigateTo("/taikhoan/dangnhap/");
+        }
+    }
+}

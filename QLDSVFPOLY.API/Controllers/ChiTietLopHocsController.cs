@@ -7,11 +7,11 @@ namespace QLDSVFPOLY.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChiTietLopHocController : ControllerBase
+    public class ChiTietLopHocsController : ControllerBase
     {
         private readonly IChiTietLopHocServices _iChiTietLopHocServices;
 
-        public ChiTietLopHocController(IChiTietLopHocServices iChiTietLopHocServices)
+        public ChiTietLopHocsController(IChiTietLopHocServices iChiTietLopHocServices)
         {
             _iChiTietLopHocServices = iChiTietLopHocServices;
         }
@@ -43,7 +43,7 @@ namespace QLDSVFPOLY.API.Controllers
 
         //Controller dc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ChiTietLopHocCreateViewmodel chiTietLopHoc)
+        public async Task<IActionResult> CreateAsync([FromBody] ChiTietLopHocCreateVM chiTietLopHoc)
         {
             if (chiTietLopHoc == null)
                 return BadRequest();
@@ -56,7 +56,7 @@ namespace QLDSVFPOLY.API.Controllers
         //Controller dc gọi khi update obj
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChiTietLopHocUpdateViewmodel chiTietLopHoc)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChiTietLopHocUpdateVM chiTietLopHoc)
         {
             var result = await _iChiTietLopHocServices.UpdateAsync(id, chiTietLopHoc);
             return Ok(result);

@@ -25,7 +25,7 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         //lấy ra danh sách giảng viên còn hoạt động kết hợp tìm kiếm
-        [HttpGet("active")]
+        [HttpGet("allactive")]
         public async Task<IActionResult> GetAllChuyenNganhMonHocActive([FromQuery] ChuyenNganhMonHocSearchVM searchVm)
         {
             var listCNMHSearchActive = await _iChuyenNganhMonHocServices.GetAllActiveAsync(searchVm);

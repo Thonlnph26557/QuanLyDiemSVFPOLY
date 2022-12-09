@@ -16,9 +16,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
     {
         //
         IChiTietLopHocRepositories _iChiTietLopHocRepositories;
-        IGiangVienRepositories _iGiangVienRepositories;
+        IGiangVienRepository _iGiangVienRepositories;
         IKiHocRepositories _iKiHocRepositories;
-        ILopHocRepositories _iLopHocRepositories;
+        ILopHocRepository _iLopHocRepositories;
 
         List<ChiTietLopHoc> _listChiTietLopHocs;
 
@@ -27,9 +27,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         public ChiTietLopHocServices()
         {
             _iChiTietLopHocRepositories = new ChiTietLopHocRepositories();
-            _iGiangVienRepositories = new GiangVienRepositories();
+            _iGiangVienRepositories = new GiangVienRepository();
             _iKiHocRepositories = new KiHocRepositories();
-            _iLopHocRepositories = new LopHocRepositories();
+            _iLopHocRepositories = new LopHocRepository();
         }
 
         //
@@ -41,16 +41,16 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
 
         //
-        public async Task<List<ChiTietLopHocViewmodel>> GetAllAsync(ChiTietLopHocSearchViewmodel obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllAsync(ChiTietLopHocSearchVM obj)
         {
             await GetListChiTietLopHocAsync();
 
-            List<ChiTietLopHocViewmodel> listChiTietLopHocViewmodel = new List<ChiTietLopHocViewmodel>();
+            List<ChiTietLopHocVM> listChiTietLopHocViewmodel = new List<ChiTietLopHocVM>();
 
 
             foreach (var temp in _listChiTietLopHocs)
             {
-                listChiTietLopHocViewmodel.Add(new ChiTietLopHocViewmodel()
+                listChiTietLopHocViewmodel.Add(new ChiTietLopHocVM()
                 {
                     Id = temp.Id,
                     IdGiangVien = temp.IdGiangVien,
@@ -73,18 +73,18 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         //
         //Active = (TrangThai != 0)
-        public async Task<List<ChiTietLopHocViewmodel>> GetAllActiveAsync(ChiTietLopHocSearchViewmodel obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllActiveAsync(ChiTietLopHocSearchVM obj)
         {
             await GetListChiTietLopHocAsync();
 
-            List<ChiTietLopHocViewmodel> listChiTietLopHocViewmodel = new List<ChiTietLopHocViewmodel>();
+            List<ChiTietLopHocVM> listChiTietLopHocViewmodel = new List<ChiTietLopHocVM>();
 
             foreach (var temp in _listChiTietLopHocs)
             {
                 //Kiểm tra TrangThai
                 if (temp.TrangThai != 0)
                 {
-                    listChiTietLopHocViewmodel.Add(new ChiTietLopHocViewmodel()
+                    listChiTietLopHocViewmodel.Add(new ChiTietLopHocVM()
                     {
                         Id = temp.Id,
                         IdGiangVien = temp.IdGiangVien,
@@ -108,13 +108,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         }
 
         //
-        public async Task<ChiTietLopHocViewmodel> GetByIdAsync(Guid id)
+        public async Task<ChiTietLopHocVM> GetByIdAsync(Guid id)
         {
             await GetListChiTietLopHocAsync();
 
             ChiTietLopHoc temp = _listChiTietLopHocs.FirstOrDefault(c => c.Id == id);
 
-            ChiTietLopHocViewmodel result = new ChiTietLopHocViewmodel()
+            ChiTietLopHocVM result = new ChiTietLopHocVM()
             {
                 Id = temp.Id,
                 IdGiangVien = temp.IdGiangVien,
@@ -129,7 +129,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         }
 
         //
-        public async Task<bool> CreateAsync(ChiTietLopHocCreateViewmodel obj)
+        public async Task<bool> CreateAsync(ChiTietLopHocCreateVM obj)
         {
             var temp = new ChiTietLopHoc()
             {
@@ -154,7 +154,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         }
 
         //
-        public async Task<bool> UpdateAsync(Guid id, ChiTietLopHocUpdateViewmodel obj)
+        public async Task<bool> UpdateAsync(Guid id, ChiTietLopHocUpdateVM obj)
         {
             var _listChiTietLopHocs = await _iChiTietLopHocRepositories.GetAllAsync();
 

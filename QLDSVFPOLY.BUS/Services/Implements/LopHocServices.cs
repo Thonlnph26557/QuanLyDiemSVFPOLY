@@ -46,15 +46,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
             }
-            if (searchVm.TrangThai != null)
-            {
-                return listLopHocViewmodel.Where(c => c.TrangThai == searchVm.TrangThai).ToList();
-            }
-            if (searchVm.NgayTao != null)
-            {
-                return listLopHocViewmodel.Where(c => c.NgayTao == searchVm.NgayTao).ToList();
-            }
-
             return listLopHocViewmodel;
         }
 
@@ -78,15 +69,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
             }
-            if (searchVm.TrangThai != null)
-            {
-                return listLopHocViewmodel.Where(c => c.TrangThai == searchVm.TrangThai).ToList();
-            }
-            if (searchVm.NgayTao != null)
-            {
-                return listLopHocViewmodel.Where(c => c.NgayTao == searchVm.NgayTao).ToList();
-            }
-
             return listLopHocViewmodel;
         }
 
@@ -112,15 +94,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         public async Task<bool> CreateAsync(LopHocCreateVM createVm)
         {
-            createVm.Id = Guid.NewGuid();
-
             var temp = new LopHoc()
             {
-                Id = createVm.Id,
+                Id = Guid.NewGuid(),
                 Ma = createVm.Ma,
-                IdDaoTao = createVm.IdDaoTao,// tại sao IdDaoTao lại là NewGuid???
-                NgayTao = createVm.NgayTao,
-                TrangThai = createVm.TrangThai
+                IdDaoTao = createVm.IdDaoTao,
+                TrangThai = createVm.TrangThai,
+                NgayTao = DateTime.Now
             };
 
             await _iLopHocRepositories.CreateAsync(temp);
@@ -139,11 +119,12 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             if (!_listLopHocs.Any(c => c.Id == id)) return false;
 
             var temp = _listLopHocs.FirstOrDefault(c => c.Id == id);
-            temp.NgayTao = updateVm.NgayTao;
+            temp.Ma = updateVm.Ma;
             temp.TrangThai = updateVm.TrangThai;
 
             await _iLopHocRepositories.UpdateAsync(temp);
             await _iLopHocRepositories.SaveChangesAsync();
+
             return true;
         }
 
@@ -160,14 +141,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return true;
         }
 
-        public async Task<bool> UpdateTrangThaiAsync(Guid id)
+        public async Task<bool> UpdateTrangThaiAsync(Guid id, LopHocUpdateVM obj)
         {
             var _listLopHocs = await _iLopHocRepositories.GetAllAsync();
             if (!_listLopHocs.Any(c => c.Id == id)) return false;
 
             var temp = _listLopHocs.FirstOrDefault(c => c.Id == id);
-
-            temp.TrangThai = 0;
+            temp.TrangThai = obj.TrangThai;
 
             await _iLopHocRepositories.UpdateAsync(temp);
             await _iLopHocRepositories.SaveChangesAsync();

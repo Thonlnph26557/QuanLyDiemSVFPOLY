@@ -55,25 +55,14 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync(Guid id)
         {
-            var temp = await _sv.RemoveAsync(id);
+            var temp = await _sv.UpdateTrangThaiAsync(id);
             return Ok(temp);
         }
 
-        //Controller dc gọi khi thêm chuyên ngành hẹp
-        [HttpPost]
-        public async Task<IActionResult> CreateChuyenNganhHep([FromBody] ChuyenNganhCreateVM chuyenNganh, Guid idChuyenNganh)
-        {
-            if (chuyenNganh == null)
-                return BadRequest();
-
-            var newChuyenNganhHep = await _sv.CreateChuyenNganhHep(chuyenNganh, idChuyenNganh);
-
-            return Ok(newChuyenNganhHep);
-        }
 
         //lấy ra chuyên ngành hẹp theo idChuyenNganh 
         [HttpGet]
-        [Route("{id}")]
+        [Route("chuyennganhhep/{id}")]
         public async Task<IActionResult> GetChuyenNganhhepById(Guid id)
         {
             var listCNHep = await _sv.GetChuyenNganhHepById(id);

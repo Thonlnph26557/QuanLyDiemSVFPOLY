@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
-using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
+using QLDSVFPOLY.BUS.ViewModels.DiemSo;
 
 namespace QLDSVFPOLY.API.Controllers
 {

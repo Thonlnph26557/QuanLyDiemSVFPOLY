@@ -1,0 +1,108 @@
+﻿@page "/monhoc/danhsach"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.Blazor.Components
+@inject IMonHocRepo _repoMonHoc
+@inject IChuyenNganhRepo _repoChuyenNganh
+@inject NavigationManager _navManager
+
+@if(_list == null) {
+    <LoadingIndicator/>
+}
+else {
+    <MudTable Items = "@_list">
+        <ToolBarContent>
+            <MudText Typo="Typo.h5">Danh sách môn học</MudText>
+            <MudSpacer></MudSpacer>
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/monhoc/them">Thêm</MudButton>
+            @*<MudTextField T="string" Placeholder="Tìm kiếm..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>*@
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh><MudText>STT</MudText></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.Ma)">Mã</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.Ten)">Tên</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.TrangThai)">Trạng thái</MudTableSortLabel></MudTh>
+            <MudTh><MudText Typo="Typo.body2">Hành động</MudText></MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@(stt++)</MudTd>
+            <MudTd>@context.Ma</MudTd>
+            <MudTd>@context.Ten</MudTd>
+            <MudTd><p style="color: @Color_TrangThai(context.TrangThai); margin: auto">@Convert_TrangThai(context.TrangThai)</p></MudTd>
+            <MudTd>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => navChinhSua(context.Id))">Chỉnh sửa</MudButton>
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(
+    ()=> btn_Delete(context.Id))">Xóa</MudButton>
+                
+            </MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+
+
+@code {
+    private List<MonHocVM> _list;
+    private int stt = 1;
+
+    protected override async Task OnInitializedAsync() {
+        await LoadDgrid();
+    }
+
+    private async Task LoadDgrid() {
+        _list = await _repoMonHoc.GetAllActiveAsync(new MonHocSearchVM());
+    }
+
+    private async Task btn_Delete(Guid id) {
+        bool result = await _repoMonHoc.RemoveAsync(id);
+        stt = 1;
+        await LoadDgrid();
+    }
+
+    private async Task navChinhSua(Guid idMonHoc) {
+        if(idMonHoc != null) {
+            _navManager.NavigateTo($"/monhoc/chinhsua/{idMonHoc}");
+        }
+    }
+
+    private string Convert_TrangThai(int tt) 
+    {
+        //Có khả năng có nhiều tt & color nên để switch :D
+        switch (tt)
+        {
+            case 0: {
+                    return "Đã xóa";
+                }
+            case 1: {
+                    return "Hoạt động";
+                }
+            default: {
+                    return "Không xác định";
+                }
+        }    
+    }
+
+    private string Color_TrangThai(int tt) 
+    {
+        switch (tt)
+        {
+            case 0: {
+                    return "red";
+                }
+            case 1: {
+                    return "green";
+                }
+            default: {
+                    return "red";
+                }
+        }   
+    }
+}

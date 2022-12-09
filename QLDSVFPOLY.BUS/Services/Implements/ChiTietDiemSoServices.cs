@@ -43,20 +43,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).ToList();
 
-            if (obj.IdChiTietLopHoc == null
-                && obj.IdSinhVien == null
-                && obj.IdDiemSo == null
-                && obj.TrangThai == 0)
-            {
-                return listCTDiemSoVM;
-            }
 
-            return listCTDiemSoVM.Where(c =>
-                c.IdChiTietLopHoc == obj.IdChiTietLopHoc
-                || c.IdSinhVien == obj.IdSinhVien
-                || c.IdDiemSo == obj.IdDiemSo
-                || c.TrangThai == obj.TrangThai
-                ).ToList();
+                return listCTDiemSoVM;
+
 
         }
 
@@ -74,19 +63,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).Where(c => c.TrangThai != 0).ToList();
 
-            if (obj.IdChiTietLopHoc == null
-                && obj.IdSinhVien == null
-                && obj.IdDiemSo == null
-                && obj.TrangThai == 0)
-            {
+
                 return listCTDiemSoVM;
-            }
-            return listCTDiemSoVM.Where(c =>
-                c.IdChiTietLopHoc == obj.IdChiTietLopHoc
-                || c.IdSinhVien == obj.IdSinhVien
-                || c.IdDiemSo == obj.IdDiemSo
-                || c.TrangThai == obj.TrangThai
-                ).ToList();
+
         }
 
         public async Task<ChiTietDiemSoVM> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)

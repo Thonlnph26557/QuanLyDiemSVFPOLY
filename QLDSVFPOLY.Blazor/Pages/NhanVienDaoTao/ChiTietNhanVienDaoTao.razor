@@ -1,0 +1,137 @@
+﻿@page "/nhanviendaotao/chitiet/{idNhanVienDaoTao}"
+
+@using QLDSVFPOLY.BUS.ViewModels.NhanVienDaoTao
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+
+@if (_listNhanVienDaoTaos == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+
+@*<h1>Nhân Viên Đào Tạo : @obj.Ho @obj.TenDem @obj.Ten</h1>
+*@
+<style>
+    #dd {
+        border: 1px black;
+        width: 17vw;
+        height: 46vh;
+        margin-left: 10px;
+    }
+</style>
+
+<EditForm Model="@updateVM">
+
+    <div class="w-25" style="float: left; margin-top:20px">
+
+        <img id="dd" /><br />
+
+        <input multiple="" type="file" _bl_2="" style="margin-top:15px;margin-left:45px">
+
+    </div>
+    <div class="w-75" style="float: right;padding-left:20px;">
+        <div class="row">
+            <div class="col">
+                <label>Mã Nhân Viên Đào Tạo</label>
+                <input type="text" class="form-control" @bind-value="updateVM.Ma">
+            </div>
+            <div class="col">
+                <label>Ngày Sinh</label>
+                <input type="date" class="form-control" @bind-value="updateVM.NgaySinh">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Họ</label>
+                <input type="text" class="form-control" @bind-value="updateVM.Ho">
+            </div>
+            <div class="col">
+                <label>Địa Chỉ</label>
+                <input type="text" class="form-control" @bind-value="updateVM.DiaChi">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Tên Đệm</label>
+                <input type="text" class="form-control" @bind-value="updateVM.TenDem" >
+            </div>
+            <div class="col">
+                <label>Email</label>
+                <input type="email" class="form-control" @bind-value="updateVM.Email">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Tên</label>
+                <input type="text" class="form-control" @bind-value="updateVM.Ten">
+            </div>
+            <div class="col">
+                <label>Số Điện Thoại</label>
+                <input type="text" class="form-control" @bind-value="updateVM.SoDienThoai">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+
+            <div class="col">
+                <label>Giới Tính</label>
+                <select class="form-control" @bind="updateVM.GioiTinh">
+                    <option value=0>Nam</option>
+                    <option value=1>Nữ</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label>Trạng Thái</label>
+                <select class="form-control" @bind="updateVM.TrangThai">
+                    <option value=1>Đang làm</option>
+                    <option value=2>Đang nghỉ làm</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top:10px">
+            <div class="col"></div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" style="float:left" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</button>
+                    <button type="button" class="btn btn-primary" style="float:right" @onclick="()=>ChinhSua(Guid.Parse(idNhanVienDaoTao), updateVM)">CHỈNH SỬA</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+}
+
+@code {
+    [Parameter]
+    public string idNhanVienDaoTao { set; get; }
+
+    private NhanVienDaoTaoUpdateVM updateVM = new();
+
+
+
+    private async Task ChinhSua(Guid idNhanVienDaoTao, NhanVienDaoTaoUpdateVM updateVM)
+    {
+        await nhanVienDaoTaoRepos.UpdateAsync(idNhanVienDaoTao, updateVM);
+
+        await LoadData();
+    }
+
+
+    // Khai báo
+    private NhanVienDaoTaoVM obj;
+
+    private List<NhanVienDaoTaoVM> _listNhanVienDaoTaos;
+
+    private NhanVienDaoTaoSearchVM _search = new NhanVienDaoTaoSearchVM();
+
+    //
+    private async Task LoadData()
+    {
+        _listNhanVienDaoTaos = await nhanVienDaoTaoRepos.GetAllActiveAsync(_search);
+
+        _listNhanVienDaoTaos = _listNhanVienDaoTaos.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+        obj = _listNhanVienDaoTaos.FirstOrDefault(c => c.Id == Guid.Parse(idNhanVienDaoTao));
+    }
+
+}

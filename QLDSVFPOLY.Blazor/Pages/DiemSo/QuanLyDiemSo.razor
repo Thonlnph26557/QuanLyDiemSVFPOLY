@@ -1,0 +1,202 @@
+﻿@page "/diemso/quanlydiemso"
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using System.Linq;
+@if(listDiemSo == null || listMonHoc == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+<h1>Quản Lý Điểm Số</h1>
+<form>
+    <div class="w-100" style="margin-top:20px; margin: 0 auto ">
+        <div class="row" style="margin-top:15px">
+            <div class="col">
+                <label>Tên Điểm Số</label>
+                <input @bind="TenDiemSo" type="text" class="form-control">
+                @*<MudTextField @bind-Value="TextValue" Label="Tên"  Variant="Variant.Outlined" />*@
+            </div>
+            <div class="col">
+                <label>Trọng Số</label>
+                <input @bind="TrongSo" type="text" class="form-control">
+                @*<MudTextField T="DateTime?" Format="yyyy-MM-dd" Label="Ngày Bắt Đầu"  InputType="InputType.Date"/>*@
+            </div>
+        </div>
+        <div class="row" style="margin-top:15px">
+            <div class="col">
+                <label>Môn Học</label>
+                <select @bind="@IdMonHoc" class="form-control">
+                    <option value="@Guid.Empty">Ngành Học</option>
+                    @foreach(var item in listMonHoc)
+                    {
+                            if (IdMonHoc != Guid.Empty)
+                            {
+                                if(item.Id == IdMonHoc)
+                                {
+                                    <option selected value="@item.Id">@item.Ten</option>
+                                }
+                                else
+                                {
+                                        <option value="@item.Id">@item.Ten</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Ten</option>
+                            }
+                        }
+                </select>
+            </div> 
+            <div class="col">
+                <label>Trạng Thái</label>
+                <select @bind="TrangThai" type="int" class="form-control">
+                    <option value="1">Hoạt Động</option>
+                    <option value="0">Không Hoạt Động</option>
+                </select>
+                @*<MudTextField T="DateTime?" Format="yyyy-MM-dd" Label="Ngày Kết Thúc"  InputType="InputType.Date"/>*@
+            </div>
+        </div>
+        <div class="row" style="margin-top:15px">
+            <div class="col"></div>  
+            <div class="col">
+                <button type="button" class="btn btn-primary" style="float:right;" @onclick="SuaDiemSo">CHỈNH SỬA</button>
+                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="LamMoi">LÀM MỚI</button>
+                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="ThemDiemSo">THÊM MỚI</button>
+                @*<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Info" Style="float:right">Thêm</MudButton>*@
+            </div>  
+        </div>
+    </div>
+    </form>
+    <div style="clear:both"></div>
+    <h1 style="margin-top: 50px">Danh Sách Điểm Số</h1>
+    
+    <table class="table">
+	    <thead>
+		    <tr>
+			    <th scope="col">STT</th>
+			    <th scope="col">Môn Học</th>
+			    <th scope="col">Tên Điểm Số</th>
+			    <th scope="col">Trọng Số</th>
+			    <th scope="col">Ngày Tạo</th>
+			    <th scope="col">Trạng Thái</th>
+			    <th scope="col">Bản Ghi</th>
+                <th scope="col">Xóa</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+            @for (int i=0;i< listDiemSo.Count();i++)
+            {
+                var item = listDiemSo[i];
+                <tr >
+                    <th scope="row">@(i+1)</th>
+			        <td>@listMonHoc.FirstOrDefault(c=>c.Id == item.IdMonHoc).Ten</td>
+			        <td>@item.TenDauDiem</td>
+			        <td>@item.TrongSo</td>
+			        <td>@item.NgayTao</td>
+                    <td>@item.TrangThai</td>
+                    <td><button type="button" class="btn btn-primary" @onclick="()=>LoadBanGhi(item.Id)">Bản ghi</button></td>
+                    <td><button type="button" class="btn btn-danger" @onclick="()=>OnDeleteDiemSo(item.Id)">Xóa</button></td>
+			        @*<td><MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small">Delete</MudButton></td>*@
+		        </tr>
+            }
+		    
+	    </tbody>
+    </table>
+}
+
+
+@code {
+    [Parameter]
+    public string idDaoTao { get; set; }
+    [Inject] private HttpClient httpClient { get; set; }
+    [Inject] private IMonHocRepo MonHocRepos { get; set; }
+    //Inject Repo cua DiemSo
+    [Inject] private IDiemSoRepos DiemSoRepos { get; set; }
+    //Khai bao ra listDiemSo
+    private List<DiemSoVM> listDiemSo;
+    private DiemSoSearchVM searchVM = new DiemSoSearchVM();
+
+
+    private List<MonHocVM> listMonHoc;
+    private MonHocSearchVM searchMonHoc = new MonHocSearchVM();
+    //Id khi xoa
+    protected override async Task OnInitializedAsync()
+    {
+        //Gan listDiemSo = GetAll de lay ra list
+        await LoadData();
+
+    }
+    private async Task LoadData()
+    {
+        listDiemSo = await DiemSoRepos.GetAllActiveAsync(searchVM);
+        listMonHoc = await MonHocRepos.GetAllActiveAsync(searchMonHoc);
+    }
+
+
+
+    public async Task OnDeleteDiemSo(Guid deleteId)
+    {
+        await DiemSoRepos.RemoveAsync(deleteId);
+        await LoadData();
+    }
+
+
+
+    private async Task ThemDiemSo()
+    {
+        DiemSoCreateVM createVm = new DiemSoCreateVM();
+        createVm.TenDauDiem = TenDiemSo;
+        createVm.TrongSo = TrongSo;
+        createVm.TrangThai = TrangThai;
+        createVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString()) ;
+        bool x = await DiemSoRepos.CreateAsync(createVm);
+        TenDiemSo = null;
+        TrongSo = 0;
+        TrangThai = 0;
+        IdMonHoc = Guid.Empty;
+        await LoadData();
+    }
+    private async Task SuaDiemSo()
+    {
+        DiemSoUpdateVM updateVm = new DiemSoUpdateVM();
+        updateVm.TenDauDiem = TenDiemSo;
+        updateVm.TrongSo = TrongSo;
+        updateVm.TrangThai = TrangThai;
+        updateVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString()) ;
+        bool x = await DiemSoRepos.UpdateAsync(IdDiemSo,updateVm);
+        await LoadData();
+        TenDiemSo = null;
+        TrongSo = 0;
+        TrangThai = 0;
+        IdMonHoc = Guid.Empty;
+    }
+
+
+
+    private string TenDiemSo{ get; set; }
+    private double TrongSo{ get; set; }
+    private int TrangThai{ get; set; }
+    private Guid IdMonHoc{ get; set; }
+    private Guid IdDiemSo { get; set; }
+    private async Task LoadBanGhi(Guid id)
+    {
+        DiemSoVM diemSoVM = await DiemSoRepos.GetByIdAsync(id);
+        IdDiemSo = diemSoVM.Id;
+        TenDiemSo = diemSoVM.TenDauDiem;
+        TrongSo = diemSoVM.TrongSo ;
+        TrangThai = diemSoVM.TrangThai;
+        IdMonHoc = diemSoVM.IdMonHoc;
+    }
+    private async Task LamMoi()
+    {
+        IdDiemSo = Guid.Empty;
+        IdMonHoc = Guid.Empty;
+        TenDiemSo = null;
+        TrongSo = 0;
+        TrangThai = 0;
+    }
+
+}

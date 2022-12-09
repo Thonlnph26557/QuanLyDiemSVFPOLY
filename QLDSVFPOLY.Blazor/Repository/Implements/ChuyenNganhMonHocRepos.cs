@@ -13,11 +13,11 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public async Task<int> CreateAsync(ChuyenNganhMonHocCreateVM obj)
+        public async Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/ChuyenNganhMonHoc", obj);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            var result = await _httpClient.PostAsJsonAsync("api/ChuyenNganhMonHocs", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
         public async Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync(ChuyenNganhMonHocSearchVM searchVM)
@@ -29,7 +29,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             //    queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhMonHoc/allactive", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhMonHocs/allactive", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhMonHocVM>>(url);
             return result;
         }
@@ -43,23 +43,23 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             //    queryStringParam.Add("TrangThai", searchVM.TrangThai);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhMonHoc/all", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhMonHocs/all", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhMonHocVM>>(url);
             return result;
         }
 
         public async Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            var result = await _httpClient.GetFromJsonAsync<ChuyenNganhMonHocVM>($"/api/ChuyenNganhMonHoc/all/{idChuyenNganh},{idMonHoc}");
+            var result = await _httpClient.GetFromJsonAsync<ChuyenNganhMonHocVM>($"/api/ChuyenNganhMonHocs/all/{idChuyenNganh},{idMonHoc}");
             return result;
         }
 
-        public async Task<int> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            var url = Path.Combine("/api/ChuyenNganhMonHoc", idChuyenNganh.ToString(), idMonHoc.ToString());
+            var url = Path.Combine("/api/ChuyenNganhMonHocs", idChuyenNganh.ToString(), idMonHoc.ToString());
             var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }

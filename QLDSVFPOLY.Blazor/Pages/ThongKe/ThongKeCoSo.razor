@@ -1,0 +1,76 @@
+﻿@page "/thongke/thongkecoso"
+@using QLDSVFPOLY.Blazor.Data;
+@inject IJSRuntime jsRuntime;
+
+<style>
+	#chartdiv {
+		width: 100%;
+		height: 500px;
+		font-size: 11px;
+	}
+
+	path {
+		fill: purple;
+		stroke: purple;
+	}
+
+	a {
+		opacity: 0 !important;
+	}
+</style>
+
+<h1>Biểu Đồ Thống Kê Thông Tin Cơ Sở</h1>
+<div style="clear:both"></div>
+<div class="w-100">
+	<div class="row" style="margin-top:50px">
+		<div class="col"><button type="button" class="btn btn-info btn-lg" style="width: -webkit-fill-available;" @onclick="ChuyenNganhBarChart">Số lượng chuyên ngành</button></div>
+		<div class="col"><button type="button" class="btn btn-info btn-lg" style="width: -webkit-fill-available;" @onclick="GiangVienBarChart">Số lượng giảng viên</button></div>
+		<div class="col"><button type="button" class="btn btn-info btn-lg" style="width: -webkit-fill-available;" @onclick="SinhVienBarChart">Số lượng sinh viên</button></div>
+		<div class="col"><button type="button" class="btn btn-info btn-lg" style="width: -webkit-fill-available;" @onclick="LopHocBarChart">Số lượng lớp học</button></div>
+	</div>
+</div>
+
+
+
+
+
+
+<div id="chartdiv"></div>
+
+
+@code {
+	List<ThongKe> thongKes = new List<ThongKe>();
+
+	private async Task ChuyenNganhBarChart()
+	{
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Hoạt động", SoLuong = ChuyenNganhActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Tạm dừng hoạt động", SoLuong = ChuyenNganhDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Dừng hoạt động", SoLuong = ChuyenNganhNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task GiangVienBarChart()
+	{
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Đang làm", SoLuong = GiangVienActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Đang nghỉ làm", SoLuong = GiangVienDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Đã nghỉ", SoLuong = GiangVienNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task SinhVienBarChart()
+	{
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Đang học", SoLuong = SinhVienActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Bảo lưu", SoLuong = SinhVienDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Đã nghỉ", SoLuong = SinhVienNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task LopHocBarChart()
+	{
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Hoạt động", SoLuong = LopHocActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Tạm dừng hoạt động", SoLuong = LopHocDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Dừng hoạt động", SoLuong = LopHocNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+}

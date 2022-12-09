@@ -1,4 +1,10 @@
-﻿using System;
+﻿
+
+
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +14,7 @@ using System.Threading.Tasks;
 namespace QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 {
     //> public
-    public class ChiTietLopHocSearchViewmodel
+    public class ChiTietLopHocUpdateVM
     {
         //public Guid Id { get; set; }
         public Guid IdLopHoc { get; set; }

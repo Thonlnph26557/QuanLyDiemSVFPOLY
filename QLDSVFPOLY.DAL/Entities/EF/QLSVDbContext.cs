@@ -2,6 +2,7 @@
 using QLDSVFPOLY.DAL.Configurations;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using QLDSVFPOLY.DAL.Extensions;
 
 namespace QLDSVFPOLY.DAL.Entities.EF
 {
@@ -30,7 +31,7 @@ namespace QLDSVFPOLY.DAL.Entities.EF
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChuyenNganhMonHocConfigurations());
             modelBuilder.ApplyConfiguration(new NhanVienDaoTaoConfigurations());
-            //modelBuilder.SeedData();
+            modelBuilder.SeedData();
         }
 
         //thay đổi đường dẫn để kết nối SQL
@@ -51,7 +52,8 @@ namespace QLDSVFPOLY.DAL.Entities.EF
         public DbSet<ChiTietDiemSo> ChiTietDiemSos { get; set; }
         public DbSet<DiemSo> DiemSos { get; set; }
         public DbSet<ChiTietLopHoc> ChiTietLopHocs { get; set; }
-
+        public DbSet<ChuyenNganhMonHoc> ChuyenNganhMonHocs { get; set; }
+        public DbSet<NhanVienDaoTao> NhanVienDaoTaos { get; set; }
     }
 }
 

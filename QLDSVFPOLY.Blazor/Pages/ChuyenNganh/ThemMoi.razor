@@ -1,0 +1,115 @@
+﻿@page "/chuyennganh/themmoi/{idDaoTao}"
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.Blazor.Components;
+@inject IChuyenNganhRepo ChuyenNganhRepo
+
+<h1>Thêm Chuyên Ngành</h1>
+<style>
+	#dd {
+		border: 2px black;
+		width: 300px;
+		height: 150px;
+		margin-left: 20px;
+		margin-right: 200px;
+	}
+</style>
+@if (chuyenNganh == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+
+
+	<EditForm Model="chuyenNganh">
+		<div class="w-25" style="float: left; margin-top:30px">
+			<img id="dd" /><br />
+			<button style="margin-top:10px; background: cyan;margin-left:150px;">
+				Thay Đổi
+			</button>
+		</div>
+		<div class="w-50" style="float: left;padding-left:20px;margin-top:20px;margin-left:100px">
+			<div class="row">
+				<div class="col">
+					<label>Mã Chuyên Ngành</label>
+					<input type="text" class="form-control" @bind="chuyenNganh.Ma">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<label>Tên Ngành</label>
+					<input type="text" class="form-control" @bind="chuyenNganh.TenChuyenNganh">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<label>Trạng Thái</label>
+					<select class="form-control" @bind="chuyenNganh.TrangThai">
+						<option value="1">Hoạt động</option>
+						<option value="2">Tạm dừng hoạt động</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="w-50" style="float: right;padding-left:50px;margin-top:50px">
+			<div class="row" style="margin-left:30px">
+				<div class="col"><h4>Các Chức Năng</h4></div>
+				<div class="col"><button type="button" class="btn btn-primary" @onclick="()=>Clear()">Làm Mới</button> </div>
+				<div class="col">
+					<button type="submit" class="btn btn-primary" @onclick="()=>ThemChuyenNganh(chuyenNganh)">Thêm Mới</button>
+				</div>
+			</div>
+		</div>
+	</EditForm>
+}
+
+@code {
+	[Parameter]
+	public string idDaoTao { set; get; }
+
+	//Inject Repo cua ChuyenNganh
+	[Inject] private IChuyenNganhRepo ChuyenNganhRepos { set; get; }
+
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhVM> listChuyenNganhs;
+
+	private ChuyenNganhSearchVM searchVM = new ChuyenNganhSearchVM();
+
+	private ChuyenNganhCreateVM chuyenNganh = new ChuyenNganhCreateVM();
+
+	protected override async Task OnInitializedAsync()
+	{
+		idDaoTao = "9d01fb1f-6d12-4b11-9962-871c333e659b";
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		listChuyenNganhs = await ChuyenNganhRepos.GetAllActiveAsync(searchVM);
+		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+		//lay ra list chuyenNganhMH
+	}
+
+	private async Task<bool> ThemChuyenNganh(ChuyenNganhCreateVM chuyenNganh)
+	{
+		chuyenNganh.IdDaoTao = Guid.Parse(idDaoTao);
+		chuyenNganh.DuongDanAnh = "default.png";
+		//LoadData
+		if (await ChuyenNganhRepos.CreateAsync(chuyenNganh))
+		{
+			await LoadData();
+			await Clear();
+			return true;
+		}
+		return false;
+	}
+
+	private async Task Clear()
+	{
+		chuyenNganh.Ma = "";
+		chuyenNganh.TenChuyenNganh = "";
+		chuyenNganh.TrangThai = 0;
+	}
+
+}

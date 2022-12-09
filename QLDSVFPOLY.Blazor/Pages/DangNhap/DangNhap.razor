@@ -1,0 +1,59 @@
+﻿@page "/taikhoan/dangnhap"
+@layout EmptyMudLayout
+
+@using QLDSVFPOLY.BUS.ViewModels.TaiKhoan
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@inject ITaiKhoanRepo _repoTaiKhoan
+@inject NavigationManager _navManager
+
+
+<PageTitle>Đăng Nhập | Quản Lý Điểm Sinh Viên FPOLY</PageTitle>
+
+
+@if(ShowErrors) {
+    <div class="alert alert-danger">
+        <p>@Error</p>
+    </div>
+}
+
+<MudContainer class="d-flex justify-center align-center w-70 h-75">
+    <EditForm Model="@vlogin">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <MudGrid class="justify-center">
+        <MudItem>
+                <MudCard class="p-4" Style="border: 1px solid grey; min-width: 20vw;">
+                <MudCardContent>
+                    <MudTextField Label="Tài khoản" @bind-Value="vlogin.TaiKhoan" For="() => vlogin.TaiKhoan"></MudTextField>
+                    <MudTextField Label="Mật khẩu" @bind-Value="vlogin.MatKhau" For="() => vlogin.MatKhau" InputType="InputType.Password"></MudTextField>
+                    <MudSelect T="string" Label="Chức vụ" AnchorOrigin="Origin.BottomCenter" @bind-Value="vlogin.ChucVu">
+                        <MudSelectItem Value="@("DaoTao")">Đào tạo</MudSelectItem>
+                        <MudSelectItem Value="@("GiangVien")">Giảng viên</MudSelectItem>
+                        <MudSelectItem Value="@("SinhVien")">Sinh viên</MudSelectItem>
+                            <MudSelectItem Value="@("NhanVienDaoTao")">Nhân viên đào tạo</MudSelectItem>
+                    </MudSelect>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudLink Href="/taikhoan/doimatkhau">Đổi mật khẩu</MudLink>
+                    @*<MudLink Href="quen-mat-khau">Quên mật khẩu?</MudLink><br />*@
+                    <MudButton ButtonType="ButtonType.Submit" Variant = "Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="HandleLogin">Đăng Nhập</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+    </EditForm>
+</MudContainer>
+    
+@code {
+    DangNhapVM vlogin = new DangNhapVM();
+
+    private bool ShowErrors;
+    private string Error = "";
+
+    private async Task HandleLogin()
+    {
+        var x = await _repoTaiKhoan.LoginAsync(vlogin);
+        if(x != null) {
+            _navManager.NavigateTo($"/thongke/thongkecoso/");
+        }
+    }
+}

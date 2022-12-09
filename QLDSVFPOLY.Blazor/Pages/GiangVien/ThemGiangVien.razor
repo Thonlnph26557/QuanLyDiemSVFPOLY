@@ -1,0 +1,186 @@
+﻿@page "/giangvien/themmoi/{idDaoTao}"
+
+@using QLDSVFPOLY.BUS.ViewModels.GiangVien
+@using QLDSVFPOLY.Blazor.Repository.Implements
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+
+@if (_listGiangViens == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+
+
+<h1>Thêm Giảng Viên</h1>
+
+<style>
+    #dd {
+        border: 1px black;
+        width: 17vw;
+        height: 46vh;
+        margin-left: 10px;
+    }
+</style>
+
+<EditForm Model="@giangVien">
+
+    <div class="w-25" style="float: left; margin-top:20px">
+
+        <img id="dd" /><br />
+
+        <input multiple="" type="file" _bl_2="" style="margin-top:15px;margin-left:45px">
+
+    </div>
+
+    <div class="w-75" style="float: right;padding-left:20px;">
+
+        <div class="row">
+
+            <div class="col">
+                    <label>Mã Giảng Viên</label>
+                    <input type="text" class="form-control" @bind-value="giangVien.Ma">
+            </div>
+
+            <div class="col">
+                <label>Email</label>
+                <input type="text" class="form-control" @bind-value="giangVien.Email">
+
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Họ</label>
+                    <input type="text" class="form-control" @bind-value="giangVien.Ho">
+            </div>
+                <div class="col">
+                    <label>Số Điện Thoại</label>
+                    <input type="email" class="form-control" @bind-value="giangVien.SoDienThoai">
+                </div>
+            </div>
+
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Tên Đệm</label>
+                    <input type="text" class="form-control" @bind-value="giangVien.TenDem">
+            </div>
+                <div class="col">
+                    <label>Địa Chỉ</label>
+                    <input type="text" class="form-control" @bind-value="giangVien.DiaChi">
+                </div>
+
+        </div>
+
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <label>Tên</label>
+                    <input type="text" class="form-control" @bind-value="giangVien.Ten">
+            </div>
+                <div class="col">
+                    <label>Trạng Thái</label>
+                    <select class="form-control" @bind="giangVien.TrangThai">
+                        <option value=1>Đang làm</option>
+                        <option value=2>Đang nghỉ làm</option>
+                    </select>
+                </div>
+            </div>
+
+        <div class="row" style="margin-top:10px">
+
+            <div class="col">
+                <label>Giới Tính</label>
+                    <select class="form-control" @bind="giangVien.GioiTinh">
+                    <option value=0>Nam</option>
+                    <option value=1>Nữ</option>
+                </select>
+            </div>
+
+                <div class="col">
+                    <label>Ngày Sinh</label>
+                    <input type="date" class="form-control" @bind-value="giangVien.NgaySinh">
+                </div>
+
+        </div>
+
+
+        <div class="row" style="margin-top:10px">
+
+            <div class="col">
+            </div>
+
+            <div class="col">
+                <button type="button" class="btn btn-primary" style="float:left" @onclick="()=>ReLoad()">LÀM MỚI</button>
+                <button type="button" class="btn btn-primary" style="float:right" @onclick="()=>Them()">THÊM</button>
+            </div>
+
+        </div>
+
+    </div>
+</EditForm>
+}
+
+@code {
+    private List<GiangVienVM> _listGiangViens;
+
+    private GiangVienCreateVM giangVien = new();
+
+    [Inject] private IGiangVienRepos giangVienRepos { set; get; }
+
+    private async Task Them()
+    {
+        giangVien.DuongDanAnh = "default.png";
+        giangVien.MatKhau = "aa";
+        giangVien.TenDangNhap = "png";
+        giangVien.IdDaoTao = Guid.Parse("9D01FB1F-6D12-4B11-9962-871C333E659B");
+        await giangVienRepos.CreateAsync(giangVien);
+    }
+
+
+    //
+    private async Task ReLoad()
+    {
+        giangVien.IdDaoTao = Guid.Empty;
+        giangVien.Ma = null;
+        giangVien.Ho = null;
+        giangVien.TenDem = null;
+        giangVien.Ten = null;
+        giangVien.GioiTinh = 0;
+        giangVien.NgaySinh = DateTime.Now;
+        giangVien.Email = null;
+        giangVien.TenDangNhap = null;
+        giangVien.MatKhau = null;
+        giangVien.DuongDanAnh = null;
+        giangVien.SoDienThoai = null;
+        giangVien.DiaChi = null;
+        giangVien.TrangThai = 0;
+    }
+
+
+    //
+    [Parameter]
+    public string idDaoTao { get; set; }
+
+    private GiangVienSearchVM _search = new GiangVienSearchVM();
+
+
+    //Ghi đè phương thức OnInitializedAsync
+
+    //Gọi OnInitializedAsync để lấy dữ liệu.Khi OnInitializedAsync hãy sử dụng từ khóa await vì gọi không đồng bộ:
+    protected override async Task OnInitializedAsync()
+    {
+        idDaoTao = "9D01FB1F-6D12-4B11-9962-871C333E659B";
+        await LoadData();
+    }
+
+    //
+    private async Task LoadData()
+    {
+        _listGiangViens = await giangVienRepos.GetAllActiveAsync(_search);
+
+        _listGiangViens = _listGiangViens.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+    }
+
+
+}

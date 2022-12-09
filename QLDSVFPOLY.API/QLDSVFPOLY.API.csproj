@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\DaoTaosController.cs" />
+    <Compile Remove="Controllers\TestsController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QLDSVFPOLY.BUS\QLDSVFPOLY.BUS.csproj" />
   </ItemGroup>
 
 </Project>

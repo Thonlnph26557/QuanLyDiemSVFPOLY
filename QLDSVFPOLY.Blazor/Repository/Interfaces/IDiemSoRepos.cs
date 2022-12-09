@@ -1,14 +1,14 @@
-﻿using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
+﻿using QLDSVFPOLY.BUS.ViewModels.DiemSo;
 
 namespace QLDSVFPOLY.Blazor.Repository.Interfaces
 {
-    public interface IDiemSoRepo
+    public interface IDiemSoRepos
     {
         Task<List<DiemSoVM>> GetAllAsync(DiemSoSearchVM vm);
         Task<List<DiemSoVM>> GetAllActiveAsync(DiemSoSearchVM vm);
         Task<DiemSoVM> GetByIdAsync(Guid id);
-        Task<int> CreateAsync(DiemSoCreateVM vm);
-        Task<int> UpdateAsync(Guid id, DiemSoUpdateVM vm);
-        Task<int> RemoveAsync(Guid id);
+        Task<bool> CreateAsync(DiemSoCreateVM vm);
+        Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM vm);
+        Task<bool> RemoveAsync(Guid id);
     }
 }

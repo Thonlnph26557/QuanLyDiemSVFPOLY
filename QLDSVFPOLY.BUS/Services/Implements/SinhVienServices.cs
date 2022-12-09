@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.BUS.Services.Implements
 {
-    public class SinhVienServices: ISinhVienServices
+    public class SinhVienServices : ISinhVienServices
     {
         //
         ISinhVienRepository _repos;
@@ -36,49 +36,38 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             List<SinhVienVM> listSinhVienVM = new List<SinhVienVM>();
 
-            listSinhVienVM = _listSinhViens.Select(c => new SinhVienVM()          
+            listSinhVienVM = _listSinhViens.Select(c => new SinhVienVM()
             {
-                    Id = c.Id,
-                    Ma = c.Ma,
-                    Ho = c.Ho,
-                    TenDem = c.TenDem,
-                    Ten = c.Ten,
-                    GioiTinh = c.GioiTinh,
-                    NgaySinh = c.NgaySinh,
-                    DiaChi = c.DiaChi,
-                    SoDienThoai = c.SoDienThoai,
-                    Email = c.Email,
-                    TenDangNhap = c.TenDangNhap,
-                    MatKhau = c.MatKhau,
-                    DuongDanAnh = c.DuongDanAnh,
-                    NgayTao = c.NgayTao,
-                    TrangThai = c.TrangThai,
-                    IdChuyenNganh = c.IdChuyenNganh,
+                Id = c.Id,
+                Ma = c.Ma,
+                Ho = c.Ho,
+                TenDem = c.TenDem,
+                Ten = c.Ten,
+                GioiTinh = c.GioiTinh,
+                NgaySinh = c.NgaySinh,
+                DiaChi = c.DiaChi,
+                SoDienThoai = c.SoDienThoai,
+                Email = c.Email,
+                TenDangNhap = c.TenDangNhap,
+                MatKhau = c.MatKhau,
+                DuongDanAnh = c.DuongDanAnh,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+                IdChuyenNganh = c.IdChuyenNganh,
             }).ToList();
-            
+
+
 
             if (obj.Ma != null ||
                 obj.Ho != null ||
                 obj.TenDem != null ||
-                obj.Ten != null ||
-                obj.GioiTinh != null ||
-                obj.DiaChi != null ||
-                obj.SoDienThoai != null ||
-                obj.Email != null ||
-                obj.TrangThai != null 
-                //obj.IdChuyenNganh != null 
+                obj.Ten != null 
                 )
             {
                 return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
                                                     || c.Ho.Contains(obj.Ho)
                                                     || c.TenDem.Contains(obj.TenDem)
                                                     || c.Ten.Contains(obj.Ten)
-                                                    || c.GioiTinh==(obj.GioiTinh)
-                                                    || c.DiaChi.Contains(obj.DiaChi)
-                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
-                                                    || c.Email.Contains(obj.Email)
-                                                    || c.TrangThai==(obj.TrangThai)
-                                                    //|| c.IdChuyenNganh.Contains(obj.IdChuyenNganh)
                                                     ).ToList();
             }
             else
@@ -121,25 +110,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             if (obj.Ma != null ||
                 obj.Ho != null ||
                 obj.TenDem != null ||
-                obj.Ten != null ||
-                obj.GioiTinh != null ||
-                obj.DiaChi != null ||
-                obj.SoDienThoai != null ||
-                obj.Email != null ||
-                obj.TrangThai != null
-                //obj.IdChuyenNganh != null 
+                obj.Ten != null 
                 )
             {
                 return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
                                                     || c.Ho.Contains(obj.Ho)
                                                     || c.TenDem.Contains(obj.TenDem)
                                                     || c.Ten.Contains(obj.Ten)
-                                                    || c.GioiTinh == (obj.GioiTinh)
-                                                    || c.DiaChi.Contains(obj.DiaChi)
-                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
-                                                    || c.Email.Contains(obj.Email)
-                                                    || c.TrangThai == (obj.TrangThai)
-                                                    //|| c.IdChuyenNganh.Contains(obj.IdChuyenNganh)
                                                     ).ToList();
             }
             else
@@ -219,20 +196,20 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             var temp = listSinhVien.FirstOrDefault(c => c.Id == id);
 
-                temp.Ma = obj.Ma;
-                temp.Ho = obj.Ho;
-                temp.TenDem = obj.TenDem;
-                temp.Ten = obj.Ten;
-                temp.GioiTinh = obj.GioiTinh;
-                temp.NgaySinh = obj.NgaySinh;
-                temp.DiaChi = obj.DiaChi;
-                temp.SoDienThoai = obj.SoDienThoai;
-                temp.Email = obj.Email;
-                temp.TenDangNhap = obj.TenDangNhap;
-                temp.MatKhau = obj.MatKhau;
-                temp.DuongDanAnh = obj.DuongDanAnh;
-                temp.TrangThai = obj.TrangThai;
-                temp.IdChuyenNganh = obj.IdChuyenNganh;
+            temp.Ma = obj.Ma;
+            temp.Ho = obj.Ho;
+            temp.TenDem = obj.TenDem;
+            temp.Ten = obj.Ten;
+            temp.GioiTinh = obj.GioiTinh;
+            temp.NgaySinh = obj.NgaySinh;
+            temp.DiaChi = obj.DiaChi;
+            temp.SoDienThoai = obj.SoDienThoai;
+            temp.Email = obj.Email;
+            temp.TenDangNhap = obj.TenDangNhap;
+            temp.MatKhau = obj.MatKhau;
+            temp.DuongDanAnh = obj.DuongDanAnh;
+            temp.TrangThai = obj.TrangThai;
+            temp.IdChuyenNganh = obj.IdChuyenNganh;
 
             await _repos.UpdateAsync(temp);
             await _repos.SaveChangesAsync();

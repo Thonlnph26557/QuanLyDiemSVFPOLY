@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 {
     //> public
-    public class ChiTietLopHocCreateViewmodel
+    public class ChiTietLopHocSearchVM
     {
         //public Guid Id { get; set; }
         public Guid IdLopHoc { get; set; }

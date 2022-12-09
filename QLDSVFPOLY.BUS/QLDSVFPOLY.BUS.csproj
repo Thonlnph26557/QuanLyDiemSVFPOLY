@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Implements\DaoTaoServices.cs" />
+    <Compile Remove="Services\Implements\TestServices.cs" />
+    <Compile Remove="Services\Interfaces\IDaoTaoServices.cs" />
+    <Compile Remove="Services\Interfaces\ITestServices.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QLDSVFPOLY.DAL\QLDSVFPOLY.DAL.csproj" />
   </ItemGroup>
 

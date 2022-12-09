@@ -1,5 +1,5 @@
 ﻿using QLDSVFPOLY.BUS.Services.Interfaces;
-using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo;
+using QLDSVFPOLY.BUS.ViewModels.DiemSo;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
 using QLDSVFPOLY.DAL.Entities;
@@ -34,27 +34,27 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListDiemSoAsync();
 
-            List<DiemSoVM> listDiemSoVM = _listDiemSo.Select(c => new DiemSoVM
+            List<DiemSoVM> listDiemSoVM = new List<DiemSoVM>();
+            listDiemSoVM = _listDiemSo.Select(c => new DiemSoVM()
             {
                 Id = c.Id,
+                IdMonHoc = c.IdMonHoc,
                 TrongSo = c.TrongSo,
                 TenDauDiem = c.TenDauDiem,
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai
             }).ToList();
 
-            if (obj.TrongSo == 0
-                && obj.TenDauDiem == null
-                && obj.TrangThai == 0)
+            //if (obj.TrongSo != 0)
+            //{
+            //    listDiemSoVM = listDiemSoVM.Where(c =>
+            // c.TrongSo.ToString().Contains(obj.TrongSo.ToString())).ToList();
+            //}
+            if (obj.TenDauDiem != null)
             {
-                return listDiemSoVM;
+                listDiemSoVM = listDiemSoVM.Where(c => c.TenDauDiem.Contains(obj.TenDauDiem)).ToList();
             }
-
-            return listDiemSoVM.Where(c =>
-            c.TrongSo == obj.TrongSo
-            || c.TenDauDiem == obj.TenDauDiem
-            || c.TrangThai == obj.TrangThai
-            ).ToList();
+            return listDiemSoVM;
 
         }
 
@@ -62,27 +62,26 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             await GetListDiemSoAsync();
 
-            List<DiemSoVM> listDiemSoVM = _listDiemSo.Select(c => new DiemSoVM
+            List<DiemSoVM> listDiemSoVM = new List<DiemSoVM>();
+            listDiemSoVM = _listDiemSo.Where(c=>c.TrangThai !=0).Select(c => new DiemSoVM()
             {
                 Id = c.Id,
+                IdMonHoc = c.IdMonHoc,
                 TrongSo = c.TrongSo,
                 TenDauDiem = c.TenDauDiem,
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai
             }).ToList();
-
-            if (obj.TrongSo == 0
-                && obj.TenDauDiem == null
-                && obj.TrangThai == 0)
+            //if (obj.TrongSo != 0)
+            //{
+            //    listDiemSoVM = listDiemSoVM.Where(c =>
+            // c.TrongSo.ToString().Contains(obj.TrongSo.ToString())).ToList();
+            //}
+            if(obj.TenDauDiem != null)
             {
-                return listDiemSoVM;
+                listDiemSoVM = listDiemSoVM.Where(c => c.TenDauDiem.Contains(obj.TenDauDiem)).ToList();
             }
-
-            return listDiemSoVM.Where(c =>
-            c.TrongSo.ToString().Contains(obj.TrongSo.ToString())
-            || c.TenDauDiem.Contains(obj.TenDauDiem)
-            || c.TrangThai == obj.TrangThai
-            ).ToList();
+            return listDiemSoVM;
         }
 
         public async Task<DiemSoVM> GetByIdAsync(Guid id)
@@ -94,6 +93,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             DiemSoVM result = new DiemSoVM()
             {
                 Id = temp.Id,
+                IdMonHoc = temp.IdMonHoc,
                 TrongSo = temp.TrongSo,
                 TenDauDiem = temp.TenDauDiem,
                 NgayTao = temp.NgayTao,
@@ -105,40 +105,34 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> CreateAsync(DiemSoCreateVM obj)
         {
-            obj.Id = Guid.NewGuid();
 
             var temp = new DiemSo()
             {
-                Id = obj.Id,
+                Id = Guid.NewGuid(),
+                IdMonHoc = obj.IdMonHoc,
                 TrongSo = obj.TrongSo,
                 TenDauDiem = obj.TenDauDiem,
-                NgayTao = obj.NgayTao,
+                NgayTao = DateTime.Now,
                 TrangThai = obj.TrangThai,
             };
 
             await _iDiemSoRepository.CreateAsync(temp);
             await _iDiemSoRepository.SaveChangesAsync();
 
-            var listDaoTao = await _iDiemSoRepository.GetAllDiemSoAsync();
-            if (listDaoTao.Any(c => obj.Id == c.Id)) return true;
+            var listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
+            if (listDiemSo.Any(c => temp.Id == c.Id)) return true;
             return false;
         }
 
         public async Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM obj)
         {
-            await GetListDiemSoAsync();
-
-            var temp = _listDiemSo.FirstOrDefault(c => c.Id == id);
-            if (temp == null)
-            {
-                return false;
-            }
-            else
-            {
+            var listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
+            if (!listDiemSo.Any(c => c.Id == id)) return false;
+            var temp = listDiemSo.FirstOrDefault(temp => temp.Id == id);
+                temp.IdMonHoc = obj.IdMonHoc;
                 temp.TrongSo = obj.TrongSo;
                 temp.TenDauDiem = obj.TenDauDiem;
                 temp.TrangThai = obj.TrangThai;
-            }
 
             await _iDiemSoRepository.UpdateAsync(temp);
             await _iDiemSoRepository.SaveChangesAsync();
@@ -147,12 +141,10 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> RemoveAsync(Guid id)
         {
-            await GetListDiemSoAsync();
+            var listDiemSo = await _iDiemSoRepository.GetAllDiemSoAsync();
 
-            var temp = _listDiemSo.FirstOrDefault(c => c.Id == id);
-
-            temp.TrangThai = 0;
-
+            if (!listDiemSo.Any(c => c.Id == id)) return false;
+            await _iDiemSoRepository.DeleteAsync(id);
             await _iDiemSoRepository.SaveChangesAsync();
             return true;
         }

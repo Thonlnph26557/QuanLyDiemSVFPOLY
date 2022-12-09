@@ -13,14 +13,14 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public async Task<int> CreateAsync(GiangVienVM obj)
+        public async Task<bool> CreateAsync(GiangVienCreateVM obj)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/GiangVien", obj);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            var result = await _httpClient.PostAsJsonAsync("api/GiangViens", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public async Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienVM searchVM)
+        public async Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienSearchVM searchVM)
         {
             var queryStringParam = new Dictionary<string, string>();
 
@@ -29,12 +29,12 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
                 queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/GiangVien/allactive", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/GiangViens/allactive", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<GiangVienVM>>(url);
             return result;
         }
 
-        public async Task<List<GiangVienVM>> GetAllAsync(GiangVienVM searchVM)
+        public async Task<List<GiangVienVM>> GetAllAsync(GiangVienSearchVM searchVM)
         {
             var queryStringParam = new Dictionary<string, string>();
 
@@ -43,31 +43,31 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
                 queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/GiangVien/all", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/GiangViens/all", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<GiangVienVM>>(url);
             return result;
         }
 
         public async Task<GiangVienVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.GetFromJsonAsync<GiangVienVM>($"/api/GiangVien/all/{id}");
+            var result = await _httpClient.GetFromJsonAsync<GiangVienVM>($"/api/GiangViens/all/{id}");
             return result;
         }
 
-        public async Task<int> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            var url = Path.Combine("/api/GiangVien", id.ToString());
+            var url = Path.Combine("/api/GiangViens", id.ToString());
             var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public async Task<int> UpdateAsync(Guid id, GiangVienVM obj)
+        public async Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM obj)
         {
-            var url = Path.Combine("/api/GiangVien", id.ToString());
+            var url = Path.Combine("/api/GiangViens", id.ToString());
             var result = await _httpClient.PutAsJsonAsync(url, obj);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }

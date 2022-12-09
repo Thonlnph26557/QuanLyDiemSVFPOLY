@@ -7,8 +7,9 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
         Task<List<ChuyenNganhVM>> GetAllAsync(ChuyenNganhSearchVM vm);
         Task<List<ChuyenNganhVM>> GetAllActiveAsync(ChuyenNganhSearchVM vm);
         Task<ChuyenNganhVM> GetByIdAsync(Guid id);
-        Task<int> CreateAsync(ChuyenNganhCreateVM vm);
-        Task<int> UpdateAsync(Guid id, ChuyenNganhUpdateVM vm);
-        Task<int> RemoveAsync(Guid id);
+        Task<List<ChuyenNganhVM>> GetChuyenNganhHepByIdAsync(Guid id);
+        Task<bool> CreateAsync(ChuyenNganhCreateVM vm);
+        Task<bool> UpdateAsync(Guid id, ChuyenNganhUpdateVM vm);
+        Task<bool> RemoveAsync(Guid id);
     }
 }

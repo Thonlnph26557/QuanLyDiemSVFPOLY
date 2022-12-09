@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.KiHoc;
 
@@ -7,25 +8,25 @@ namespace QLDSVFPOLY.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KiHocController : ControllerBase
+    public class KiHocsController : ControllerBase
     {
         private readonly IKiHocServices _iKiHocServices;
-        public KiHocController(IKiHocServices iKiHocServices)
+        public KiHocsController()
         {
-            _iKiHocServices = iKiHocServices;
+            _iKiHocServices = new KiHocServices();
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] KiHocSearchViewmodel searchVM)
         {
-            var listKiHoc = await _iKiHocServices.GetAllAsync(null);
+            var listKiHoc = await _iKiHocServices.GetAllAsync(searchVM);
             return Ok(listKiHoc);
         }
 
         [HttpGet("allActive")]
-        public async Task<IActionResult> GetAllActiveAsync()
+        public async Task<IActionResult> GetAllActiveAsync([FromQuery] KiHocSearchViewmodel searchVM)
         {
-            var listKiHoc = await _iKiHocServices.GetAllActiveAsync(null);
+            var listKiHoc = await _iKiHocServices.GetAllActiveAsync(searchVM);
             return Ok(listKiHoc);
         }
 
@@ -33,8 +34,7 @@ namespace QLDSVFPOLY.API.Controllers
 
 
         //GetById
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var kiHoc = await _iKiHocServices.GetByIdAsync(id);
@@ -43,6 +43,7 @@ namespace QLDSVFPOLY.API.Controllers
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
+
         public async Task<IActionResult> CreateAsync([FromBody] KiHocCreateViewmodel kiHoc)
         {
             if (kiHoc == null) return BadRequest();
@@ -51,16 +52,14 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         //Controller đc gọi khi update obj
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] KiHocUpdateViewmodel kiHoc)
         {
             var result = await _iKiHocServices.UpdateAsync(id, kiHoc);
             return Ok(result);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var result = await _iKiHocServices.RemoveAsync(id);

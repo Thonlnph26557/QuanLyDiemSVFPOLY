@@ -11,9 +11,9 @@ namespace QLDSVFPOLY.BUS.ViewModels.LopHoc
     public class LopHocUpdateVM
     {
         //public Guid Id { get; set; }
-        //public string Ma { get; set; }
+        public string Ma { get; set; }
         //public Guid IdDaoTao { get; set; }
-        public DateTime NgayTao { get; set; }
+        //public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
     }
 }

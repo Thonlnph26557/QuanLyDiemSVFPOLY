@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+namespace QLDSVFPOLY.BUS.ViewModels.DiemSo
 {
     public class DiemSoUpdateVM
     {
+        public Guid IdMonHoc { get; set; }
         public double TrongSo { get; set; }
         public string TenDauDiem { get; set; }
         public DateTime NgayTao { get; set; }

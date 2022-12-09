@@ -13,11 +13,11 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public async Task<int> CreateAsync(LopHocCreateVM obj)
+        public async Task<bool> CreateAsync(LopHocCreateVM obj)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/LopHoc", obj);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            var result = await _httpClient.PostAsJsonAsync("api/LopHocs", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
         public async Task<List<LopHocVM>> GetAllAsync(LopHocSearchVM searchVM)
@@ -29,7 +29,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
                 queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/LopHoc/all", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/LopHocs/all", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<LopHocVM>>(url);
             return result;
         }
@@ -43,31 +43,31 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
                 queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
-            string url = QueryHelpers.AddQueryString("/api/LopHoc/allactive", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/LopHocs/allactive", queryStringParam);
             var result = await _httpClient.GetFromJsonAsync<List<LopHocVM>>(url);
             return result;
         }
 
         public async Task<LopHocVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.GetFromJsonAsync<LopHocVM>($"/api/LopHoc/all/{id}");
+            var result = await _httpClient.GetFromJsonAsync<LopHocVM>($"/api/LopHocs/{id}");
             return result;
         }
 
-        public async Task<int> UpdateAsync(Guid id, LopHocUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, LopHocUpdateVM obj)
         {
-            var url = Path.Combine("/api/LopHoc", id.ToString());
+            var url = Path.Combine("/api/LopHocs", id.ToString());
             var result = await _httpClient.PutAsJsonAsync(url, obj);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public async Task<int> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            var url = Path.Combine("/api/LopHoc", id.ToString());
+            var url = Path.Combine("/api/LopHocs", id.ToString());
             var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }

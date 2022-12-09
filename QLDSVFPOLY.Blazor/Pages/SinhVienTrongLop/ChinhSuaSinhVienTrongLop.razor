@@ -1,0 +1,52 @@
+﻿@page "/sinhvientronglop/danhsach/{idDaoTao}/{idGiangVien?}"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@*@using QLDSVFPOLY.BUS.ViewModels.*@
+@using QLDSVFPOLY.Blazor.Components
+@inject NavigationManager _navManager
+
+@if (_list == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <MudTable Items="@_list">
+        <ToolBarContent>
+            <MudText Typo="Typo.h5">Danh sách lớp học</MudText>
+            <MudSpacer></MudSpacer>
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/monhoc/them">Thêm chi tiết lớp học</MudButton>
+            <MudTextField T="string" Placeholder="Tìm kiếm..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh><MudText>STT</MudText></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.Ma)">Mã</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.Ten)">Tên</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<MonHocVM, object>(c => c.TrangThai)">Trạng thái</MudTableSortLabel></MudTh>
+            <MudTh><MudText Typo="Typo.body2">Hành động</MudText></MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@(stt++)</MudTd>
+                <MudTd>@context.Ma</MudTd>
+                <MudTd>@context.Ten</MudTd>
+                <MudTd><p style="color: @Color_TrangThai(context.TrangThai); margin: auto">@Convert_TrangThai(context.TrangThai)</p></MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" EndIcon="" Color="Color.Primary" OnClick="@(() => navChinhSua(context.Id))">Chỉnh sửa</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(
+    ()=> btn_Delete(context.Id))">Xóa</MudButton>
+
+                </MudTd>
+            </RowTemplate>
+
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+            </PagerContent>
+        </MudTable>
+}
+
+@code {
+
+}

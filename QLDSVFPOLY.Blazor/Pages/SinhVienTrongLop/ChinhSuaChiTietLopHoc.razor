@@ -1,0 +1,150 @@
+﻿@page "/chitietlophoc/chinhsua/{idCTLH}"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.KiHoc
+@using QLDSVFPOLY.BUS.ViewModels.GiangVien
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.Blazor.Components
+@inject IMonHocRepo _repoMonHoc
+@inject ILopHocRepos _repoLopHoc
+@inject IGiangVienRepos _repoGiangVien
+@inject IKiHocRepos _repoKiHoc
+@inject IChiTietLopHocRepos _repoChiTietLopHoc
+
+@if (ListGiangVienVM == null || ListKiHocVM == null || ListLopHocVM == null || ListMonHocVM == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Right" hidden="@hide_Success">Chỉnh sửa thành công</MudAlert>
+    <MudPaper Class="px-2 pt-2 pb-10 ma-2" Outlined="true">
+        <MudForm class="m-4">
+            
+
+            <div class="row">
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Môn học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdMonHoc" Variant="Variant.Outlined">
+                        @if(ListMonHocVM != null) {
+                            foreach(var item in ListMonHocVM) {
+                                <MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
+                            }
+                    
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Lớp học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdLopHoc" Variant="Variant.Outlined">
+                        @if (ListLopHocVM != null)
+                        {
+                            foreach (var item in ListLopHocVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ma</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Giảng viên" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdGiangVien" Variant="Variant.Outlined">
+                        @if (ListGiangVienVM != null)
+                        {
+                            foreach (var item in ListGiangVienVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ma - @item.Ho @item.TenDem @item.Ten</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Kì học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdKiHoc" Variant="Variant.Outlined">
+                        @if (ListKiHocVM != null)
+                        {
+                            foreach (var item in ListKiHocVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col px-2 pt-3 pb-2">
+                    <MudNumericField @bind-Value="@inputSoLuongSinhVien" Label="Số lượng sinh viên" Variant="Variant.Outlined" Min="0"/>
+                </div>
+                <div class="col p-2">
+                        <MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@inputTrangThai">
+                        <MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+                        <MudSelectItem T="int" Value="0">Không hoạt động</MudSelectItem>
+                    </MudSelect>
+                </div>
+            </div>
+    
+            <div style="float:right;" class="pt-2">
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Color="Color.Primary" @onclick="UpdateChiTietLopHoc">Lưu</MudButton>
+            </div>
+        </MudForm>
+    </MudPaper>
+}
+
+@code {
+    [Parameter]
+    public string idCTLH { get; set; }
+
+    private bool hide_Success = true;
+
+    int inputSoLuongSinhVien = 0;
+
+    private List<MonHocVM> ListMonHocVM;
+    private List<GiangVienVM> ListGiangVienVM;
+    private List<LopHocVM> ListLopHocVM;
+    private List<KiHocViewmodel> ListKiHocVM;
+
+    private Guid inputIdMonHoc;
+    private Guid inputIdGiangVien;
+    private Guid inputIdLopHoc;
+    private Guid inputIdKiHoc;
+    private int inputTrangThai;
+
+    private async Task UpdateChiTietLopHoc()
+    {
+        int result = await _repoChiTietLopHoc.UpdateAsync(Guid.Parse(idCTLH), new ChiTietLopHocUpdateVM()
+            {
+                IdMonHoc = inputIdMonHoc,
+                IdGiangVien = inputIdGiangVien,
+                IdLopHoc = inputIdLopHoc,
+                IdKiHoc = inputIdKiHoc,
+                TrangThai = inputTrangThai,
+                SoLuongSinhVien = inputSoLuongSinhVien,
+            });
+    }
+
+    private async Task LoadCurrentData() {
+        var vm = await _repoChiTietLopHoc.GetByIdAsync(Guid.Parse(idCTLH));
+        inputIdGiangVien = vm.IdGiangVien;
+        inputIdMonHoc = vm.IdMonHoc;
+        inputIdKiHoc = vm.IdKiHoc;
+        inputIdLopHoc = vm.IdLopHoc;
+        inputSoLuongSinhVien = vm.SoLuongSinhVien;
+        inputTrangThai = vm.TrangThai;
+    }
+
+    protected override async Task OnInitializedAsync() {
+        await LoadListsAsync();
+        await LoadCurrentData();
+    }
+
+    private async Task LoadListsAsync() {
+        ListMonHocVM = await _repoMonHoc.GetAllActiveAsync(new MonHocSearchVM());
+        ListGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
+        ListLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
+        ListKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
+    }
+}

@@ -36,7 +36,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 Id = c.Id,
                 Ma = c.Ma,
-                TenNganhHoc = c.TenNganhHoc,
+                TenChuyenNganh = c.TenNganhHoc,
                 DuongDanAnh = c.DuongDanAnh,
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
@@ -44,16 +44,14 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 IdDaoTao = c.IdDaoTao
             }).ToList();
 
-            if (obj.Ma == null 
-                && obj.TenNganhHoc == null
-                && obj.TrangThai == 0)
+            if (obj.Ma == null
+                && obj.TenChuyenNganh == null
+                )
             {
                 return listChuyenNganhVM;
             }
-            return listChuyenNganhVM.Where(c => 
-            c.Ma.Contains(obj.Ma)
-            || c.TenNganhHoc.Contains(obj.TenNganhHoc)
-            || c.TrangThai == obj.TrangThai).ToList();
+            return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
+                                            || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
         }
 
 
@@ -66,7 +64,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 Id = c.Id,
                 Ma = c.Ma,
-                TenNganhHoc = c.TenNganhHoc,
+                TenChuyenNganh = c.TenNganhHoc,
                 DuongDanAnh = c.DuongDanAnh,
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
@@ -74,16 +72,13 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 IdDaoTao = c.IdDaoTao
             }).Where(c => c.TrangThai != 0).ToList();
 
-            if (obj.Ma == null
-                && obj.TenNganhHoc == null
-                && obj.TrangThai == 0)
+            if (obj.Ma != null
+                || obj.TenChuyenNganh != null)
             {
-                return listChuyenNganhVM;
+                return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
+                                                || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
             }
-            return listChuyenNganhVM.Where(c =>
-            c.Ma.Contains(obj.Ma)
-            || c.TenNganhHoc.Contains(obj.TenNganhHoc)
-            || c.TrangThai == obj.TrangThai).ToList();
+            return listChuyenNganhVM;
         }
 
         public async Task<ChuyenNganhVM> GetByIdAsync(Guid id)
@@ -96,7 +91,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                 Id = temp.Id,
                 Ma = temp.Ma,
-                TenNganhHoc = temp.TenNganhHoc,
+                TenChuyenNganh = temp.TenNganhHoc,
                 DuongDanAnh = temp.DuongDanAnh,
                 NgayTao = temp.NgayTao,
                 TrangThai = temp.TrangThai,
@@ -107,25 +102,24 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return result;
         }
 
-
         public async Task<bool> CreateAsync(ChuyenNganhCreateVM obj)
         {
-            obj.Id = Guid.NewGuid();
             var temp = new ChuyenNganh()
             {
                 Id = Guid.NewGuid(),
                 Ma = obj.Ma,
-                TenNganhHoc = obj.TenNganhHoc,
+                TenNganhHoc = obj.TenChuyenNganh,
                 DuongDanAnh = obj.DuongDanAnh,
-                NgayTao = obj.NgayTao,
-                TrangThai = obj.TrangThai,
+                NgayTao = DateTime.Now,
                 IdChuyenNganh = obj.IdChuyenNganh,
+                TrangThai = obj.TrangThai,
                 IdDaoTao = obj.IdDaoTao,
             };
+
             await _repos.CreateAsync(temp);
             await _repos.SaveChangesAsync();
             var listChuyenNganh = await _repos.GetAllAsync();
-            if (listChuyenNganh.Any(c => obj.Id == c.Id)) return true;
+            if (listChuyenNganh.Any(c => temp.Id == c.Id)) return true;
             return false;
         }
 
@@ -137,7 +131,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             var temp = listChuyenNganh.FirstOrDefault(c => c.Id == id);
 
             temp.Ma = obj.Ma;
-            temp.TenNganhHoc = obj.TenNganhHoc;
+            temp.TenNganhHoc = obj.TenChuyenNganh;
             temp.DuongDanAnh = obj.DuongDanAnh;
             temp.TrangThai = obj.TrangThai;
             temp.IdChuyenNganh = obj.IdChuyenNganh;
@@ -146,6 +140,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _repos.SaveChangesAsync();
             return true;
         }
+
+
         public async Task<bool> RemoveAsync(Guid id)
         {
             var listChuyenNganh = await _repos.GetAllAsync();
@@ -155,49 +151,45 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return true;
         }
 
-        public async Task<bool> CreateChuyenNganhHep(ChuyenNganhCreateVM obj, Guid idChuyenNganh)
-        {
-            var temp = new ChuyenNganh()
-            {
-                Id = Guid.NewGuid(),
-                Ma = obj.Ma,
-                TenNganhHoc = obj.TenNganhHoc,
-                DuongDanAnh = obj.DuongDanAnh,
-                NgayTao = obj.NgayTao,
-                TrangThai = obj.TrangThai,
-                IdChuyenNganh = idChuyenNganh,
-                IdDaoTao = obj.IdDaoTao,
-            };
-            await _repos.CreateChuyenNganhHep(temp, idChuyenNganh);
-            await _repos.SaveChangesAsync();
-            var listChuyenNganh = await _repos.GetAllAsync();
-            //if (listChuyenNganh.Any(c => c.Id == idChuyenNganh)) return true;
-
-            if (listChuyenNganh.Any(c => c.Id == obj.Id)) return true;
-            return false;
-        }
 
         //lấy ra list ChuyenNganhHep có IdChuyenNganh == id
-        //Lấy 1 vm thôi, nhưng mà cũng giống cái get by id trên
-        public async Task<ChuyenNganhVM> GetChuyenNganhHepById(Guid id)
+        public async Task<List<ChuyenNganhVM>> GetChuyenNganhHepById(Guid id)
         {
             await GetListChuyenNganhAsync();
 
-            ChuyenNganh temp = _listChuyenNganh.FirstOrDefault(c => c.Id == id);
+            List<ChuyenNganhVM> listChuyenNganhVM = new List<ChuyenNganhVM>();
 
-            ChuyenNganhVM result = new ChuyenNganhVM()
+            foreach (var temp in _listChuyenNganh)
             {
-                Id = temp.Id,
-                Ma = temp.Ma,
-                TenNganhHoc = temp.TenNganhHoc,
-                DuongDanAnh = temp.DuongDanAnh,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-                IdChuyenNganh = temp.IdChuyenNganh,
-                IdDaoTao = temp.IdDaoTao,
-            };
+                listChuyenNganhVM.Add(new ChuyenNganhVM()
+                {
+                    Id = temp.Id,
+                    Ma = temp.Ma,
+                    TenChuyenNganh = temp.TenNganhHoc,
+                    DuongDanAnh = temp.DuongDanAnh,
+                    NgayTao = temp.NgayTao,
+                    TrangThai = temp.TrangThai,
+                    IdChuyenNganh = temp.IdChuyenNganh,
+                    IdDaoTao = temp.IdDaoTao,
+                });
+            }
 
-            return result;
+            return listChuyenNganhVM.Where(c => c.IdChuyenNganh == id).ToList();
+        }
+
+        public async Task<bool> UpdateTrangThaiAsync(Guid id)
+        {
+            var listChuyenNganh = await _repos.GetAllAsync();
+            if (!listChuyenNganh.Any(c => c.Id == id)) return false;
+
+            var temp = listChuyenNganh.FirstOrDefault(c => c.Id == id);
+
+
+            temp.TrangThai = 0;
+
+            await _repos.UpdateAsync(temp);
+            await _repos.SaveChangesAsync();
+            return true;
         }
     }
 }

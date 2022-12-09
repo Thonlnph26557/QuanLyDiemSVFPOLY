@@ -8,12 +8,12 @@ namespace QLDSVFPOLY.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LopHocControllers : ControllerBase
+    public class LopHocsController : ControllerBase
     {
         //gọi đến service của LopHoc
         private readonly ILopHocServices _iLopHocServices;
 
-        public LopHocControllers(ILopHocServices lopHocServices)
+        public LopHocsController(ILopHocServices lopHocServices)
         {
             _iLopHocServices = lopHocServices;
         }

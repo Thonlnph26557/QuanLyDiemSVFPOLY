@@ -1,0 +1,126 @@
+﻿@page "/lophoc/quanlylophoc/{idDaoTao}"
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@if(listLopHocs == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+<h1>Quản Lý Lớp Học</h1>
+<form>
+     <div class="w-100" style="margin-top:20px; margin: 0 auto ">
+        <div class="row" style="margin-top:15px">
+            <div class="col">
+                <label>Mã Lớp Học</label>
+                <input @bind="Ma" type="text" class="form-control">
+            </div>
+            <div class="col">
+                <label>Trạng Thái</label>
+                <select @bind="TrangThai" type="int" class="form-control">
+                    <option value="1">Hoạt Động</option>
+                    <option value="0">Không Hoạt Động</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top:15px">
+            <div class="col"></div>  
+            <div class="col">
+                <button type="button" class="btn btn-primary" style="float:right;" @onclick="SuaLopHoc">CHỈNH SỬA</button>
+                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="LamMoi">LÀM MỚI</button>
+                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="ThemLopHoc">THÊM MỚI</button>
+            </div>  
+        </div>
+    </div>
+</form>
+<div style="clear:both"></div>
+<h1 style="margin-top: 50px">Danh Sách Lớp Học</h1>
+    <table class="table">
+	    <thead>
+		    <tr>
+			    <th scope="col">STT</th>
+			    <th scope="col">Mã</th>
+			    <th scope="col">Ngày Tạo</th>
+			    <th scope="col">Bản Ghi</th>
+			    <th scope="col">Xóa</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+            @for (int i=0;i< listLopHocs.Count();i++)
+            {
+                var item = listLopHocs[i];
+                <tr>
+                    <th scope="row">@(i+1)</th>
+			        <td>@item.Ma</td>
+			        <td>@item.NgayTao</td>
+                    <td><button type="button" class="btn btn-primary" @onclick="()=>LoadBanGhi(item.Id)">Bản ghi</button></td>
+                    <td><button type="button" class="btn btn-danger" @onclick="()=>OnDeleteLopHoc(item.Id)">Xóa</button></td>
+		        </tr>
+            }
+	    </tbody>
+    </table>
+}
+@code {
+    [Parameter]
+    public string idDaoTao { get; set; }
+    [Inject] public HttpClient httpClient { get; set; }
+    [Inject] public ILopHocRepos LopHocRepos { get; set; }
+
+    private List<LopHocVM> listLopHocs;
+    private LopHocSearchVM searchVM = new LopHocSearchVM();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+    private async Task LoadData()
+    {
+        listLopHocs = await LopHocRepos.GetAllActiveAsync(searchVM);
+        listLopHocs = listLopHocs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao.ToString())).ToList();
+    }
+    public Guid Id { get; set; }
+    public string Ma { get; set; }
+    public int TrangThai { get; set; }
+
+    private LopHocCreateVM createVm = new LopHocCreateVM();
+    private async Task ThemLopHoc()
+    {
+        createVm.Ma = Ma;
+        createVm.TrangThai = TrangThai;
+        createVm.IdDaoTao = Guid.Parse(idDaoTao.ToString());
+        await LopHocRepos.CreateAsync(createVm);
+        await LoadData();
+        Id = Guid.Empty;
+        Ma = null;
+        TrangThai = 0;
+    }
+    private async Task LoadBanGhi(Guid id)
+    {
+        LopHocVM lopHocVM = await LopHocRepos.GetByIdAsync(id);
+        Id = lopHocVM.Id;
+        Ma = lopHocVM.Ma;
+        TrangThai= lopHocVM.TrangThai;
+    }
+
+    private LopHocUpdateVM updateVm = new LopHocUpdateVM();
+    private async Task SuaLopHoc()
+    {
+        
+        updateVm.Ma = Ma;
+        updateVm.TrangThai = TrangThai;
+        await LopHocRepos.UpdateAsync(Id,updateVm);
+        await LoadData();
+        //Id = Guid.Empty;
+        Ma = null;
+        TrangThai = 0;
+    }
+    private async Task LamMoi()
+    {
+        Ma = null;
+        TrangThai = 0;
+    }
+    public async Task OnDeleteLopHoc(Guid deleteId)
+    {
+        await LopHocRepos.RemoveAsync(deleteId);
+        await LoadData();
+    }
+}

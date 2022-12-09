@@ -1,0 +1,228 @@
+﻿@page "/monhoc/{hanhdong}/{idMonHoc?}"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganhMonHoc
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using QLDSVFPOLY.Blazor.Components
+@inject IMonHocRepo _repoMonHoc
+@inject IChuyenNganhRepo _repoChuyenNganh
+@inject IChuyenNganhMonHocRepos _repoChuyenNganhMonHoc
+@inject IMonHocRepo _repoMonHoc
+@inject IDiemSoRepos _repoDiemSo
+
+@if (ListChuyenNganhVMActive == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <MudForm class="m-4">
+        <div style="float:left" class="w-25">
+            <MudImage Src="" Elevation="25" Class="rounded-lg" Style="background-color: black; height: 20vh; width: 20vw" />
+        </div>
+
+        <div style="float:left" class="w-75">
+            <div class="row pl-5">
+                <div class="col">
+                    <MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@MaInput" />
+
+                    <MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@TenInput" />
+
+                    <MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@TrangThaiInput">
+                        <MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+                        <MudSelectItem T="int" Value="0">Không hoạt động</MudSelectItem>
+                    </MudSelect>
+
+                    <MudSelect T="string" @bind-SelectedValues="ListStringMaChuyenNganh" MultiSelection="true" Label="Chuyên ngành" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1">
+                        @foreach (var item in ListChuyenNganhVMActive.Where(c => c.IdChuyenNganh.HasValue == false))
+                        {
+                            <MudSelectItem T="string" Value="@item.Ma">@item.TenChuyenNganh</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <div style="float:right;" class="pt-1">
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" hidden="@(hanhdong != "chinhsua" ? true : false)">Lưu</MudButton>
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" hidden="@(hanhdong != "them" ? true : false)" OnClick="ThemMonHoc">Thêm</MudButton>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </MudForm>
+    <div style="clear:both;"></div>
+    @if (idMonHoc != null)
+    {
+        <div class="m-4">
+            <div class="row mt-3">
+                <div class="col">
+                    <MudTextField T="string" Label="Tên đầu điểm" Variant="Variant.Outlined"></MudTextField>
+                </div>
+                <div class="col">
+                    <MudNumericField Label="Trọng số" Variant="Variant.Outlined" Step="10" Min="0" Max="100" @bind-Value="@TrongSoInput"/>
+                </div>
+                <div class="d-flex justify-center align-center" FullWidth="true" style="width: 16%">
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" @onclick="@ThemDauDiem">Thêm đầu điểm</MudButton>
+                </div>
+            </div>
+
+            <MudTable Items="@listDiemSo">
+                <HeaderContent>
+                    <MudTh>STT</MudTh>
+                    <MudTh>Tên đầu điểm</MudTh>
+                    <MudTh>Trọng số</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@(stt++)</MudTd>
+                        <MudTd>@context.TenDauDiem</MudTd>
+                        <MudTd>@context.TrongSo</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </div>
+
+    }
+
+}
+
+
+@code {
+    [Parameter]
+    public string hanhdong { get; set; }
+    [Parameter]
+    public string idMonHoc { get; set; }
+
+    private List<ChuyenNganhVM> ListChuyenNganhVMActive;
+    private List<ChuyenNganhMonHocVM> ListCNMHVM;
+    private List<MonHocVM> ListMonHoc;
+    private List<DiemSoVM> listDiemSo;
+
+    private string? MaInput;
+    private string? TenInput;
+    private double TrongSoInput;
+    private int TrangThaiInput;
+    private IEnumerable<string> ListStringMaChuyenNganh = new HashSet<string>();
+
+    private int stt = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListsAsync();
+    }
+
+    private async Task LoadListsAsync()
+    {
+        ListChuyenNganhVMActive = await _repoChuyenNganh.GetAllActiveAsync(new ChuyenNganhSearchVM());
+        ListCNMHVM = await _repoChuyenNganhMonHoc.GetAllAsync(new ChuyenNganhMonHocSearchVM());
+        ListMonHoc = await _repoMonHoc.GetAllAsync(new MonHocSearchVM());
+        listDiemSo = await _repoDiemSo.GetAllActiveAsync(new DiemSoSearchVM());
+        listDiemSo = listDiemSo.Where(c => c.IdMonHoc == Guid.Parse(idMonHoc)).ToList();
+    }
+
+
+    private async Task ThemMonHoc()
+    {
+        bool task1Result = await _repoMonHoc.CreateAsync(new MonHocCreateVM()
+            {
+                Ma = MaInput,
+                Ten = TenInput,
+                TrangThai = TrangThaiInput,
+                DuongDanAnh = "NotAvailable"
+            });
+        //Thêm thành công ms tiến hành
+        if (task1Result)
+        {
+            await LoadListsAsync();
+            var lastResult = ListMonHoc.FirstOrDefault(c => c.Ma == MaInput);
+
+            Guid idTask1 = lastResult.Id;
+
+            var listIdChuyenNganh = ConvertMaToIdCN();
+
+            foreach (var item in listIdChuyenNganh)
+            {
+                await _repoChuyenNganhMonHoc.CreateAsync(new ChuyenNganhMonHocCreateVM()
+                    {
+                        IdChuyenNganh = item,
+                        IdMonHoc = Guid.Parse(idMonHoc),
+                        TrangThai = 1
+                    });
+            }
+        }
+        await LoadListsAsync();
+    }
+
+    private void ThemDauDiem() {
+        _repoDiemSo.CreateAsync(new DiemSoCreateVM()
+        {
+            IdMonHoc = Guid.Parse(idMonHoc),
+            TenDauDiem = TenInput,
+            TrongSo = TrongSoInput,
+            TrangThai = 1
+        });
+    }
+
+    //if(ListCNMHVM.Any(c => c.IdChuyenNganh == item && c.IdMonHoc == idMonHoc))
+    //    {
+
+    //    }
+
+    private async Task LoadDataOnGUI() {
+
+    }
+
+    private async Task SuaMonHoc()
+    {
+        bool task1Result = await _repoMonHoc.UpdateAsync(Guid.Parse(idMonHoc), new MonHocUpdateVM()
+            {
+                Ma = MaInput,
+                Ten = TenInput,
+                TrangThai = TrangThaiInput,
+                DuongDanAnh = "NotAvailable"
+            });
+        if (task1Result)
+        {
+            await LoadListsAsync();
+            var lastResult = ListMonHoc.FirstOrDefault(c => c.Id == Guid.Parse(idMonHoc));
+
+            var listIdChuyenNganh = ConvertMaToIdCN();
+
+            foreach (var item in ListCNMHVM)
+            {
+                if(item.IdMonHoc == Guid.Parse(idMonHoc) && listIdChuyenNganh.Any(c => c == item.IdChuyenNganh) == true) {
+                    await _repoChuyenNganhMonHoc.RemoveAsync(item.IdChuyenNganh, item.IdMonHoc);
+                }
+                
+            }
+            foreach (var item in listIdChuyenNganh)
+            {
+                await _repoChuyenNganhMonHoc.CreateAsync(new ChuyenNganhMonHocCreateVM()
+                    {
+                        IdChuyenNganh = item,
+                        IdMonHoc = Guid.Parse(idMonHoc),
+                        TrangThai = 1
+                    });
+            }
+        }
+        await LoadListsAsync();
+
+    }
+
+    private Guid GetIdByMa(string iMa)
+    {
+        LoadListsAsync();
+        return ListMonHoc.FirstOrDefault(c => c.Ma == iMa).Id;
+    }
+
+    private List<Guid> ConvertMaToIdCN()
+    {
+        var listString = ListStringMaChuyenNganh.ToList();
+        List<Guid> listIdChuyenNganh = new List<Guid>();
+        foreach (var i in listString)
+        {
+            listIdChuyenNganh.Add(ListChuyenNganhVMActive.FirstOrDefault(c => c.Ma == i).Id);
+        }
+        return listIdChuyenNganh;
+    }
+}

@@ -9,12 +9,15 @@ namespace QLDSVFPOLY.API.Controllers
     [ApiController]
     public class NhanVienDaoTaosController : ControllerBase
     {
+        //
         private readonly INhanVienDaoTaoServices _iNhanVienDaoTaoServices;
+        //
         public NhanVienDaoTaosController(INhanVienDaoTaoServices nhanVienDaoTaoServices)
         {
             _iNhanVienDaoTaoServices = nhanVienDaoTaoServices;
         }
 
+        //
         [HttpGet("all")]
         public async Task<IActionResult> GetAllNhanVienDaoTao([FromQuery] NhanVienDaoTaoSearchVM searchVm)
         {
@@ -61,11 +64,12 @@ namespace QLDSVFPOLY.API.Controllers
             return Ok(result);
         }
 
+        //
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteNhanVienDaoTao(Guid id)
         {
-            var result = await _iNhanVienDaoTaoServices.RemoveAsync(id);
+            var result = await _iNhanVienDaoTaoServices.UpdateRemoveAsync(id);
             return Ok(result);
         }
     }

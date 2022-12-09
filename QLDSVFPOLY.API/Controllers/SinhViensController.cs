@@ -23,25 +23,10 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         //lấy ra danh sách sinh viên còn hoạt động kết hợp tìm kiếm
-        [HttpGet("active")]
+        [HttpGet("allactive")]
         public async Task<IActionResult> GetAllSinhVienActive([FromQuery] SinhVienSearchVM search)
         {
             var listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(search);
-
-            if (search.Ma == null
-                && search.Ho == null
-                && search.TenDem == null
-                && search.Ten == null
-                && search.GioiTinh == 0
-                && search.DiaChi == null
-                && search.SoDienThoai == null
-                && search.Email == null
-                && search.TrangThai == 0
-                && search.IdChuyenNganh == null)
-            {
-                listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(null);
-            }
-
             return Ok(listSinhVienSearch);
         }
 
@@ -50,20 +35,6 @@ namespace QLDSVFPOLY.API.Controllers
         public async Task<IActionResult> GetAllSinhVien([FromQuery] SinhVienSearchVM search)
         {
             var listSinhVienSearch = await _sinhVienServices.GetAllAsync(search);
-
-            if (search.Ma == null
-                && search.Ho == null
-                && search.TenDem == null
-                && search.Ten == null
-                && search.GioiTinh == 0
-                && search.DiaChi == null
-                && search.SoDienThoai == null
-                && search.Email == null
-                && search.TrangThai == 0
-                && search.IdChuyenNganh == null)
-            {
-                listSinhVienSearch = await _sinhVienServices.GetAllActiveAsync(null);
-            }
 
             return Ok(listSinhVienSearch);
         }

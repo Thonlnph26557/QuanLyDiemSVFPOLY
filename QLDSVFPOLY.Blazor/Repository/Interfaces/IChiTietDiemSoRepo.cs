@@ -5,10 +5,10 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
     public interface IChiTietDiemSoRepo
     {
         Task<List<ChiTietDiemSoVM>> GetAllAsync(ChiTietDiemSoSearchVM vm);
-        Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM vm;
-        Task<ChiTietDiemSoVM> GetByIdAsync(Guid id);
-        Task<int> CreateAsync(ChiTietDiemSoCreateVM vm);
-        Task<int> UpdateAsync(Guid id, ChiTietDiemSoUpdateVM vm);
-        Task<int> RemoveAsync(Guid id);
+        Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM vm);
+        Task<ChiTietDiemSoVM> GetByIdAsync(Guid idLopHoc, Guid idDiemSo, Guid idSinhVien);
+        Task<bool> CreateAsync(ChiTietDiemSoCreateVM vm);
+        Task<bool> UpdateAsync(Guid id, ChiTietDiemSoUpdateVM vm);
+        Task<bool> RemoveAsync(Guid id);
     }
 }

@@ -38,28 +38,21 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await GetListKiHocAsync();
 
             List<KiHocViewmodel> listKiHocViewmodel = new List<KiHocViewmodel>();
-
-            foreach (var temp in _listKiHocs)
+            listKiHocViewmodel = _listKiHocs.Select(c=> new KiHocViewmodel()
             {
-                listKiHocViewmodel.Add(new KiHocViewmodel()
-                {
-                    Id = temp.Id,
-                    Ten = temp.Ten,
-                    NamHoc = temp.NamHoc,
-                    NgayBatDau = temp.NgayBatDau,
-                    NgayKetThuc = temp.NgayKetThuc,
-                    NgayTao = temp.NgayTao,
-                    TrangThai = temp.TrangThai,
-                });
+                Id = c.Id,
+                Ten = c.Ten,
+                NamHoc = c.NamHoc,
+                NgayBatDau = c.NgayBatDau,
+                NgayKetThuc = c.NgayKetThuc,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
+            if (obj.Ten != null)
+            {
+                listKiHocViewmodel = listKiHocViewmodel.Where(c => c.Ten.Contains(obj.Ten)).ToList();
             }
             return listKiHocViewmodel;
-
-            //if (obj == null)
-            //{
-            //    return listKiHocViewmodel;
-            //}
-            ////Tìm kiếm, tôi chỉ tìm theo Mã trc
-            //return listKiHocViewmodel.Where(c => c.Id == obj.Id).ToList();
         }
 
         //
@@ -69,32 +62,21 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await GetListKiHocAsync();
 
             List<KiHocViewmodel> listKiHocViewmodel = new List<KiHocViewmodel>();
-
-            foreach (var temp in _listKiHocs)
+            listKiHocViewmodel = _listKiHocs.Where(c => c.TrangThai !=0).Select(c => new KiHocViewmodel()
             {
-                //Kiểm tra TrangThai
-                if (temp.TrangThai != 0)
-                {
-                    listKiHocViewmodel.Add(new KiHocViewmodel()
-                    {
-                        Id = temp.Id,
-                        Ten = temp.Ten,
-                        NamHoc = temp.NamHoc,
-                        NgayBatDau = temp.NgayBatDau,
-                        NgayKetThuc = temp.NgayKetThuc,
-                        NgayTao = temp.NgayTao,
-                        TrangThai = temp.TrangThai,
-                    });
-                }
+                Id = c.Id,
+                Ten = c.Ten,
+                NamHoc = c.NamHoc,
+                NgayBatDau = c.NgayBatDau,
+                NgayKetThuc = c.NgayKetThuc,
+                NgayTao = c.NgayTao,
+                TrangThai = c.TrangThai,
+            }).ToList();
+            if(obj.Ten != null)
+            {
+                listKiHocViewmodel = listKiHocViewmodel.Where(c => c.Ten.Contains(obj.Ten)).ToList();
             }
             return listKiHocViewmodel;
-
-            //if (obj == null)
-            //{
-            //    return listKiHocViewmodel;
-            //}
-            ////Tìm kiếm, tôi chỉ tìm theo Mã trc
-            //return listKiHocViewmodel.Where(c => c.Id == obj.Id).ToList();
         }
 
         //
@@ -121,7 +103,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         public async Task<bool> CreateAsync(KiHocCreateViewmodel obj)
         {
-
             var temp = new KiHoc()
             {
                 Id = Guid.NewGuid(),
@@ -129,7 +110,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 NamHoc = obj.NamHoc,
                 NgayBatDau = obj.NgayBatDau,
                 NgayKetThuc = obj.NgayKetThuc,
-                TrangThai = obj.TrangThai
+                TrangThai = obj.TrangThai,
+                NgayTao = DateTime.Now
             };
 
             await _iKiHocRepositories.CreateAsync(temp);

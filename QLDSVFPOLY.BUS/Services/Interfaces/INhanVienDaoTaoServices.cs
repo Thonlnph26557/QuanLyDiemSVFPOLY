@@ -14,6 +14,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<NhanVienDaoTaoVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(NhanVienDaoTaoCreateVM obj);
         Task<bool> UpdateAsync(Guid id, NhanVienDaoTaoUpdateVM obj);
+        Task<bool> UpdateRemoveAsync(Guid id);
+
         Task<bool> RemoveAsync(Guid id);
     }
 }
