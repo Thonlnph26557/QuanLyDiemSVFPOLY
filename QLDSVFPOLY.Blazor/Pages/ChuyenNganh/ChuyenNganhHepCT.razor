@@ -2,8 +2,11 @@
 @using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
 @using QLDSVFPOLY.Blazor.Components;
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
+@inject IToastService toastService
+@inject ISessionStorageService _SStorage
+@inject IJSRuntime JS
 
-<h1>Chuyên Ngành Hẹp???</h1>
+
 <style>
 	#dd {
 		border: 2px black;
@@ -19,50 +22,36 @@
 }
 else
 {
-	<EditForm Model="@updateVm">
-		<div class="w-25" style="float: left; margin-top:30px">
-			<img id="dd" /><br />
-			<input multiple="" type="file" _bl_2="" style="margin-top:20px;margin-left:50px">
-		</div>
-		<div class="w-50" style="float:right;margin-top:20px;">
-			<div class="row" style="margin-top:15px">
-				<div class="col">
-					<label>Mã Chuyên Ngành</label>
-					<input type="text" class="form-control" @bind="updateVm.Ma">
-				</div>
-				<div class="col"></div>
-			</div>
-			<div class="row" style="margin-top:15px">
-				<div class="col">
-					<label>Tên Ngành</label>
-					<input type="text" class="form-control" @bind="updateVm.TenChuyenNganh">
-				</div>
-				<div class="col"></div>
-			</div>
-			<div class="row" style="margin-top:15px">
-				<div class="col">
-					<label>Trạng Thái</label>
-					<select class="form-control" @bind="updateVm.TrangThai">
-						<option value="1">Hoạt động</option>
-						<option value="2">Tạm dừng hoạt động</option>
-					</select>
-				</div>
-				<div class="col"></div>
-			</div>
-			<div class="row" style="margin-top:15px">
-				<div class="col">
-					<button type="button" class="btn btn-primary" style="float:left" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</button>
-					<button type="button" class="btn btn-primary" style="float:right" @onclick="()=>UpdateCN(Guid.Parse(idChuyenNganhHep), updateVm)">CHỈNH SỬA</button>
-				</div>
-				<div class="col"></div>
-			</div>
-			<div class="row" style="margin-top:15px">
-				<div class="col"></div>
-				<div class="col"></div>
-			</div>
+	<MudText Typo="Typo.h5">Danh sách chuyên ngành</MudText>
+	<MudForm class="m-4">
+		<div style="float:left" class="w-25">
+			<MudSpacer></MudSpacer>
+			<MudImage Src="@updateVm.Ma" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+			<InputFile OnChange="@OnInputFileChanged"></InputFile>
 		</div>
 
-	</EditForm>
+		<div style="float:left" class="w-75">
+			<div class="row pl-5">
+				<div class="col">
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" />
+
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" />
+
+					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai">
+						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+						<MudSelectItem T="int" Value="2">Tạm dừng hoạt động</MudSelectItem>
+					</MudSelect>
+					<div style="float:right;" class="pt-1">
+						<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@(()=>ShowConfirmSua(Guid.Parse(idChuyenNganhHep),updateVm))">Lưu</MudButton>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</MudForm>
+
+	<Confirmation ConfirmationMessage="Bạn có muốn sửa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="()=>UpdateCN(IdSua,confirmchuyenNganhSua)"></Confirmation>
+
 }
 @code {
 
@@ -73,7 +62,7 @@ else
 	public string idChuyenNganhHep { set; get; }
 
 	//Su dung cho Update
-	private ChuyenNganhUpdateVM updateVm;
+	private ChuyenNganhUpdateVM updateVm = new ChuyenNganhUpdateVM();
 
 	//Inject Repo cua ChuyenNganh
 	[Inject] private IChuyenNganhRepo chuyenNganhRepo { set; get; }
@@ -86,7 +75,9 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
 		await LoadDataUpdate();
+
 	}
 
 	private async Task LoadData()
@@ -100,17 +91,28 @@ else
 
 	private async Task LoadDataUpdate()
 	{
-		var chuyenNganh = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganhHep));
-		updateVm.Ma = chuyenNganh.Ma;
-		updateVm.TenChuyenNganh = chuyenNganh.TenChuyenNganh;
-		updateVm.TrangThai = chuyenNganh.TrangThai;
-		updateVm.IdChuyenNganh = chuyenNganh.IdChuyenNganh;
+		var chuyenNganhHep = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganhHep));
+
+		updateVm.Ma = chuyenNganhHep.Ma;
+		updateVm.TenChuyenNganh = chuyenNganhHep.TenChuyenNganh;
+		updateVm.TrangThai = chuyenNganhHep.TrangThai;
+		updateVm.IdChuyenNganh = Guid.Parse(idChuyenNganh);
+		updateVm.DuongDanAnh = chuyenNganhHep.DuongDanAnh;
+		updateVm.TrangThai = chuyenNganhHep.TrangThai;
 	}
 
 	private async Task UpdateCN(Guid idChuyenNganh, ChuyenNganhUpdateVM updateVm)
 	{
-		await chuyenNganhRepo.UpdateAsync(idChuyenNganh, updateVm);
-		await LoadData();
+		bool x = await chuyenNganhRepo.UpdateAsync(idChuyenNganh, updateVm);
+		if (x)
+		{
+			toastService.ShowSuccess($"Sửa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Sửa thất bại");
+		}
 
 	}
 
@@ -119,5 +121,37 @@ else
 		updateVm.Ma = "";
 		updateVm.TenChuyenNganh = "";
 		updateVm.TrangThai = 0;
+	}
+
+
+	protected Confirmation _confirmSua { set; get; }
+
+	private Guid IdSua { set; get; }
+	private ChuyenNganhUpdateVM confirmchuyenNganhSua = new ChuyenNganhUpdateVM();
+
+	private async Task ShowConfirmSua(Guid suaId, ChuyenNganhUpdateVM chuyenNganh)
+	{
+		IdSua = suaId;
+		confirmchuyenNganhSua = chuyenNganh;
+		_confirmSua.show();
+	}
+
+	DefaultImages defImg = new DefaultImages();
+	IJSObjectReference module;
+	record ImageDimensions(int Width, int Height);
+	private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+		var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+		var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+		if (dimensions.Width > 250)
+		{
+			file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+		}
+		var buffers = new byte[file.Size];
+		await file.OpenReadStream().ReadAsync(buffers);
+		string imageType = file.ContentType;
+		updateVm.Ma = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
 	}
 }

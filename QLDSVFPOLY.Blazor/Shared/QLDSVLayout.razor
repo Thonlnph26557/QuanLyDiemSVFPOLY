@@ -1,8 +1,14 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
+@inject ISessionStorageService _SStorage
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+@*<BlazoredToasts />*@
+<BlazoredToasts Position="ToastPosition.BottomRight" Timeout="5" IconType="IconType.FontAwesome" ErrorIcon="fa fa-times"
+                InfoIcon="fa fa-info" SuccessIcon="fa fa-check" WarningIcon="fa fa-exclamation" />
+
 
 <MudLayout>
     <MudAppBar>
@@ -13,7 +19,11 @@
             <MudText Typo="Typo.body2" Style="font-size: 1.5vh;">Chương trình</MudText>
             <MudText Typo="Typo.h6" Style="font-size: 2.2vh;">Quản lý điểm sinh viên</MudText>
         </div>
-
+        <MudSpacer></MudSpacer>
+        <div>
+            <MudText Typo="Typo.body2" Style="font-size: 1.5vh;">Chương trình</MudText>
+            <MudText Typo="Typo.h6" Style="font-size: 2.2vh;">Quản lý điểm sinh viên</MudText>
+        </div>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
 

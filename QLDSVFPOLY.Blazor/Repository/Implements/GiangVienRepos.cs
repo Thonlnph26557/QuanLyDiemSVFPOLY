@@ -50,7 +50,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
 
         public async Task<GiangVienVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.GetFromJsonAsync<GiangVienVM>($"/api/GiangViens/all/{id}");
+            var result = await _httpClient.GetFromJsonAsync<GiangVienVM>($"/api/GiangViens/{id}");
             return result;
         }
 

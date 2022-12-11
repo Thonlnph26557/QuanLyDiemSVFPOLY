@@ -1,8 +1,13 @@
 using QLDSVFPOLY.BUS.Services.Implements;
 using QLDSVFPOLY.BUS.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigurationManager Configuration = builder.Configuration;
+IWebHostEnvironment environment = builder.Environment;
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -24,7 +29,24 @@ builder.Services.AddTransient<IChiTietDiemSoServices, ChiTietDiemSoServices>();
 builder.Services.AddTransient<ITaiKhoanServices, TaiKhoanServices>();
 builder.Services.AddTransient<ISinhVienServices, SinhVienServices>();
 builder.Services.AddTransient<INhanVienDaoTaoServices, NhanVienDaoTaoServices>();
+builder.Services.AddTransient<IDaoTaoServices, DaoTaoServices>();
 
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = Configuration["Jwt:Issuer"],
+            ValidAudience = Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -34,6 +56,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 

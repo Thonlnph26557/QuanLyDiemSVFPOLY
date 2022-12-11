@@ -205,7 +205,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             temp.NgaySinh = updateVm.NgaySinh;
             temp.DiaChi = updateVm.DiaChi;
             temp.SoDienThoai = updateVm.SoDienThoai;
-            temp.MatKhau = updateVm.MatKhau;
+            //temp.MatKhau = updateVm.MatKhau;
             temp.DuongDanAnh = updateVm.DuongDanAnh;
             temp.NgayTao = updateVm.NgayTao;
             temp.TrangThai = updateVm.TrangThai;

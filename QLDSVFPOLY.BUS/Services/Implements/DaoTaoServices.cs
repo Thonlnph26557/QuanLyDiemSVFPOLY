@@ -53,24 +53,23 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai,
             }).ToList();
 
-            if (obj.Ma != null ||
-                obj.DiaChi != null ||
-                obj.SoDienThoai != null ||
-                obj.Email != null ||
-                obj.TrangThai != null
-                )
-            {
-                return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.DiaChi.Contains(obj.DiaChi)
-                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
-                                                    || c.Email.Contains(obj.Email)
-                                                    || c.TrangThai == (obj.TrangThai)
-                                                    ).ToList();
-            }
-            else
-            {
-                return listDaoTaoVM;
-            }
+            //if (obj.Ma != null ||
+            //    obj.DiaChi != null ||
+            //    obj.Email != null ||
+            //    obj.TrangThai != null
+            //    )
+            //{
+            //    return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
+            //                                        || c.DiaChi.Contains(obj.DiaChi)
+            //                                        || c.Email.Contains(obj.Email)
+            //                                        || c.TrangThai == (obj.TrangThai)
+            //                                        ).ToList();
+            //}
+            //else
+            //{
+            //    return listDaoTaoVM;
+            //}
+            return listDaoTaoVM;
         }
 
         //
@@ -94,25 +93,23 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
             }).ToList();
-
-            if (obj.Ma != null ||
-                obj.DiaChi != null ||
-                obj.SoDienThoai != null ||
-                obj.Email != null ||
-                obj.TrangThai != null
-                )
-            {
-                return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.DiaChi.Contains(obj.DiaChi)
-                                                    || c.SoDienThoai.Contains(obj.SoDienThoai)
-                                                    || c.Email.Contains(obj.Email)
-                                                    || c.TrangThai == (obj.TrangThai)
-                                                    ).ToList();
-            }
-            else
-            {
-                return listDaoTaoVM;
-            }
+            return listDaoTaoVM;
+            //if (obj.Ma != null ||
+            //    obj.DiaChi != null ||
+            //    obj.Email != null ||
+            //    obj.TrangThai != null
+            //    )
+            //{
+            //    return listDaoTaoVM.Where(c => c.Ma.Contains(obj.Ma)
+            //                                        || c.DiaChi.Contains(obj.DiaChi)
+            //                                        || c.Email.Contains(obj.Email)
+            //                                        || c.TrangThai == (obj.TrangThai)
+            //                                        ).ToList();
+            //}
+            //else
+            //{
+            //    return listDaoTaoVM;
+            //}
         }
 
         //
@@ -142,7 +139,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         public async Task<bool> CreateAsync(DaoTaoCreateVM obj)
         {
-
             var temp = new DaoTao()
             {
                 Id = Guid.NewGuid(),
@@ -153,7 +149,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TenDangNhap = obj.TenDangNhap,
                 MatKhau = obj.MatKhau,
                 NgayTao = DateTime.Now,
-                TrangThai = obj.TrangThai,
+                TrangThai = obj.TrangThai
             };
 
             await _repos.CreateAsync(temp);

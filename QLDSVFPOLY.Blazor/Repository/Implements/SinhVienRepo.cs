@@ -115,29 +115,29 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         }
 
         //
-        public async Task<int> CreateAsync(SinhVienCreateVM vm)
+        public async Task<bool> CreateAsync(SinhVienCreateVM vm)
         {
             var result = await _httpClient.PostAsJsonAsync("api/SinhViens", vm);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
         //
-        public async Task<int> UpdateAsync(Guid id, SinhVienUpdateVM vm)
+        public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM vm)
         {
             var url = Path.Combine("/api/SinhViens", id.ToString());
             var result = await _httpClient.PutAsJsonAsync(url, vm);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
         //
-        public async Task<int> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
             var url = Path.Combine("/api/SinhViens", id.ToString());
             var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return 1;
-            return 0;
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }

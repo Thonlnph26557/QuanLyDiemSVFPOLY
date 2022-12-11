@@ -1,4 +1,6 @@
 ﻿@page "/listtest"
+@attribute [Authorize(Roles =("DaoTao"))]
+
 
 <MudSelect T="string" Label="US States" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options">
     @foreach (var state in states)

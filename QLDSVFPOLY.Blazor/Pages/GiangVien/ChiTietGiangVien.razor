@@ -4,7 +4,14 @@
 @using QLDSVFPOLY.Blazor.Repository.Implements
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 
-@if (_listGiangViens == null)
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+@inject IToastService ToastService
+@inject IJSRuntime JS
+@inject ISessionStorageService _SStorage
+
+@if (_listGiangViens == null || obj == null)
 {
 	<LoadingIndicator></LoadingIndicator>
 }
@@ -12,147 +19,166 @@ else
 {
 
 
-<h1>Thêm Giảng Viên</h1>
+<MudText Typo="Typo.h5">
+    Giảng Viên
+    : @obj.Ho @obj.TenDem @obj.Ten
+</MudText>
 
-<style>
-    #dd {
-        border: 1px black;
-        width: 17vw;
-        height: 46vh;
-        margin-left: 10px;
-    }
-</style>
+<MudContainer class="d-flex justify-center align-center w-70 h-75">
 
-<EditForm Model="@updateVM">
-
-    <div class="w-25" style="float: left; margin-top:20px">
-
-        <img id="dd" /><br />
-
-        <input multiple="" type="file" _bl_2="" style="margin-top:15px;margin-left:45px">
-
-    </div>
-
-    <div class="w-75" style="float: right;padding-left:20px;">
-
-        <div class="row">
-
-            <div class="col">
-                <label>Mã Giảng Viên</label>
-                <input type="text" class="form-control" @bind-value="updateVM.Ma">
-            </div>
-
-            <div class="col">
-                <label>Email</label>
-                <input type="text" class="form-control" @bind-value="updateVM.Email">
-
-            </div>
-
-        </div>
-
-        <div class="row" style="margin-top:10px">
-            <div class="col">
-                <label>Họ</label>
-                <input type="text" class="form-control" @bind-value="updateVM.Ho">
-            </div>
-            <div class="col">
-                <label>Số Điện Thoại</label>
-                <input type="email" class="form-control" @bind-value="updateVM.SoDienThoai">
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-            <div class="col">
-                <label>Tên Đệm</label>
-                <input type="text" class="form-control" @bind-value="updateVM.TenDem">
-            </div>
-            <div class="col">
-                <label>Địa Chỉ</label>
-                <input type="text" class="form-control" @bind-value="updateVM.DiaChi">
-            </div>
-
-        </div>
-
-        <div class="row" style="margin-top:10px">
-            <div class="col">
-                <label>Tên</label>
-                <input type="text" class="form-control" @bind-value="updateVM.Ten">
-            </div>
-            <div class="col">
-                <label>Trạng Thái</label>
-                <select class="form-control" @bind="updateVM.TrangThai">
-                    <option value=1>Đang làm</option>
-                    <option value=2>Đang nghỉ làm</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-
-            <div class="col">
-                <label>Giới Tính</label>
-                <select class="form-control" @bind="updateVM.GioiTinh">
-                    <option value=0>Nam</option>
-                    <option value=1>Nữ</option>
-                </select>
-            </div>
-
-            <div class="col">
-                <label>Ngày Sinh</label>
-                <input type="date" class="form-control" @bind-value="updateVM.NgaySinh">
-            </div>
-
-        </div>
+    <style>
+        #dd {
+            border: 1px black;
+            width: 17vw;
+            height: 46vh;
+            margin-left: 10px;
+        }
+    </style>
 
 
-        <div class="row" style="margin-top:10px">
 
-            <div class="col">
-            </div>
+    <EditForm Model="@updateVM">
 
-            <div class="col">
-                <button type="button" class="btn btn-primary" style="float:left" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</button>
-                <button type="button" class="btn btn-primary" style="float:right" @onclick="()=>ChinhSua(Guid.Parse(idGiangVien), updateVM)">CHỈNH SỬA</button>
-            </div>
+        <DataAnnotationsValidator></DataAnnotationsValidator>
 
-        </div>
 
-    </div>
-</EditForm>
+        <MudGrid class="w-25" Style="float: left; margin-top:20px">
+
+                <MudImage Src="@updateVM.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+                <InputFile OnChange="@OnInputFileChanged"></InputFile>
+
+        </MudGrid>
+
+        <MudGrid class="w-75" Style="float: right;padding-left:20px;">
+
+            <MudGrid class="row">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Mã Giảng Viên" class="form-control" @bind-Value="updateVM.Ma" For="() => updateVM.Ma"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Email" class="form-control" @bind-Value="updateVM.Email" For="() => updateVM.Email"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Họ" class="form-control" @bind-Value="updateVM.Ho" For="() => updateVM.Ho"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="updateVM.SoDienThoai" For="() => updateVM.SoDienThoai"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="updateVM.TenDem" For="() => updateVM.TenDem"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="updateVM.DiaChi" For="() => updateVM.DiaChi"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên" class="form-control" @bind-Value="updateVM.Ten" For="() => updateVM.Ten"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.TrangThai">
+
+                        <MudSelectItem Value=1>Đang học</MudSelectItem>
+                        <MudSelectItem Value=2>Đang nghỉ học</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.GioiTinh">
+
+                        <MudSelectItem Value=0>Nam</MudSelectItem>
+                        <MudSelectItem Value=1>Nữ</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Sinh" InputType="InputType.Date"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:left" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</MudButton>
+
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:right" @onclick="ShowConfirmSua">CHỈNH SỬA</MudButton>
+
+                </MudItem>
+
+            </MudGrid>
+
+        </MudGrid>
+
+    </EditForm>
+
+</MudContainer>
 }
+
+<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="()=>ChinhSua(Guid.Parse(idGiangVien), updateVM)"></Confirmation>
 
 @code {
 
-    [Parameter]
-    public string idGiangVien { set; get; }
-
-    private GiangVienUpdateVM updateVM = new();
-
-
-
-    private async Task ChinhSua(Guid idGiangVien, GiangVienUpdateVM updateVM)
-    {
-        await giangVienRepos.UpdateAsync(idGiangVien, updateVM);
-
-        await LoadData();
-    }
-
-
-    // Khai báo
-    private GiangVienVM obj;
-
-    private List<GiangVienVM> _listGiangViens;
-
-    private GiangVienSearchVM _search = new GiangVienSearchVM();
-
     //
-    private async Task LoadData()
+    protected Confirmation _confirmSua { get; set; }
+
+    private async Task ShowConfirmSua()
     {
-        _listGiangViens = await giangVienRepos.GetAllActiveAsync(_search);
-
-        _listGiangViens = _listGiangViens.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
-
-        obj = _listGiangViens.FirstOrDefault(c => c.Id == Guid.Parse(idGiangVien));
+        _confirmSua.show();
     }
+
+
 
 }

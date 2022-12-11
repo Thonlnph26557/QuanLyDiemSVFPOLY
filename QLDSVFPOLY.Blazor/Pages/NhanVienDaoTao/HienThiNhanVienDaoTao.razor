@@ -1,6 +1,14 @@
-﻿@page "/nhanviendaotao/hienthi/{idDaoTao}"
+﻿@page "/nhanviendaotao/hienthi"
 
 @inject IConfiguration Configuration
+@inject ISessionStorageService _SStorage
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+
+@inject IToastService ToastService
+
 
 @if (_listNhanVienDaoTaos == null)
 {
@@ -9,55 +17,94 @@
 else
 {
 
-<div>
-	<h1 style="float:left">Danh Sách Nhân Viên Đào Tạo</h1>
-	<button type="button" class="btn btn-primary" style="float: right; margin-right:40px" @onclick="()=>NavigationThemMoi()">Thêm</button>
-</div>
+    <MudTable Items="@_listNhanVienDaoTaos">
 
-<table class="table">
+        <ToolBarContent>
 
-	<thead>
-		<tr>
-			<th scope="col">STT</th>
-			<th scope="col">Họ Và Tên</th>
-			<th scope="col">Giới Tính</th>
-			<th scope="col">Ngày Sinh</th>
-			<th scope="col">Địa Chỉ</th>
-			<th scope="col">Số Điện Thoại</th>
-			<th scope="col">Email</th>
-			<th scope="col">Ngày Tạo</th>
-			<th scope="col">Chi Tiết</th>
-			<th scope="col">Xóa</th>
-		</tr>
-	</thead>
+            <MudText Typo=" Typo.h5">Danh Sách Nhân Viên Đào Tạo</MudText>
 
-	<tbody>
+            <MudSpacer></MudSpacer>
 
-		@for (int i = 0; i < _listNhanVienDaoTaos.Count(); i++)
-		{
-			var item = _listNhanVienDaoTaos[i];
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>NavigationThemMoi()">Thêm</MudButton>
+        </ToolBarContent>
 
-		<tr>
-			<th scope="row">@(i+1)</th>
-			<td>@item.Ho @item.TenDem @item.Ten</td>
-			<td>@(item.GioiTinh == 1 ? "Nữ" : "Nam")</td>
-			<td>@item.NgaySinh.ToString("MM/dd/yyyy")</td>
-			<td>@item.DiaChi</td>
-			<td>@item.SoDienThoai</td>
-			<td>@item.Email</td>
-			<td>@item.NgayTao.ToString("MM/dd/yyyy")</td>
-			<td><button type="button" class="btn btn-link" @onclick="()=>NavigationChiTiet(item.Id)">Chi tiết</button></td>
-			<td><button type="button" class="btn btn-danger" @onclick="()=>OnDeleteNhanVienDaoTao(item.Id)">Xóa</button></td>
-		</tr>
-		
-		}
-	</tbody>
+        <HeaderContent>
 
-</table>
+            <MudTh>STT</MudTh>
+
+            <MudTh>Họ Và Tên </MudTh>
+
+            <MudTh>Giới Tính </MudTh>
+
+            <MudTh>Ngày Sinh </MudTh>
+
+            <MudTh>Địa Chỉ </MudTh>
+
+            <MudTh>Số Điện Thoại </MudTh>
+
+            <MudTh>Email </MudTh>
+
+            <MudTh>Ngày Tạo </MudTh>
+
+        </HeaderContent>
+
+        <RowTemplate>
+
+            <MudTd>@(stt++)</MudTd>
+
+                <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
+
+                <MudTd>@(context.GioiTinh == 1 ? "Nữ" : "Nam")</MudTd>
+
+                <MudTd>@context.NgaySinh.ToString("MM/dd/yyyy")</MudTd>
+
+                <MudTd>@context.DiaChi</MudTd>
+
+                <MudTd>@context.SoDienThoai</MudTd>
+
+                <MudTd>@context.Email</MudTd>
+
+                <MudTd>@context.NgayTao.ToString("MM/dd/yyyy")</MudTd>
+
+                <MudTd>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=> NavigationChiTiet(context.Id)">Chi Tiết</MudButton>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmXoa(context.Id))">Xóa</MudButton>
+
+                </MudTd>
+
+            </RowTemplate>
+
+            <PagerContent>
+
+                <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+
+            </PagerContent>
+
+        </MudTable>
+
 }
 
+<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteNhanVienDaoTao(idDeleted)"></Confirmation>
 
 
-@code{
+@code {
+
+    //
+    private int stt = 0;
+
+    //
+    private Guid idDeleted { get; set; }
+
+    //
+    protected Confirmation _confirmXoa { get; set; }
+
+    private async Task ShowConfirmXoa(Guid IdDelete)
+    {
+        idDeleted = IdDelete;
+        _confirmXoa.show();
+    }
+
 
 }

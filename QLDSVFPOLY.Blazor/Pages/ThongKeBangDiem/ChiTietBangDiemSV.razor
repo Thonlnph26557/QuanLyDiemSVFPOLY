@@ -10,48 +10,44 @@
 
 
 @if (listDiemSos == null
-									|| listCTDiemSos == null || listLopHocs == null)
+													|| listCTDiemSos == null || listLopHocs == null)
 {
 	<LoadingIndicator></LoadingIndicator>
 }
 else
 {
-	<h4>Mã Lớp Học: @listLopHocs.FirstOrDefault(c => c.Id == @listCTLHs.FirstOrDefault(x=>x.Id==Guid.Parse(idCTLH)).IdLopHoc).Ma</h4>
-	<br />
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">STT</th>
-				<th scope="col">Tên Đầu Điểm</th>
-				<th scope="col">Trọng Số</th>
-				<th scope="col">Điểm</th>
-				<th scope="col">Trạng Thái</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (int i = 0; i < listCTDiemSos.Count(); i++)
+	<MudTable Items="@listCTDiemSos">
+		<ToolBarContent>
+			<MudText Typo="Typo.h5">Bảng điểm sinh viên</MudText>
+			<MudSpacer></MudSpacer>
+		</ToolBarContent>
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudText>Tên Đầu Điểm</MudText></MudTh>
+			<MudTh><MudText>Trọng Số</MudText></MudTh>
+			<MudTh><MudText>Điểm</MudText></MudTh>
+			<MudTh><MudText>Trạng Thái</MudText></MudTh>
+		</HeaderContent>
+		<RowTemplate>
+			<MudTd>@(stt++)</MudTd>
+			<MudTd>@listDiemSos.FirstOrDefault(c=>c.Id==context.IdDiemSo).TenDauDiem</MudTd>
+			<MudTd>@listDiemSos.FirstOrDefault(c=>c.Id==@context.IdDiemSo).TrongSo</MudTd>
+			<MudTd>@context.Diem</MudTd>
+			@if (context.TrangThai == 1)
 			{
-				var item = listCTDiemSos[i];
-				<tr>
-					<th scope="row">@(i+1)</th>
-					<td>@listDiemSos.FirstOrDefault(c=>c.Id==@item.IdDiemSo).TenDauDiem</td>
-					<td>@listDiemSos.FirstOrDefault(c=>c.Id==@item.IdDiemSo).TrongSo</td>
-					<td>@item.Diem</td>
-					@if (@item.TrangThai == 1)
-					{
-						<td>Hoạt động</td>
-					}
-					else
-					{
-						<td>Tạm dừng hoạt động</td>
-					}
-				</tr>
+			<MudTd>Hoạt động</MudTd>
 			}
-			<tr><td style="color:red;">Điểm trung bình: 
-					@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),Guid.Parse(idCTLH)),2)
-				</td></tr>
-		</tbody>
-	</table>
+			else
+			{
+			<MudTd>Tạm dừng hoạt động</MudTd>
+			}
+	</RowTemplate>
+</MudTable>
+			<MudSpacer></MudSpacer>
+			<MudSpacer></MudSpacer>
+			<MudText Typo="Typo.body1" Style="color:orangered; font-weight:bold;font-size:15;">Điểm trung bình:
+			@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),Guid.Parse(idCTLH)),2)</MudText>
+
 }
 
 @code {
@@ -60,6 +56,8 @@ else
 
 	[Parameter]
 	public string idCTLH { set; get; }
+
+	private int stt = 0;
 
 
 	//DiemSo

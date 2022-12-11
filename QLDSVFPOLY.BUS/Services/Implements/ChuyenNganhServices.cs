@@ -44,14 +44,16 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 IdDaoTao = c.IdDaoTao
             }).ToList();
 
-            if (obj.Ma == null
-                && obj.TenChuyenNganh == null
-                )
-            {
-                return listChuyenNganhVM;
-            }
-            return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
-                                            || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
+            //if (obj.Ma == null
+            //    && obj.TenChuyenNganh == null
+            //    )
+            //{
+            //    return listChuyenNganhVM;
+            //}
+            //return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
+            //                                || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
+
+            return listChuyenNganhVM;
         }
 
 
@@ -72,12 +74,12 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 IdDaoTao = c.IdDaoTao
             }).Where(c => c.TrangThai != 0).ToList();
 
-            if (obj.Ma != null
-                || obj.TenChuyenNganh != null)
-            {
-                return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
-            }
+            //if (obj.Ma != null
+            //    || obj.TenChuyenNganh != null)
+            //{
+            //    return listChuyenNganhVM.Where(c => c.Ma.Contains(obj.Ma)
+            //                                    || c.TenChuyenNganh.Contains(obj.TenChuyenNganh)).ToList();
+            //}
             return listChuyenNganhVM;
         }
 

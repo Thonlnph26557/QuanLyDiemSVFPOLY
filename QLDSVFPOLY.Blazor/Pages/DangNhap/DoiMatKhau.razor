@@ -4,6 +4,7 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @inject NavigationManager _navManager
 @inject ITaiKhoanRepo _repo
+@inject IToastService _iToast
 
 <MudContainer class="d-flex justify-center align-center w-70 h-75">
     <EditForm Model="@_dmkVM">

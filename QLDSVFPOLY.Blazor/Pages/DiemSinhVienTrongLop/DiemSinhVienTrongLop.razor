@@ -1,0 +1,41 @@
+﻿@page "/diemso/hienthi"
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Repository.Implements
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+
+@inject SinhVienRepo _repoSinhVien
+@inject DiemSoRepos _repoDiemSo
+@inject ChiTietDiemSoRepo _repoCTDS
+@inject ChiTietLopHocRepos _repoCTLH
+@inject ISessionStorageService _SStorage
+
+@if(1 + 1 != 2) {
+    <LoadingIndicator></LoadingIndicator>
+}
+else {
+
+}
+
+
+@code {
+    [Parameter]
+    public string idSinhVien { get; set; }
+
+    private List<SinhVienVM> _listSinhVien;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        idSinhVien = await _SStorage.GetItemAsync<string>("Id");
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        
+    }
+}

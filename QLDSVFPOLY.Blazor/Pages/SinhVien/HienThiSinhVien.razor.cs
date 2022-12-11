@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
+using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 
 namespace QLDSVFPOLY.Blazor.Pages.SinhVien
 {
-	public partial class HienThiSinhVien
-	{
+    public partial class HienThiSinhVien
+    {
         //
         [Parameter]
         public string idDaoTao { get; set; }
@@ -37,8 +38,6 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         private Guid IdDelete { get; set; }
 
         //Ghi đè phương thức OnInitializedAsync
-
-        //Gọi OnInitializedAsync để lấy dữ liệu.Khi OnInitializedAsync hãy sử dụng từ khóa await vì gọi không đồng bộ:
         protected override async Task OnInitializedAsync()
         {
             idDaoTao = "9D01FB1F-6D12-4B11-9962-871C333E659B";
@@ -46,18 +45,10 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
             await LoadData();
         }
 
-        /*
-            B1 : Laays ra list chuyen nganh cua dao tao dua voa idDaoTao lay tu route
-
-            B2 : Lay ra list Sinh Vien cos idChuyenNganh nam trong list chuyen nganh tim duoc 
-            
-         */
-
-
 
         //
         private async Task LoadData()
-        
+
         {
 
             _listChuyenNganh = await chuyenNganhRepo.GetAllActiveAsync(_searchVM);
@@ -71,7 +62,7 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
 
             foreach (var item in _listSinhViens)
             {
-                if(_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
+                if (_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
                 {
 
                 }
@@ -89,6 +80,20 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         {
             await sinhVienRepos.RemoveAsync(IdDelete);
             await LoadData();
+
+
+            bool x = await sinhVienRepos.RemoveAsync(IdDelete);
+
+            if (x == true)
+            {
+                ToastService.ShowSuccess($"Xóa thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Xóa thất bại");
+            }
+
+
         }
 
         //
@@ -98,10 +103,9 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         }
 
         //
-        //
         private void NavigationThemMoi()
         {
-            navigationManager.NavigateTo("/sinhvien/themmoi/{idDaoTao}");
+            navigationManager.NavigateTo($"/sinhvien/themmoi/{idDaoTao}");
         }
 
     }

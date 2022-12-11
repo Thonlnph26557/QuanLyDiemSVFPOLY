@@ -17,8 +17,10 @@ namespace QLDSVFPOLY.BUS.ViewModels.TaiKhoan
 
         [Required(ErrorMessage = ("Trường này không được để trống"))]
         public string? NhapLaiMatKhau { get; set; }
+        [Required(ErrorMessage = ("Trường này không được để trống"))]
         public string? ChucVu { get; set; }
         public string? TenHienThi { get; set; }
+        public Guid? Id { get; set; }
         public Guid IdDaoTao { get; set;}
     }
 }

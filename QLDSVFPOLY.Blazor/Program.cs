@@ -4,6 +4,11 @@ using QLDSVFPOLY.Blazor.Data;
 using MudBlazor.Services;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using QLDSVFPOLY.Blazor.Repository.Implements;
+using Microsoft.AspNetCore.Components.Authorization;
+using QLDSVFPOLY.Blazor.Repository;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Blazored.SessionStorage;
+using Blazored.Toast;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +36,12 @@ builder.Services.AddTransient<IChiTietDiemSoRepo, ChiTietDiemSoRepo>();
 builder.Services.AddTransient<ITaiKhoanRepo, TaiKhoanRepo>();
 builder.Services.AddTransient<ISinhVienRepo, SinhVienRepo>();
 builder.Services.AddTransient<INhanVienDaoTaoRepos, NhanVienDaoTaoRepos>();
+builder.Services.AddTransient<IDaoTaoRepo, DaoTaoRepo>();
+
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddBlazoredToast();
+
 //
 
 var app = builder.Build();

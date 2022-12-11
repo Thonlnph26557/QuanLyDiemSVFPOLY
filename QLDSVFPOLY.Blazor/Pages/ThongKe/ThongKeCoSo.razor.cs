@@ -4,6 +4,7 @@ using QLDSVFPOLY.BUS.ViewModels.LopHoc;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using Microsoft.AspNetCore.Components;
+using QLDSVFPOLY.BUS.ViewModels.DaoTao;
 
 namespace QLDSVFPOLY.Blazor.Pages.ThongKe
 {
@@ -11,7 +12,9 @@ namespace QLDSVFPOLY.Blazor.Pages.ThongKe
     {
         [Parameter]
         public string idDaoTao { set; get; }
-
+        [Inject] private IDaoTaoRepo DaoTaoRepo { set; get; }
+        private List<DaoTaoVM> listDaoTaos { set; get; }
+        private DaoTaoSearchVM daoTaoSearchVM = new DaoTaoSearchVM();
         //ChuyenNganh
         [Inject] private IChuyenNganhRepo ChuyenNganhRepo { set; get; }
         private List<ChuyenNganhVM> listChuyenNganhs;
@@ -51,9 +54,16 @@ namespace QLDSVFPOLY.Blazor.Pages.ThongKe
 
         protected override async Task OnInitializedAsync()
         {
-            idDaoTao = "9d01fb1f-6d12-4b11-9962-871c333e659b";
-
-            await LoadData();
+            idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+            try
+            {
+                await LoadData();
+                if (listChuyenNganhs != null && listGiangViens != null && listSinhViens != null && listLopHocs != null && listDaoTaos != null)
+                {
+                    await ChuyenNganhBarChart();
+                }
+            }
+           catch(Exception ex) { }
         }
 
         private async Task LoadData()
@@ -70,7 +80,9 @@ namespace QLDSVFPOLY.Blazor.Pages.ThongKe
             //GiangVien
             listGiangViens = await GiangVienRepo.GetAllAsync(giangVienSearchVm);
             listGiangViens = listGiangViens.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
-
+            //DaoTao
+            listDaoTaos = await DaoTaoRepo.GetAllAsync(daoTaoSearchVM);
+            listDaoTaos = listDaoTaos.Where(c => c.Id == Guid.Parse(idDaoTao)).ToList();
             //Đếm số lượng có trong cơ sở
             int SinhVienCount = listSinhViens.Count();
             int GiangVienCount = listGiangViens.Count();

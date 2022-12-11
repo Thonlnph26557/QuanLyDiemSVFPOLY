@@ -1,4 +1,4 @@
-﻿<MudNavMenu Class="mud-width-full">
+﻿<MudNavMenu Class="mud-width-full h-100" Style="background: linear-gradient(to right, #da8cff, #9a55ff) !important;">
 
     @*<MudAvatar Image=""></MudAvatar>*@
 
@@ -6,11 +6,45 @@
 
     <MudDivider Class="my-4 mx-6" DividerType="DividerType.Middle" Style="height:1px; border-color: black"></MudDivider>
 
-    <MudNavLink Icon="@Icons.Filled.CoPresent" Href="#">Quản lý chuyên ngành</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.LibraryBooks" Href="monhoc/danhsach">Quản lý môn học</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.MeetingRoom" Href="#">Quản lý lớp học</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.CoPresent" Href="#">Quản lý giảng viên</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.Group" Href="#">Quản lý sinh viên</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.TextSnippet" Href="#">Quản lý điểm số</MudNavLink>
-    <MudNavLink Icon="@Icons.Filled.TextSnippet" Href="/chitietlophoc/hienthi">Quản lý chi tiết lớp học</MudNavLink>
+
+
+    <AuthorizeView Roles="DaoTao">
+
+        <MudNavLink Icon="@Icons.Filled.Group" Href="/nhanviendaotao/hienthi">Quản lý nhân viên đào tạo</MudNavLink>
+
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="DaoTao, NhanVienDaoTao">
+
+        <MudNavLink Icon="@Icons.Filled.CoPresent" Href="/giangvien/hienthi">Quản lý giảng viên</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.Group" Href="/sinhvien/hienthi">Quản lý sinh viên</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.AccountTree" Href="/chuyennganh/hienthi">Quản lý chuyên ngành</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.LibraryBooks" Href="monhoc/danhsach">Quản lý môn học</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.CalendarMonth" Href="/kihoc/chitietkihoc">Quản lý kì học</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.CreditScore" Href="/diemso/quanlydiemso">Quản lý điểm số</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.MeetingRoom" Href="/lophoc/quanlylophoc">Quản lý lớp học</MudNavLink>
+        <MudNavLink Icon="@Icons.Filled.StackedBarChart" Href="/thongke/thongkecoso">Thống kê cơ sở</MudNavLink>
+
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="GiangVien, DaoTao, NhanVienDaoTao">
+        <MudNavLink Icon="@Icons.Filled.TextSnippet" Href="/chitietlophoc/hienthi">Quản lý chi tiết lớp học</MudNavLink>
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="SinhVien">
+
+        <MudNavLink Icon="@Icons.Filled.AddChart" Href="/bangdiemSV/hienthi
+">Chi tiết bảng điểm</MudNavLink>
+
+    </AuthorizeView>
+
+    
+    
 </MudNavMenu>
+

@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\DaoTaosController.cs" />
     <Compile Remove="Controllers\TestsController.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

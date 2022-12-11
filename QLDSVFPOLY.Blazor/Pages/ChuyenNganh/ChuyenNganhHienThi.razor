@@ -1,114 +1,180 @@
-﻿@page "/chuyennganh/hienthi/{idDaoTao}"
+﻿@page "/chuyennganh/hienthi"
 @using QLDSVFPOLY.BUS.ViewModels.ChuyenNganhMonHoc
 @using QLDSVFPOLY.Blazor.Repository.Interfaces;
 @using QLDSVFPOLY.Blazor.Components;
 @using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 @using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh;
 @inject IConfiguration Configuration
+@inject IToastService toastService;
+@inject ISessionStorageService _SStorage
 
-<div>
-	<h1 style="float:left">Danh Sách Chuyên Ngành</h1>
-	<button type="button" class="btn btn-primary" style="float: right; margin-right:40px" @onclick="()=>NavigationThemMoi()">Thêm Chuyên Ngành</button>
-</div>
 
-@if (listChuyenNganhs == null || listChuyenNganhMonHocs == null || listSinhViens ==null)
+
+@if (listChuyenNganhs == null || listChuyenNganhMonHocs == null || listSinhViens == null)
 {
-		<LoadingIndicator></LoadingIndicator>
+	<LoadingIndicator></LoadingIndicator>
 }
 else
 {
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">STT</th>
-				<th scope="col">Tên</th>
-				<th scope="col">Tổng số môn học</th>
-				<th scope="col">Tổng số sinh viên</th>
-				<th scope="col">Chỉnh sửa</th>
-				<th scope="col">Xóa</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (int i = 0; i < listChuyenNganhs.Count(); i++)
-			{
-				var item = listChuyenNganhs[i];
-				<tr>
-					<th scope="row">@(i+1)</th>
-					<td>@item.TenChuyenNganh</td>
-					<td>@listChuyenNganhMonHocs.Count(c=>c.IdChuyenNganh==@item.Id)</td>
-					<td>@listSinhViens.Count(c=>c.IdChuyenNganh==@item.Id)</td>
-					<td><button type="button" class="btn btn-link" @onclick="()=>NavigationChiTiet(item.Id)">Chi tiết chuyên ngành</button></td>
-					<td><button type="button" class="btn btn-danger" @onclick="()=>OnDeleteChuyenNganh(item.Id)">Xóa</button></td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	<MudTable Items="@listChuyenNganhs">
+		<ToolBarContent>
+			<MudText Typo="Typo.h5">Danh sách chuyên ngành</MudText>
+			<MudSpacer></MudSpacer>
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/chuyennganh/themmoi">Thêm</MudButton>
+			@*<MudTextField T="string" Placeholder="Tìm kiếm..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>*@
+		</ToolBarContent>
+
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.Ma)">Mã</MudTableSortLabel></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.TenChuyenNganh)">Tên</MudTableSortLabel></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.TrangThai)">Trạng thái</MudTableSortLabel></MudTh>
+			<MudTh><MudText Typo="Typo.body2">Hành động</MudText></MudTh>
+		</HeaderContent>
+
+		<RowTemplate>
+			<MudTd>@(stt++)</MudTd>
+			<MudTd>@context.Ma</MudTd>
+			<MudTd>@context.TenChuyenNganh</MudTd>
+			<MudTd><p style="color: @Color_TrangThai(context.TrangThai); margin: auto">@Convert_TrangThai(context.TrangThai)</p></MudTd>
+			<MudTd>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => NavigationChiTiet(context.Id))">Chỉnh sửa</MudButton>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(
+    ()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
+
+
+			</MudTd>
+		</RowTemplate>
+
+		<PagerContent>
+			<MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+		</PagerContent>
+	</MudTable>
+
+	<Confirmation ConfirmationMessage="Bạn có muốn xóa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteChuyenNganh(IdDelete)"></Confirmation>
+
 }
 
 @code {
-	    [Parameter]
-        public string idDaoTao { get; set; }
+	//[Parameter]
+	public string idDaoTao { get; set; }
+
+	private int stt = 0;
 
 
-        //Inject Repo cua ChuyenNganh
-        [Inject] private IChuyenNganhRepo ChuyenNganhRepos { set; get; }
+	//Inject Repo cua ChuyenNganh
+	[Inject] private IChuyenNganhRepo ChuyenNganhRepos { set; get; }
 
-        //Khai bao ra listChuyenNganh
-        private List<ChuyenNganhVM> listChuyenNganhs;
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhVM> listChuyenNganhs;
 
-        private ChuyenNganhSearchVM searchVM = new ChuyenNganhSearchVM();
+	private ChuyenNganhSearchVM searchVM = new ChuyenNganhSearchVM();
 
-        //lay listChuyenNganhMonHoc
-        [Inject] private IChuyenNganhMonHocRepos ChuyenNganhMonHocRepo { set; get; }
+	//lay listChuyenNganhMonHoc
+	[Inject] private IChuyenNganhMonHocRepos ChuyenNganhMonHocRepo { set; get; }
 
-        //Khai bao ra listChuyenNganh
-        private List<ChuyenNganhMonHocVM> listChuyenNganhMonHocs;
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhMonHocVM> listChuyenNganhMonHocs;
 
-        private ChuyenNganhMonHocSearchVM searchCNMHVM = new ChuyenNganhMonHocSearchVM();
+	private ChuyenNganhMonHocSearchVM searchCNMHVM = new ChuyenNganhMonHocSearchVM();
 
-        //SinhVien
-        [Inject] private ISinhVienRepo sinhVienRepo { set; get; }
+	//SinhVien
+	[Inject] private ISinhVienRepo sinhVienRepo { set; get; }
 
-        //Khai bao ra listChuyenNganh
-        private List<SinhVienVM> listSinhViens;
+	//Khai bao ra listChuyenNganh
+	private List<SinhVienVM> listSinhViens;
 
-        private SinhVienSearchVM searchSV = new SinhVienSearchVM();
+	private SinhVienSearchVM searchSV = new SinhVienSearchVM();
 
-        [Inject] private NavigationManager navigationManager { get; set; }
+	[Inject] private NavigationManager navigationManager { get; set; }
 
 
-        protected override async Task OnInitializedAsync()
+	protected override async Task OnInitializedAsync()
+	{
+		idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		listChuyenNganhs = await ChuyenNganhRepos.GetAllActiveAsync(searchVM);
+		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+		//lay ra list chuyenNganhMH
+		listChuyenNganhMonHocs = await ChuyenNganhMonHocRepo.GetAllActiveAsync(searchCNMHVM);
+		//SinhVien
+		listSinhViens = await sinhVienRepo.GetAllActiveAsync(searchSV);
+		//listSinhViens = listSinhViens.Where(c => c.IdChuyenNganh == Guid.Parse(idDaoTao)).ToList();
+	}
+
+	public async Task OnDeleteChuyenNganh(Guid deleteId)
+	{
+		bool x = await ChuyenNganhRepos.RemoveAsync(deleteId);
+		if (x)
+		{
+			toastService.ShowSuccess($"Xóa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Xóa thất bại");
+		}
+	}
+
+	//Cònirm
+	 protected Confirmation _confirmXoa { set; get; }
+        private Guid IdDelete {set;get;}
+
+        private async Task ShowConfirmXoa(Guid deleteId)
         {
-            idDaoTao = "9d01fb1f-6d12-4b11-9962-871c333e659b";
-            await LoadData();
+            IdDelete = deleteId;
+            _confirmXoa.show();
         }
 
-        private async Task LoadData()
-        {
-            listChuyenNganhs = await ChuyenNganhRepos.GetAllActiveAsync(searchVM);
-            listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
-            //lay ra list chuyenNganhMH
-            listChuyenNganhMonHocs = await ChuyenNganhMonHocRepo.GetAllActiveAsync(searchCNMHVM);
-            //SinhVien
-            listSinhViens = await sinhVienRepo.GetAllActiveAsync(searchSV);
-            //listSinhViens = listSinhViens.Where(c => c.IdChuyenNganh == Guid.Parse(idDaoTao)).ToList();
-        }
+	private void NavigationChiTiet(Guid idChuyenNganh)
+	{
+		navigationManager.NavigateTo($"/chuyennganh/chitiet/{idChuyenNganh}");
+	}
 
-        public async Task OnDeleteChuyenNganh(Guid deleteId)
-        {
-            await ChuyenNganhRepos.RemoveAsync(deleteId);
-            await LoadData();
-        }
+	private void NavigationThemMoi()
+	{
+		navigationManager.NavigateTo("/chuyennganh/themmoi");
+	}
 
-        private void NavigationChiTiet(Guid idChuyenNganh)
-        {
-            navigationManager.NavigateTo($"/chuyennganh/chitiet/{idChuyenNganh}");
-        }
+	private string Convert_TrangThai(int tt)
+	{
+		//Có khả năng có nhiều tt & color nên để switch :D
+		switch (tt)
+		{
+			case 0:
+				{
+					return "Đã xóa";
+				}
+			case 1:
+				{
+					return "Hoạt động";
+				}
+			default:
+				{
+					return "Tạm dừng hoạt động";
+				}
+		}
+	}
 
-        private void NavigationThemMoi()
+	private string Color_TrangThai(int tt) 
+    {
+        switch (tt)
         {
-            navigationManager.NavigateTo($"/chuyennganh/themmoi/{idDaoTao}");
-        }
+            case 0: {
+                    return "red";
+                }
+            case 1: {
+                    return "green";
+                }
+            default: {
+                    return "red";
+                }
+        }   
+    }
 }
 
 

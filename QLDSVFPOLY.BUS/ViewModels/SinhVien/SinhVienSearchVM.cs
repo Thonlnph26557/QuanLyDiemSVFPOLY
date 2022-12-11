@@ -13,13 +13,13 @@ namespace QLDSVFPOLY.BUS.ViewModels.SinhVien
         public string? Ho { get; set; }
         public string? TenDem { get; set; }
         public string? Ten { get; set; }
-        public int? GioiTinh { get; set; }
+        public int GioiTinh { get; set; }
         //public DateTime NgaySinh { get; set; }
         public string? DiaChi { get; set; }
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
-        public int? TrangThai { get; set; }
+        public int TrangThai { get; set; }
 
-        public Guid? IdChuyenNganh { get; set; }
+        public Guid IdChuyenNganh { get; set; }
     }
 }

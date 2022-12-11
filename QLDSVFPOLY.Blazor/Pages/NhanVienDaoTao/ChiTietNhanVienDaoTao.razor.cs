@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Identity.Client.Extensions.Msal;
+using Microsoft.JSInterop;
+using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.NhanVienDaoTao;
 using QLDSVFPOLY.DAL.Entities;
+using System.Text.Json;
 
 namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
 {
@@ -20,13 +25,13 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
 
 
         //Ghi đè phương thức OnInitializedAsync
-
-        //Gọi OnInitializedAsync để lấy dữ liệu.Khi OnInitializedAsync hãy sử dụng từ khóa await vì gọi không đồng bộ:
         protected override async Task OnInitializedAsync()
         {
-            idDaoTao = "10E3933F-66A1-42BE-9E5F-C88BD749E17A";
-            await LoadDataUpdate();
+            idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
             await LoadData();
+
+            await LoadDataUpdate();
         }
 
         //
@@ -47,7 +52,26 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
             updateVM.IdDaoTao = nhanVienDaoTao.IdDaoTao;
             updateVM.MatKhau = nhanVienDaoTao.MatKhau;
             updateVM.TrangThai = nhanVienDaoTao.TrangThai;
+            
+        }
 
+        DefaultImages defImg = new DefaultImages();
+        IJSObjectReference module;
+        record ImageDimensions(int Width, int Height);
+        private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+            var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+            var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+            if (dimensions.Width > 250)
+            {
+                file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+            }
+            var buffers = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffers);
+            string imageType = file.ContentType;
+            updateVM.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
         }
 
     }

@@ -59,22 +59,23 @@ namespace QLDSVFPOLY.API.Controllers
                 MatKhau = MatKhau,
                 ChucVu = ChucVu
             };
-            IActionResult response = Unauthorized();
 
             var user = await XacThucTK(vm);
             //user.TenHienThi = "Tenhienthitest";
 
-            if (user != null)
+            if (user != null && user.Id != null)
             {
                 var gen_token = await GenerateJWToken(user);
                 //response = Ok(new {token = gen_token} );
                 return Ok(new DangNhapResponseVM { 
                     TenHienThi = user.TenHienThi, 
+                    ChucVu = user.ChucVu,
                     IdDaoTao = user.IdDaoTao,
+                    Id = user.Id,
                     Token = gen_token 
                 });
             }
-            return response;
+            return Ok(new DangNhapResponseVM());
         }
 
 

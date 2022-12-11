@@ -11,8 +11,8 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
         Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM obj);
         Task<SinhVienVM> GetByIdAsync(Guid id);
 
-        Task<int> CreateAsync(SinhVienCreateVM obj);
-        Task<int> UpdateAsync(Guid id, SinhVienUpdateVM obj);
-        Task<int> RemoveAsync(Guid id);
+        Task<bool> CreateAsync(SinhVienCreateVM obj);
+        Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj);
+        Task<bool> RemoveAsync(Guid id);
     }
 }

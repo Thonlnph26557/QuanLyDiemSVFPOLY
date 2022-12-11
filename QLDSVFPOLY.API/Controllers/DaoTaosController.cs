@@ -23,20 +23,10 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         //lấy ra danh sách đào tạo còn hoạt động kết hợp tìm kiếm
-        [HttpGet("active")]
+        [HttpGet("allactive")]
         public async Task<IActionResult> GetAllDaoTaoActive([FromQuery] DaoTaoSearchVM search)
         {
             var listDaoTaoSearch = await _daoTaoServices.GetAllActiveAsync(search);
-
-            if (search.Ma == null 
-                && search.DiaChi == null
-                && search.SoDienThoai == null
-                && search.Email == null
-                && search.TrangThai == 0
-                )
-            {
-                listDaoTaoSearch = await _daoTaoServices.GetAllActiveAsync(null);
-            }
 
             return Ok(listDaoTaoSearch);
         }
@@ -46,16 +36,6 @@ namespace QLDSVFPOLY.API.Controllers
         public async Task<IActionResult> GetAllDaoTao([FromQuery] DaoTaoSearchVM search)
         {
             var listDaoTaoSearch = await _daoTaoServices.GetAllAsync(search);
-
-            if (search.Ma == null
-                && search.DiaChi == null
-                && search.SoDienThoai == null
-                && search.Email == null
-                && search.TrangThai == 0
-                )
-            {
-                listDaoTaoSearch = await _daoTaoServices.GetAllAsync(null);
-            }
 
             return Ok(listDaoTaoSearch);
         }
@@ -82,11 +62,10 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         //Controller dc gọi khi update obj
-        [HttpPut]
-        [Route("{IdDaoTao}")]
-        public async Task<IActionResult> UpdateDaoTao(Guid IdDaoTao, [FromBody] DaoTaoUpdateVM daoTao)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateDaoTao(Guid id, [FromBody] DaoTaoUpdateVM daoTao)
         {
-            var result = await _daoTaoServices.UpdateAsync(IdDaoTao, daoTao);
+            var result = await _daoTaoServices.UpdateAsync(id, daoTao);
             return Ok(result);
         }
 

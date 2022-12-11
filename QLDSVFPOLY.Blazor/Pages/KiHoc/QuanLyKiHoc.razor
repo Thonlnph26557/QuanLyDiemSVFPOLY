@@ -2,106 +2,101 @@
 @using QLDSVFPOLY.BUS.ViewModels.KiHoc
 @using QLDSVFPOLY.Blazor.Components
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
-@*@layout TestLayout*@
+@inject IToastService ToastService
+
 @if(listKiHocs == null)
 {
     <LoadingIndicator></LoadingIndicator>
 }
 else
 {
-<h1>Kì Học</h1>
-<form>
-    <div class="w-100" style="margin-top:20px; margin: 0 auto ">
-        <div class="row" style="margin-top:15px">
-            <div class="col">
-                <label>Tên</label>
-                <input @bind="Ten" type="text" class="form-control">
-                @*<MudTextField @bind-Value="TextValue" Label="Tên"  Variant="Variant.Outlined" />*@
+    <div class="m-4">
+    <EditForm Model="@kihoc">
+        <MudText Typo="Typo.h5">Quản Lý Kì Học</MudText>
+            <div class="row" style="margin-top:15px">
+                <div class="col">
+                    <MudTextField @bind-Value="Ten" Label="Tên" Variant="Variant.Outlined" For="() => kihoc.Ten"></MudTextField>
+                </div>
+                <div class="col">
+                    <label>Ngày Bắt Đầu</label>
+                    <input @bind="NgayBatDau" type="date" class="form-control">
+                </div>
             </div>
-            <div class="col">
-                <label>Ngày Bắt Đầu</label>
-                <input @bind="NgayBatDau" type="date" class="form-control">
-                @*<MudTextField T="DateTime?" Format="yyyy-MM-dd" Label="Ngày Bắt Đầu"  InputType="InputType.Date"/>*@
-            </div>
-        </div>
-        <div class="row" style="margin-top:15px">
-            <div class="col">
-                <label>Năm Học</label>
-                <select @bind="NamHoc" type="int" class="form-control">
+            <div class="row" style="margin-top:15px">
+                <div class="col">
+                    <MudSelect T="int" Label="Năm Học" AnchorOrigin="Origin.BottomCenter" @bind-Value="NamHoc" Variant="Variant.Outlined" For="() => kihoc.NamHoc">
                         @for(int i=2010; i<= DateTime.Now.Year+3;i++)
-                        {
-                            <option selected value="@i">@i</option>
-                        }
-                </select>
-            </div> 
-            <div class="col">
-                <label>Ngày Kết Thúc</label>
-                <input @bind="NgayKetThuc" type="date" class="form-control">
-                @*<MudTextField T="DateTime?" Format="yyyy-MM-dd" Label="Ngày Kết Thúc"  InputType="InputType.Date"/>*@
+                            {
+                                <MudSelectItem Value="@i"></MudSelectItem>
+                            }
+                    </MudSelect>
+                </div> 
+                <div class="col">
+                    <label>Ngày Kết Thúc</label>
+                    <input @bind="NgayKetThuc" type="date" class="form-control">
+                </div>
             </div>
-        </div>
-        <div class="row" style="margin-top:15px">
-            <div class="col">
-                <label>Trạng Thái</label>
-                <select @bind="TrangThai" type="int" class="form-control">
-                    <option value="1">Hoạt Động</option>
-                    <option value="0">Không Hoạt Động</option>
-                </select>
-            </div> 
-            <div class="col"></div> 
-        </div>
-        <div class="row" style="margin-top:15px">
-            <div class="col"></div>  
-            <div class="col">
-                <button type="button" class="btn btn-primary" style="float:right;" @onclick="SuaKiHoc">CHỈNH SỬA</button>
-                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="LamMoi">LÀM MỚI</button>
-                <button type="button" class="btn btn-primary" style="float:right;margin-right:30px" @onclick="ThemKiHoc">THÊM MỚI</button>
-                @*<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Info" Style="float:right">Thêm</MudButton>*@
-            </div>  
-        </div>
-    </div>
-    </form>
+            <div class="row" style="margin-top:15px">
+                <div class="col">
+                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="TrangThai" Variant="Variant.Outlined" For="() => kihoc.TrangThai">
+                        <MudSelectItem Value="1">Hoạt Động</MudSelectItem>
+                        <MudSelectItem Value="0">Không hoạt động</MudSelectItem>
+                    </MudSelect>
+                </div> 
+                <div class="col"></div> 
+            </div>
+            <div class="row" style="margin-top:15px">
+                <div class="col"></div>  
+                <div class="col" >
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmThem">Thêm</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Clear" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="LamMoi">Làm Mới</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmSua">Chỉnh Sửa</MudButton>
+                </div>  
+            </div>
+    </EditForm>
     <div style="clear:both"></div>
-    <h1 style="margin-top: 50px">Danh Sách Kì Học</h1>
+<MudTable Items="@listKiHocs">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Danh Sách Kì Học</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudText>STT</MudText></MudTh>
+        <MudTh>Tên</MudTh>
+        <MudTh>Năm Học</MudTh>
+        <MudTh>Ngày bắt đầu</MudTh>
+        <MudTh>Ngày kết thúc</MudTh>
+        <MudTh>Hành động</MudTh>
+    </HeaderContent>
 
-
-    <table class="table">
-	    <thead>
-		    <tr>
-			    <th scope="col">STT</th>
-			    <th scope="col">Tên</th>
-			    <th scope="col">Năm Học</th>
-			    <th scope="col">Ngày Bắt Đầu</th>
-			    <th scope="col">Ngày Kết Thúc</th>
-			    <th scope="col">Bản Ghi</th>
-			    <th scope="col">Xóa</th>
-		    </tr>
-	    </thead>
-	    <tbody>
-            @for (int i=0;i< listKiHocs.Count();i++)
-            {
-                var item = listKiHocs[i];
-                <tr>
-                    <th scope="row">@(i+1)</th>
-			        <td>@item.Ten</td>
-			        <td>@item.NamHoc</td>
-			        <td>@item.NgayBatDau</td>
-			        <td>@item.NgayKetThuc</td>
-                    <td><button type="button" class="btn btn-primary" @onclick="()=>LoadBanGhi(item.Id)">Bản ghi</button></td>
-                    <td><button type="button" class="btn btn-danger" @onclick="()=>OnDeleteKiHoc(item.Id)">Xóa</button></td>
-			        @*<td><MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small">Delete</MudButton></td>*@
-		        </tr>
-            }
-	    </tbody>
-    </table>
+    <RowTemplate>
+        <MudTd>@(stt++)</MudTd>
+        <MudTd>@context.Ten</MudTd>
+        <MudTd>@context.NamHoc</MudTd>
+        <MudTd>@context.NgayBatDau</MudTd>
+        <MudTd>@context.NgayKetThuc</MudTd>
+        <MudTd>
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => LoadBanGhi(context.Id))">Chỉnh sửa</MudButton> 
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+		<MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+	</PagerContent>
+</MudTable>
+</div>
 }
-
-
-
-
+<Confirmation ConfirmationMessage="Bạn có muốn thêm kì học không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="ThemKiHoc"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn sửa kì học không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="SuaKiHoc"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn xóa kì học không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteKiHoc(idDelete)"></Confirmation>
 @code {
+    protected Confirmation _confirmThem { get; set; }
+    protected Confirmation _confirmSua { get; set; }
+    protected Confirmation _confirmXoa { get; set; }
+    KiHocViewmodel kihoc = new KiHocViewmodel();
+
     [Parameter]
     public string idDaoTao { get; set; }
+    private int stt = 1;
     [Inject] private HttpClient httpClient { get; set; }
 
     //Inject Repo cua KiHoc
@@ -115,7 +110,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //Gan listKiHocs = GetAll de lay ra list
         await LoadData();
     }
     private async Task LoadData()
@@ -124,69 +118,109 @@ else
     }
     public async Task OnDeleteKiHoc(Guid deleteId)
     {
-        await KiHocRepos.RemoveAsync(deleteId);
+        int x = await KiHocRepos.RemoveAsync(deleteId);
+        if (x==1)
+        {
+            ToastService.ShowSuccess($"Xóa thành công");
+        }
+        else
+        {
+            ToastService.ShowError($"Xóa thất bại");
+        }
         await LoadData();
+        await LamMoi();
+        stt = 1;
     }
 
-
-    //Thêm
     public string Ten { get; set; }
-    public int NamHoc { get; set; }
+    public int NamHoc = DateTime.Now.Year;
     public DateTime NgayBatDau = DateTime.Now;
     public DateTime NgayKetThuc = DateTime.Now;
-    public int TrangThai { get; set; }
+    public int TrangThai { get; set; } = 1;
     public Guid Id { get; set; }
     private KiHocCreateViewmodel createVm = new KiHocCreateViewmodel();
-        private async Task ThemKiHoc()
+    private async Task ThemKiHoc()
+    {
+        createVm.Ten = Ten;
+        createVm.NamHoc = NamHoc;
+        createVm.NgayBatDau = NgayBatDau;
+        createVm.NgayKetThuc = NgayKetThuc;
+        createVm.TrangThai = TrangThai;
+        int x = await KiHocRepos.CreateAsync(createVm);
+        if (x==1)
         {
-            createVm.Ten = Ten;
-            createVm.NamHoc = NamHoc;
-            createVm.NgayBatDau = NgayBatDau;
-            createVm.NgayKetThuc = NgayKetThuc;
-            createVm.TrangThai = TrangThai;
-            int x = await KiHocRepos.CreateAsync(createVm);
-            await LoadData();
-            Id = Guid.Empty;
-            Ten = null;
-            NamHoc = DateTime.Now.Year;
-            NgayBatDau = DateTime.Now;
-            NgayKetThuc = DateTime.Now;
-            TrangThai = 0;
+            ToastService.ShowSuccess($"Thêm thành công");
         }
-        private async Task LoadBanGhi(Guid id)
+        else
         {
-            KiHocViewmodel kiHocVM = await KiHocRepos.GetByIdAsync(id);
-            Ten = kiHocVM.Ten;
-            NamHoc = kiHocVM.NamHoc;
-            NgayBatDau = kiHocVM.NgayBatDau;
-            NgayKetThuc = kiHocVM.NgayKetThuc;
-            TrangThai= kiHocVM.TrangThai;
-            Id = kiHocVM.Id;
+            ToastService.ShowError($"Thêm thất bại");
         }
-        private KiHocUpdateViewmodel updateVm = new KiHocUpdateViewmodel();
-        private async Task SuaKiHoc()
+        await LoadData();
+        Id = Guid.Empty;
+        Ten = null;
+        NamHoc = DateTime.Now.Year;
+        NgayBatDau = DateTime.Now;
+        NgayKetThuc = DateTime.Now;
+        TrangThai = 1;
+        stt = 1;
+    }
+    private async Task LoadBanGhi(Guid id)
+    {
+        KiHocViewmodel kiHocVM = await KiHocRepos.GetByIdAsync(id);
+        Ten = kiHocVM.Ten;
+        NamHoc = kiHocVM.NamHoc;
+        NgayBatDau = kiHocVM.NgayBatDau;
+        NgayKetThuc = kiHocVM.NgayKetThuc;
+        TrangThai= kiHocVM.TrangThai;
+        Id = kiHocVM.Id;
+    }
+    private KiHocUpdateViewmodel updateVm = new KiHocUpdateViewmodel();
+    private async Task SuaKiHoc()
+    {
+        updateVm.Ten = Ten;
+        updateVm.NamHoc = NamHoc;
+        updateVm.NgayBatDau = NgayBatDau;
+        updateVm.NgayKetThuc = NgayKetThuc;
+        updateVm.TrangThai = TrangThai;
+        int x = await KiHocRepos.UpdateAsync(Id,updateVm);
+        if (x==1)
         {
-            updateVm.Ten = Ten;
-            updateVm.NamHoc = NamHoc;
-            updateVm.NgayBatDau = NgayBatDau;
-            updateVm.NgayKetThuc = NgayKetThuc;
-            updateVm.TrangThai = TrangThai;
-            int x = await KiHocRepos.UpdateAsync(Id,updateVm);
-            await LoadData();
-            Id = Guid.Empty;
-            Ten = null;
-            NamHoc = DateTime.Now.Year;
-            NgayBatDau = DateTime.Now;
-            NgayKetThuc = DateTime.Now;
-            TrangThai = 0;
+            ToastService.ShowSuccess($"Sửa thành công");
         }
-        private async Task LamMoi()
+        else
         {
-            Id = Guid.Empty;
-            Ten = null;
-            NamHoc = DateTime.Now.Year;
-            NgayBatDau = DateTime.Now;
-            NgayKetThuc = DateTime.Now;
-            TrangThai = 0;
+            ToastService.ShowError($"Sửa thất bại");
         }
+        await LoadData();
+        Id = Guid.Empty;
+        Ten = null;
+        NamHoc = DateTime.Now.Year;
+        NgayBatDau = DateTime.Now;
+        NgayKetThuc = DateTime.Now;
+        TrangThai = 1;
+    }
+    private async Task LamMoi()
+    {
+        Id = Guid.Empty;
+        Ten = null;
+        NamHoc = DateTime.Now.Year;
+        NgayBatDau = DateTime.Now;
+        NgayKetThuc = DateTime.Now;
+        TrangThai = 1;
+    }
+    private Guid idDelete { get; set; }
+    private async Task ShowConfirmXoa(Guid deleteId)
+    {
+        idDelete = deleteId;
+         _confirmXoa.show();
+    }
+    private async Task ShowConfirmSua()
+    {
+        _confirmSua.show();
+    }
+    private async Task ShowConfirmThem()
+    {
+         _confirmThem.show();
+    }
+
 }

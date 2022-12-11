@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Identity.Client.Extensions.Msal;
+using Microsoft.JSInterop;
+using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 using QLDSVFPOLY.DAL.Entities;
+using System.Text.Json;
 
 namespace QLDSVFPOLY.Blazor.Pages.SinhVien
 {
-	public partial class ChiTietSinhVien
-	{
+    public partial class ChiTietSinhVien
+    {
         //
         [Parameter]
         public string idDaoTao { get; set; }
@@ -21,13 +26,13 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
 
 
         //Ghi đè phương thức OnInitializedAsync
-
-        //Gọi OnInitializedAsync để lấy dữ liệu.Khi OnInitializedAsync hãy sử dụng từ khóa await vì gọi không đồng bộ:
         protected override async Task OnInitializedAsync()
         {
-            idDaoTao = "9D01FB1F-6D12-4B11-9962-871C333E659B";
-            await LoadDataUpdate();
+            idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+
             await LoadData();
+            await LoadDataUpdate();
         }
 
         //
@@ -43,14 +48,31 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
             updateVM.DiaChi = sinhVien.DiaChi;
             updateVM.Email = sinhVien.Email;
             updateVM.SoDienThoai = sinhVien.SoDienThoai;
-            updateVM.TenDangNhap = sinhVien.TenDangNhap;
+            // updateVM.TenDangNhap = sinhVien.TenDangNhap;
             updateVM.DuongDanAnh = sinhVien.DuongDanAnh;
             updateVM.IdChuyenNganh = sinhVien.IdChuyenNganh;
-            updateVM.MatKhau = sinhVien.MatKhau;
+            //updateVM.MatKhau = sinhVien.MatKhau;
             updateVM.TrangThai = sinhVien.TrangThai;
 
         }
 
-
+        DefaultImages defImg = new DefaultImages();
+        IJSObjectReference module;
+        record ImageDimensions(int Width, int Height);
+        private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+            var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+            var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+            if (dimensions.Width > 250)
+            {
+                file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+            }
+            var buffers = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffers);
+            string imageType = file.ContentType;
+            updateVM.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+        }
     }
 }

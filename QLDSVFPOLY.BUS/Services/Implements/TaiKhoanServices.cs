@@ -23,6 +23,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         string TenHienThi = "";
         Guid IdDaoTao;
+        Guid Id;
 
         public TaiKhoanServices()
         {
@@ -48,6 +49,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                             {
                                 TenHienThi = i.Ma;
                                 IdDaoTao = i.Id;
+                                Id = i.Id;
                                 return true;
                             }
                         }
@@ -62,6 +64,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                             {
                                 TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
                                 IdDaoTao = i.IdDaoTao;
+                                Id = i.Id;
                                 return true;
                             }
                         }
@@ -77,6 +80,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                                 TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
                                 List<ChuyenNganh> list_CN = await _repoChuyenNganh.GetAllAsync();
                                 IdDaoTao = list_CN.FirstOrDefault(c => c.IdChuyenNganh == i.IdChuyenNganh).IdDaoTao;
+                                Id = i.Id;
                                 return true;
                             }
                         }
@@ -91,6 +95,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                             {
                                 TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
                                 IdDaoTao = i.IdDaoTao;
+                                Id = i.Id;
                                 return true;
                             }
                         }
@@ -108,7 +113,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TenHienThi = (String.IsNullOrEmpty(TenHienThi) ? "Không có" : TenHienThi),
                 TaiKhoan = input.TaiKhoan,
                 ChucVu = input.ChucVu,
-                IdDaoTao = IdDaoTao
+                IdDaoTao = IdDaoTao,
+                Id = Id,
             };
             return null;
         }

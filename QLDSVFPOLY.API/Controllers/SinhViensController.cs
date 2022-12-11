@@ -42,9 +42,9 @@ namespace QLDSVFPOLY.API.Controllers
         // GetById ??? 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetSinhVienById(Guid IdSinhVien)
+        public async Task<IActionResult> GetSinhVienById(Guid id)
         {
-            var sinhVien = await _sinhVienServices.GetByIdAsync(IdSinhVien);
+            var sinhVien = await _sinhVienServices.GetByIdAsync(id);
             return Ok(sinhVien);
         }
 
@@ -62,10 +62,10 @@ namespace QLDSVFPOLY.API.Controllers
 
         //Controller dc gọi khi update obj
         [HttpPut]
-        [Route("{IdSinhVien}")]
-        public async Task<IActionResult> UpdateSinhVien(Guid IdSinhVien, [FromBody] SinhVienUpdateVM sinhVien)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateSinhVien(Guid id, [FromBody] SinhVienUpdateVM sinhVien)
         {
-            var result = await _sinhVienServices.UpdateAsync(IdSinhVien, sinhVien);
+            var result = await _sinhVienServices.UpdateAsync(id, sinhVien);
             return Ok(result);
         }
 

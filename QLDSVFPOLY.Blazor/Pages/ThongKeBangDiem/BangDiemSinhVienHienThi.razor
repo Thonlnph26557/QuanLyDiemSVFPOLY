@@ -8,64 +8,57 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.Blazor.Components
 
-<h3>BangDiemSinhVienHienThi</h3>
-
 @if (listCTLHs == null
-															|| listDiemSos == null
-															|| listKiHocs == null
-															|| listMonHocs == null
-															|| listSinhViens == null
-															|| listCTDiemSos == null
-												)
+	|| listDiemSos == null
+	|| listKiHocs == null
+	|| listMonHocs == null
+	|| listSinhViens == null
+	|| listCTDiemSos == null
+																		)
 {
 	<LoadingIndicator></LoadingIndicator>
 }
 else
 {
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">STT</th>
-				<th scope="col">Kì Học</th>
-				<th scope="col">Mã Môn Học</th>
-				<th scope="col">Tên Môn Học</th>
-				<th scope="col">Điểm</th>
-				<th scope="col">Chi Tiết</th>
-				<th scope="col">Trạng Thái</th>
-			</tr>
-		</thead>
-		<tbody>
-
-
-			@for (int i = 0; i < listCTLHs.Count(); i++)
-			{
-				var item = listCTLHs[i];
-
-				Guid id = @listCTDiemSos.FirstOrDefault(c => c.IdChiTietLopHoc == @item.Id).IdDiemSo;
-				<tr>
-					<th scope="row">@(i+1)</th>
-					<td>@listKiHocs.FirstOrDefault(c=>c.Id==@item.IdKiHoc).Ten</td>
-					<td>@listMonHocs.FirstOrDefault(c=>c.Id==@item.IdMonHoc).Ma</td>
-					<td>@listMonHocs.FirstOrDefault(c=>c.Id==@item.IdMonHoc).Ten</td>
-					<td>@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),item.Id),2)</td>
-					<td><button type="button" class="btn btn-link" @onclick="()=>NavigationChiTietDiemSo(id,item.Id)">Chi tiết điểm</button></td>
-					@if (@item.TrangThai == 1)
-					{
-						<td>Hoạt động</td>
-					}
-					else
-					{
-						<td>Tạm dừng hoạt động</td>
-					}
-				</tr>
-			}
-		</tbody>
-	</table>
+	<MudTable Items="@listCTLHs">
+		<ToolBarContent>
+			<MudText Typo="Typo.h5">Bảng điểm sinh viên</MudText>
+			<MudSpacer></MudSpacer>
+		</ToolBarContent>
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudText>Kì Học</MudText></MudTh>
+			<MudTh><MudText>Mã Môn Học</MudText></MudTh>
+			<MudTh><MudText>Tên Môn Học</MudText></MudTh>
+			<MudTh><MudText>Điểm</MudText></MudTh>
+			<MudTh><MudText>Chi Tiết</MudText></MudTh>
+			<MudTh><MudText>Trạng Thái</MudText></MudTh>
+		</HeaderContent>
+		<RowTemplate>
+			<MudTd>@(stt++)</MudTd>
+			<MudTd>@listKiHocs.FirstOrDefault(c=>c.Id==context.IdKiHoc).Ten</MudTd>
+			<MudTd>@listMonHocs.FirstOrDefault(c=>c.Id==context.IdMonHoc).Ma</MudTd>
+			<MudTd>@listMonHocs.FirstOrDefault(c=>c.Id==context.IdMonHoc).Ten</MudTd>
+			<MudTd>@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),context.Id),2)</MudTd>
+			<MudTd>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.Microwave" Color="Color.Primary" OnClick="@(() => NavigationChiTietDiemSo((@listCTDiemSos.FirstOrDefault(c => c.IdChiTietLopHoc == context.Id).IdDiemSo),context.Id))">Chi tiết</MudButton>
+			</MudTd>
+			@if (context.TrangThai == 1)
+				{
+				<MudTd>Hoạt động</MudTd>
+				}
+				else
+				{
+				<MudTd>Tạm dừng hoạt động</MudTd>
+				}
+	</RowTemplate>
+</MudTable>
 }
 
 @code {
 	[Parameter]
 	public string idSinhVien { set; get; }
+	private int stt = 0;
 
 	//MonHoc
 	[Inject] private IMonHocRepo monHocRepo { set; get; }
@@ -103,8 +96,6 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		idSinhVien = "710160E5-1760-4B31-B0EF-34481B382215";
-
 		await LoadData();
 	}
 
@@ -148,7 +139,7 @@ else
 	}
 
 	//Gọi đến chi tiết chuyên ngành hẹp
-	private void NavigationChiTietDiemSo(Guid idSinhVien,Guid idCTLH)
+	private void NavigationChiTietDiemSo(Guid idSinhVien, Guid idCTLH)
 	{
 		navigationManager.NavigateTo($"/chitietdiem/{idSinhVien}/{idCTLH}");
 	}
