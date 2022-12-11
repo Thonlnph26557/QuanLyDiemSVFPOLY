@@ -2,6 +2,7 @@
 @inherits LayoutComponentBase
 @inject ISessionStorageService _SStorage
 
+<CascadingValue Value="this">
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -21,8 +22,8 @@
         </div>
         <MudSpacer></MudSpacer>
         <div>
-            <MudText Typo="Typo.body2" Style="font-size: 1.5vh;">Chương trình</MudText>
-            <MudText Typo="Typo.h6" Style="font-size: 2.2vh;">Quản lý điểm sinh viên</MudText>
+            <MudText Typo="Typo.h6" Style="text-align: left; font-size: 2.2vh;">Xin chào: @Title</MudText>
+            <MudText Typo="Typo.body2" Style="text-align: left; font-size: 1.5vh;">Chức vụ: @Role</MudText>
         </div>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
@@ -38,12 +39,36 @@
     </MudMainContent>
 
 </MudLayout>
-
+</CascadingValue>
 @code {
     bool _drawerOpen = true;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private string title;
+
+    public string Title
+    {
+        get => title;
+        set
+        {
+            title = value;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    private string role;
+
+    public string Role
+    {
+        get => role;
+        set
+        {
+            role = value;
+            InvokeAsync(() => StateHasChanged());
+        }
     }
 }

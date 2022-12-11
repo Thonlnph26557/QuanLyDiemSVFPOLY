@@ -9,8 +9,6 @@
 
   <ItemGroup>
     <Compile Remove="Pages\DiemSinhVienTrongLop\QuanLiChiTietDiemSo.razor.cs" />
-    <Compile Remove="Repository\Implements\DaoTaoRepo.cs" />
-    <Compile Remove="Repository\Interfaces\IDaoTaoRepo.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +30,6 @@
     <None Include="Pages\NhanVienDaoTao\ThemNhanVienDaoTao.razor" />
     <None Include="Pages\SinhVien\ChiTietSinhVien.razor" />
     <None Include="Pages\SinhVien\HienThiSinhVien.razor" />
-    <None Include="Pages\SinhVien\Loading.razor" />
     <None Include="Pages\SinhVien\ThemSinhVien.razor" />
   </ItemGroup>
 

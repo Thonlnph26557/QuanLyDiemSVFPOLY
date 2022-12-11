@@ -3,6 +3,7 @@
 @using QLDSVFPOLY.Blazor.Components
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @inject IToastService ToastService
+@inject ISessionStorageService _SStorage
 
 @if(listKiHocs == null)
 {
@@ -89,6 +90,12 @@ else
 <Confirmation ConfirmationMessage="Bạn có muốn sửa kì học không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="SuaKiHoc"></Confirmation>
 <Confirmation ConfirmationMessage="Bạn có muốn xóa kì học không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteKiHoc(idDelete)"></Confirmation>
 @code {
+
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+
+
     protected Confirmation _confirmThem { get; set; }
     protected Confirmation _confirmSua { get; set; }
     protected Confirmation _confirmXoa { get; set; }
@@ -110,6 +117,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadData();
     }
     private async Task LoadData()

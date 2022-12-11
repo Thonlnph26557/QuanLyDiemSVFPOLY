@@ -7,7 +7,7 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.Blazor.Components
 
-
+@inject ISessionStorageService _SStorage
 
 @if (listDiemSos == null
 													|| listCTDiemSos == null || listLopHocs == null)
@@ -59,6 +59,8 @@ else
 
 	private int stt = 0;
 
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
 
 	//DiemSo
 	[Inject] private IDiemSoRepos diemSoRepo { set; get; }
@@ -88,8 +90,8 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		idSinhVien = "4184e7d6-5f1d-4f9e-ab36-118f6d329cf5";
-
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
 		await LoadData();
 	}
 

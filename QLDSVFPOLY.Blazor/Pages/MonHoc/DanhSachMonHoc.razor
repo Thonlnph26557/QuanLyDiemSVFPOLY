@@ -7,6 +7,8 @@
 @inject IMonHocRepo _repoMonHoc
 @inject IChuyenNganhRepo _repoChuyenNganh
 @inject NavigationManager _navManager
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
 
 @if(_list == null) {
     <LoadingIndicator/>
@@ -53,7 +55,12 @@ else {
     private List<MonHocVM> _list;
     private int stt = 1;
 
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
     protected override async Task OnInitializedAsync() {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadDgrid();
     }
 
@@ -64,6 +71,11 @@ else {
     private async Task btn_Delete(Guid id) {
         bool result = await _repoMonHoc.RemoveAsync(id);
         stt = 1;
+        if(result) {
+            _iToast.ShowSuccess("Xóa thành công", "Thông báo");
+        }else {
+            _iToast.ShowError("Xóa thất bại", "Thông báo");
+        }
         await LoadDgrid();
     }
 

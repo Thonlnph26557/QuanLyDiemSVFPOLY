@@ -13,6 +13,9 @@
 @inject IGiangVienRepos _repoGiangVien
 @inject IKiHocRepos _repoKiHoc
 @inject IChiTietLopHocRepos _repoChiTietLopHoc
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
+@inject NavigationManager _navManager
 
 @if (ListGiangVienVM == null || ListKiHocVM == null || ListLopHocVM == null || ListMonHocVM == null)
 {
@@ -94,6 +97,9 @@ else
 @code {
     int inputSoLuongSinhVien = 0;
 
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
     private List<MonHocVM> ListMonHocVM;
     private List<GiangVienVM> ListGiangVienVM;
     private List<LopHocVM> ListLopHocVM;
@@ -106,7 +112,7 @@ else
     private int inputTrangThai;
 
     private async Task CreateChiTietLopHoc() {
-        await _repoChiTietLopHoc.CreateAsync(new ChiTietLopHocCreateVM()
+        var result = await _repoChiTietLopHoc.CreateAsync(new ChiTietLopHocCreateVM()
             {
                 IdMonHoc = inputIdMonHoc,
                 IdGiangVien = inputIdGiangVien,
@@ -115,9 +121,23 @@ else
                 TrangThai = inputTrangThai,
                 SoLuongSinhVien = inputSoLuongSinhVien,
             });
+        if (result == 1)
+        {
+            _iToast.ShowSuccess("Thêm thành công", "Thông báo");
+            _navManager.NavigateTo("/chitietlophoc/hienthi");
+
+        }
+
+        else
+        {
+            _iToast.ShowError("Thêm thất bại", "Thông báo");
+            _navManager.NavigateTo("/chitietlophoc/hienthi");
+        }
     }
 
     protected override async Task OnInitializedAsync() {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadListsAsync();
     }
 

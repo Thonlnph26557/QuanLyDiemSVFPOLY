@@ -14,6 +14,8 @@
 @inject IKiHocRepos _repoKiHoc
 @inject IChiTietLopHocRepos _repoChiTietLopHoc
 @inject NavigationManager _navManager
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
 
 
 @if(_listGiangVienVM == null || _listKiHocVM == null || _listLopHocVM == null || _listMonHocVM == null || _listCTLHVM == null) {
@@ -55,6 +57,9 @@ else {
     [Parameter]
     public string idDaoTao { get; set; }
 
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
     int stt = 1;
     private List<ChiTietLopHocVM> _listCTLHVM;
     private List<MonHocVM> _listMonHocVM;
@@ -64,6 +69,8 @@ else {
 
     protected override async Task OnInitializedAsync()
     {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadListsAsync();
     }
 
@@ -87,6 +94,12 @@ else {
     {
         int result = await _repoChiTietLopHoc.RemoveAsync(id);
         stt = 1;
+        if(result == 1) {
+            _iToast.ShowSuccess("Xóa thành công", "Thông báo");
+        }
+        else {
+            _iToast.ShowError("Xóa thất bại", "Thông báo");
+        }
         await LoadListsAsync();
     }
 }

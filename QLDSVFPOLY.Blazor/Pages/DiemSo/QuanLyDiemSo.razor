@@ -4,6 +4,7 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
 @using System.Linq;
+@inject ISessionStorageService _SStorage
 @inject IToastService ToastService
 
 @if(listDiemSo == null || listMonHoc == null)
@@ -64,7 +65,7 @@ else
 
         <RowTemplate>
             <MudTd>@(stt++)</MudTd>
-            <MudTd>@listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc).Ten</MudTd>
+            <MudTd>@(listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc) == null? "<bị xóa>" : listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc).Ten)</MudTd>
             <MudTd>@context.TenDauDiem</MudTd>
             <MudTd>@context.TrongSo</MudTd>
             <MudTd>@context.NgayTao</MudTd>
@@ -84,6 +85,10 @@ else
 <Confirmation ConfirmationMessage="Bạn có muốn xóa điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteDiemSo(idDelete)"></Confirmation>
 
 @code {
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+
     protected Confirmation _confirmThem { get; set; }
     protected Confirmation _confirmSua { get; set; }
     protected Confirmation _confirmXoa { get; set; }
@@ -106,6 +111,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         //Gan listDiemSo = GetAll de lay ra list
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadData();
 
     }

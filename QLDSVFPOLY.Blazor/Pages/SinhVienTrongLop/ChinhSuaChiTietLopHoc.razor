@@ -13,6 +13,8 @@
 @inject IGiangVienRepos _repoGiangVien
 @inject IKiHocRepos _repoKiHoc
 @inject IChiTietLopHocRepos _repoChiTietLopHoc
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
 
 @if (ListGiangVienVM == null || ListKiHocVM == null || ListLopHocVM == null || ListMonHocVM == null)
 {
@@ -98,6 +100,9 @@ else
     [Parameter]
     public string idCTLH { get; set; }
 
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
     private bool hide_Success = true;
 
     int inputSoLuongSinhVien = 0;
@@ -124,6 +129,14 @@ else
                 TrangThai = inputTrangThai,
                 SoLuongSinhVien = inputSoLuongSinhVien,
             });
+        if(result == 1) {
+            _iToast.ShowSuccess("Cập nhật thành công", "Thông báo");
+
+        }
+
+        else {
+            _iToast.ShowError("Cập nhật thất bại", "Thông báo");
+        }
     }
 
     private async Task LoadCurrentData() {
@@ -137,6 +150,8 @@ else
     }
 
     protected override async Task OnInitializedAsync() {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadListsAsync();
         await LoadCurrentData();
     }

@@ -5,6 +5,7 @@ using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
 using Microsoft.AspNetCore.Components;
 using QLDSVFPOLY.BUS.ViewModels.DaoTao;
+using QLDSVFPOLY.Blazor.Shared;
 
 namespace QLDSVFPOLY.Blazor.Pages.ThongKe
 {
@@ -12,6 +13,10 @@ namespace QLDSVFPOLY.Blazor.Pages.ThongKe
     {
         [Parameter]
         public string idDaoTao { set; get; }
+
+        [CascadingParameter]
+        public QLDSVLayout _Layout { get; set; }
+
         [Inject] private IDaoTaoRepo DaoTaoRepo { set; get; }
         private List<DaoTaoVM> listDaoTaos { set; get; }
         private DaoTaoSearchVM daoTaoSearchVM = new DaoTaoSearchVM();
@@ -55,6 +60,8 @@ namespace QLDSVFPOLY.Blazor.Pages.ThongKe
         protected override async Task OnInitializedAsync()
         {
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
             try
             {
                 await LoadData();

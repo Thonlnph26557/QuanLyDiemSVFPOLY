@@ -35,7 +35,6 @@
                 </MudCardContent>
                 <MudCardActions>
                     <MudLink Href="/taikhoan/doimatkhau">Đổi mật khẩu</MudLink>
-                    @*<MudLink Href="quen-mat-khau">Quên mật khẩu?</MudLink><br />*@
                     <MudButton ButtonType="ButtonType.Submit" Variant = "Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="HandleLogin">Đăng Nhập</MudButton>
                 </MudCardActions>
             </MudCard>
@@ -64,6 +63,8 @@
             await customAuthSP.UpdateAuthenticationState(loginResponse);
             await _SStorage.SetItemAsync("IdDaoTao", loginResponse.IdDaoTao);
             await _SStorage.SetItemAsync("IdNguoiDung", loginResponse.Id);
+            await _SStorage.SetItemAsync("TenHienThi", loginResponse.TenHienThi);
+            await _SStorage.SetItemAsync("ChucVu", loginResponse.ChucVu);
             switch (loginResponse.ChucVu) {
                 case "DaoTao": {
                         _navManager.NavigateTo($"/thongke/thongkecoso");

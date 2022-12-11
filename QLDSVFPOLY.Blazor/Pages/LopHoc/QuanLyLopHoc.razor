@@ -4,6 +4,9 @@
 @using QLDSVFPOLY.Blazor.Components
 @inject IToastService ToastService
 @inject ISessionStorageService _SStorage
+
+
+
 @if(listLopHocs == null)
 {
     <LoadingIndicator></LoadingIndicator>
@@ -64,6 +67,11 @@ else
 <Confirmation ConfirmationMessage="Bạn có muốn sửa lớp học không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="SuaLopHoc"></Confirmation>
 <Confirmation ConfirmationMessage="Bạn có muốn xóa lớp học không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteLopHoc(idDelete)"></Confirmation>
 @code {
+
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+
     protected Confirmation _confirmThem { get; set; }
     protected Confirmation _confirmSua { get; set; }
     protected Confirmation _confirmXoa { get; set; }
@@ -78,6 +86,8 @@ else
     private LopHocSearchVM searchVM = new LopHocSearchVM();
     protected override async Task OnInitializedAsync()
     {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
         await LoadData();
     }
