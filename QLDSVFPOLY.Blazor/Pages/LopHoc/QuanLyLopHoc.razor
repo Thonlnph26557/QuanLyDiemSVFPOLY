@@ -4,7 +4,6 @@
 @using QLDSVFPOLY.Blazor.Components
 @inject IToastService ToastService
 @inject ISessionStorageService _SStorage
-
 @if(listLopHocs == null)
 {
     <LoadingIndicator></LoadingIndicator>
@@ -16,7 +15,7 @@ else
         <MudText Typo="Typo.h5">Quản Lý Lớp Học</MudText>
             <div class="row" style="margin-top:15px">
                 <div class="col">
-                     <MudTextField @bind-Value="Ma" Label="Mã Lớp Học"  Variant="Variant.Outlined"/>
+                     <MudTextField @bind-Value="Ma" Label="Mã Lớp Học" For="() => lophoc.Ma" Variant="Variant.Outlined"/>
                 </div>
                 <div class="col">
                     <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="TrangThai" Variant="Variant.Outlined">
@@ -127,15 +126,14 @@ else
     {
         updateVm.Ma = Ma;
         updateVm.TrangThai = TrangThai;
-        await LopHocRepos.UpdateAsync(Id,updateVm);
-        bool x = await LopHocRepos.CreateAsync(createVm);
+        bool x =await LopHocRepos.UpdateAsync(Id,updateVm);
         if (x==true)
         {
-            ToastService.ShowSuccess($"Thêm thành công");
+            ToastService.ShowSuccess($"Sửa thành công");
         }
         else
         {
-            ToastService.ShowError($"Thêm thất bại");
+            ToastService.ShowError($"Sửa thất bại");
         }
         await LoadData();
         Id = Guid.Empty;

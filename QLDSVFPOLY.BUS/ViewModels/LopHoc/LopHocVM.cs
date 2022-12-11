@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace QLDSVFPOLY.BUS.ViewModels.LopHoc
     public class LopHocVM
     {
         public Guid Id { get; set; }
+        [Required]
+        [MaxLength(10, ErrorMessage = ("Mã lớp học tối đa 10 kí tự"))]
         public string? Ma { get; set; }
         public Guid? IdDaoTao { get; set; }
         public DateTime NgayTao { get; set; }
