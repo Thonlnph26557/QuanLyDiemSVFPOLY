@@ -5,7 +5,6 @@
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
 @using System.Linq;
 @inject IToastService ToastService
-@inject ISessionStorageService _SStorage
 
 @if(listDiemSo == null || listMonHoc == null)
 {
@@ -18,7 +17,7 @@ else
         <MudText Typo="Typo.h5">Quản Lý Điểm Số</MudText>
             <div class="row" style="margin-top:15px">
                 <div class="col">
-                    <MudTextField @bind-Value="TenDiemSo" Label="Tên Điểm Số"  Variant="Variant.Outlined"/>
+                    <MudTextField @bind-Value="TenDiemSo" Label="Tên Điểm Số" For="() => diemso.TenDauDiem" Variant="Variant.Outlined"/>
                 </div>
                 <div class="col">
                     <MudNumericField @bind-Value="@TrongSo" Label="Trọng Số" Variant="Variant.Outlined" Min="0" Max="100" Step="5"/>
@@ -106,7 +105,7 @@ else
     //Id khi xoa
     protected override async Task OnInitializedAsync()
     {
-        await _SStorage.GetItemAsync<string>("IdDaoTao");
+        //Gan listDiemSo = GetAll de lay ra list
         await LoadData();
 
     }
