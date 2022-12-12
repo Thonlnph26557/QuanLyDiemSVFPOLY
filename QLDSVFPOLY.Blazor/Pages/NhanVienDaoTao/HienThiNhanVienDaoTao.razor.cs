@@ -31,19 +31,16 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
         //Ghi đè phương thức OnInitializedAsync
         protected override async Task OnInitializedAsync()
         {
-            stt = 1;
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao"); ;
             await LoadData();
             _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
             _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
-            stt = 1;
         }
 
 
         //
         private async Task LoadData()
         {
-            stt = 1;
             _listNhanVienDaoTaos = await nhanVienDaoTaoRepos.GetAllActiveAsync(_search);
 
             _listNhanVienDaoTaos = _listNhanVienDaoTaos.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
@@ -72,8 +69,6 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
 
 
             }
-
-            stt = 1;
         }
 
         //

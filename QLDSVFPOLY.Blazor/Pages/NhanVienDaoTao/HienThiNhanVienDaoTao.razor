@@ -50,7 +50,7 @@ else
 
         <RowTemplate>
 
-            <MudTd>@(stt++)</MudTd>
+            <MudTd>@(_listNhanVienDaoTaos.IndexOf(context) + 1)</MudTd>
 
                 <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
 
@@ -92,7 +92,6 @@ else
 @code {
 
     //
-    private int stt = 1;
     [CascadingParameter]
     public QLDSVLayout _Layout { get; set; }
     //
