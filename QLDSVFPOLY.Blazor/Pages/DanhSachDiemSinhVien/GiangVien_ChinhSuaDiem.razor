@@ -1,0 +1,31 @@
+﻿@page "/lophoc/chitiet/{idLopHoc}"
+
+@attribute [Authorize(Roles = "GiangVien")]
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+
+@inject ISessionStorageService _SStorage
+
+
+if(1 + 1 != 2) {
+    <LoadingIndicator></LoadingIndicator>
+}
+else {
+
+}
+
+
+
+
+@code {
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+    [Parameter]
+    public string idLopHoc { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+    }
+}

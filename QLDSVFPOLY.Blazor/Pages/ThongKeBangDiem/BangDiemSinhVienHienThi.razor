@@ -1,4 +1,4 @@
-﻿@page "/bangdiemSV/hienthi/{idSinhVien}"
+﻿@page "/bangdiemSV/hienthi"
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
@@ -99,7 +99,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-
+		idSinhVien = await _SStorage.GetItemAsync<string>("IdNguoiDung");
 		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
 		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
 		await LoadData();

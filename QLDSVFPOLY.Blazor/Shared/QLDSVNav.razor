@@ -41,6 +41,12 @@
 
 
 
+    <AuthorizeView Roles="GiangVien">
+        <MudNavLink Style="my-3" Icon="@Icons.Filled.CreditScore" Href="/lophoc/hienthi">Quản lý điểm số</MudNavLink>
+    </AuthorizeView>
+
+
+
     <AuthorizeView Roles="SinhVien">
 
         <MudNavLink Style="my-3" Icon="@Icons.Filled.AddChart" Href="/bangdiemSV/hienthi
@@ -48,7 +54,9 @@
 
     </AuthorizeView>
 
-    
-    <MudNavLink Href="/taikhoan/dangnhap" Style="bottom: 0px; left: 0px; width:100% position: fixed;">Đăng xuất</MudNavLink>
+    <MudDivider Style="height:1px;" Class="my-2 mx-6" DividerType="DividerType.Middle"></MudDivider>
+
+
+    <MudNavLink Href="/taikhoan/dangnhap" Icon="@Icons.Filled.ExitToApp"><MudText Style="color: red;">Đăng xuất</MudText></MudNavLink>
 </MudNavMenu>
 

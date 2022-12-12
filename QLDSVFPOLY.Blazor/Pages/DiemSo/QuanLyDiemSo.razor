@@ -6,6 +6,8 @@
 @using System.Linq;
 @inject ISessionStorageService _SStorage
 @inject IToastService ToastService
+@inject IMonHocRepo MonHocRepos
+@inject HttpClient httpClient
 
 @if(listDiemSo == null || listMonHoc == null)
 {
@@ -64,7 +66,7 @@ else
         </HeaderContent>
 
         <RowTemplate>
-            <MudTd>@(stt++)</MudTd>
+            <MudTd>@(listDiemSo.IndexOf(context) + 1)</MudTd>
             <MudTd>@(listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc) == null? "<bị xóa>" : listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc).Ten)</MudTd>
             <MudTd>@context.TenDauDiem</MudTd>
             <MudTd>@context.TrongSo</MudTd>
@@ -80,6 +82,7 @@ else
     </MudTable>
 </div>
 }
+
 <Confirmation ConfirmationMessage="Bạn có muốn thêm điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="ThemDiemSo"></Confirmation>
 <Confirmation ConfirmationMessage="Bạn có muốn sửa điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="SuaDiemSo"></Confirmation>
 <Confirmation ConfirmationMessage="Bạn có muốn xóa điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteDiemSo(idDelete)"></Confirmation>
@@ -93,11 +96,9 @@ else
     protected Confirmation _confirmSua { get; set; }
     protected Confirmation _confirmXoa { get; set; }
     DiemSoVM diemso = new DiemSoVM();
-    private int stt = 1;
     [Parameter]
     public string idDaoTao { get; set; }
-    [Inject] private HttpClient httpClient { get; set; }
-    [Inject] private IMonHocRepo MonHocRepos { get; set; }
+    
     //Inject Repo cua DiemSo
     [Inject] private IDiemSoRepos DiemSoRepos { get; set; }
     //Khai bao ra listDiemSo
@@ -136,7 +137,6 @@ else
             ToastService.ShowError($"Xóa thất bại");
         }
         await LoadData();
-        stt = 1;
     }
 
     private async Task ThemDiemSo()
@@ -160,8 +160,10 @@ else
         TrangThai = 1;
         IdMonHoc = Guid.Empty;
         await LoadData();
-        stt = 1;
     }
+
+
+
     private async Task SuaDiemSo()
     {
         DiemSoUpdateVM updateVm = new DiemSoUpdateVM();
@@ -183,7 +185,6 @@ else
         TrongSo = 0;
         TrangThai = 1;
         IdMonHoc = Guid.Empty;
-        stt = 1;
     }
 
 
@@ -192,6 +193,7 @@ else
     private int TrangThai{ get; set; }
     private Guid IdMonHoc{ get; set; }
     private Guid IdDiemSo { get; set; }
+
     private async Task LoadBanGhi(Guid id)
     {
         DiemSoVM diemSoVM = await DiemSoRepos.GetByIdAsync(id);
@@ -200,8 +202,8 @@ else
         TrongSo = diemSoVM.TrongSo ;
         TrangThai = diemSoVM.TrangThai;
         IdMonHoc = diemSoVM.IdMonHoc;
-        stt = 1;
     }
+
     private async Task LamMoi()
     {
         IdDiemSo = Guid.Empty;
@@ -209,20 +211,31 @@ else
         TenDiemSo = null;
         TrongSo = 0;
         TrangThai = 1;
-        stt = 1;
     }
+
     private Guid idDelete { get; set; }
+
     private async Task ShowConfirmXoa(Guid deleteId)
     {
         idDelete = deleteId;
          _confirmXoa.show();
     }
+
     private async Task ShowConfirmSua()
     {
         _confirmSua.show();
     }
+
     private async Task ShowConfirmThem()
     {
          _confirmThem.show();
     }
+
+    //Extension
+    //Thêm các bảng CTDS theo đầu điểm
+    private async Task UpdateSinhVien() 
+    {
+
+    }
+
 }

@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\DiemSinhVienTrongLop\QuanLiChiTietDiemSo.razor.cs" />
+    <Compile Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\DiemSinhVienTrongLop\QuanLiChiTietDiemSo.razor" />
-    <Content Remove="Pages\SinhVienTrongLop\ChinhSuaSinhVienTrongLop.razor" />
+    <Content Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor" />
+    <Content Remove="Pages\ChiTietLopHoc\ChinhSuaSinhVienTrongLop.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,10 +60,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\DiemSinhVienTrongLop\" />
   </ItemGroup>
 
 </Project>

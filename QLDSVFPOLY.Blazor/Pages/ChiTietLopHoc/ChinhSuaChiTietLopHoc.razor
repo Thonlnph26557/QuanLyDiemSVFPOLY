@@ -101,20 +101,19 @@ else
     <MudDivider Class="my-2"></MudDivider>
 
     <MudPaper Class="px-2 pt-2 pb-10 ma-2" Outlined="true">
-        <MudTable Items="@_listCTDSHienTai">
+        <MudTable Items="@_listCTDSHienTai" Class="m-1">
             <ToolBarContent>
                 @*<MudTextField T="string" Label="Mã sinh viên" HelperText="Nhập mã sinh viên cụ thể" HelperTextOnFocus="true" Variant="Variant.Outlined" Class="mt-10 mr-3 mb-2"
                 @onchange=""/>*@
 
-                <MudSelect T="Guid" Label="Sinh viên" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mt-4 mx-3 mb-2" @bind-Value="_selectedSinhVienId">
+                <MudSelect T="Guid" Label="Sinh viên" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mt-4 mr-3 mb-2" @bind-Value="_selectedSinhVienId">
                     @foreach (var item in _listSinhVienVM)
                     {
                         <MudSelectItem T="Guid" Value="@item.Id">@item.Ma - @item.Ho @item.TenDem @item.Ten</MudSelectItem>
                     }
                 </MudSelect>
 
-
-                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-4 mb-2" @onclick="AddLopHoc">Thêm</MudButton>
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-4 mb-2" @onclick="AddSinhVien">Thêm</MudButton>
             </ToolBarContent>
 
             <HeaderContent>
@@ -140,11 +139,11 @@ else
 }
 
 @code {
-        [Parameter]
-        public string idCTLH { get; set; }
+    [Parameter]
+    public string idCTLH { get; set; }
 
-        [CascadingParameter]
-        public QLDSVLayout _Layout { get; set; }
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
 
 
     //AddSv
@@ -183,6 +182,7 @@ else
             });
         if(result == 1) {
             _iToast.ShowSuccess("Cập nhật thành công", "Thông báo");
+            _CTLHHienTai = await _repoChiTietLopHoc.GetByIdAsync(Guid.Parse(idCTLH));
 
         }
 
@@ -191,28 +191,41 @@ else
         }
     }
 
-    private async Task AddLopHoc() {
+    private async Task AddSinhVien() {
         if(_selectedSinhVienId != Guid.Empty) {
-            var listTemp = _listDiemSoVM.Where(c => c.IdMonHoc == _MonHocHienTai.Id).ToList();
-            if (listTemp.Count != 0)
+            var listDiemSoTemp = _listDiemSoVM.Where(c => c.IdMonHoc == _MonHocHienTai.Id).ToList();
+            if (listDiemSoTemp.Count != 0)
             {
-                foreach (var item in listTemp)
+                if (_listCTDSHienTai.Count >= _CTLHHienTai.SoLuongSinhVien)
                 {
-                    var checkExist = _listCTDS.Any(c => c.IdDiemSo == item.Id && c.IdSinhVien == _selectedSinhVienId && c.IdChiTietLopHoc == Guid.Parse(idCTLH));
-                    if(checkExist) {
-                        continue;
-                    }
-                    bool a = await _repoCTDS.CreateAsync(new ChiTietDiemSoCreateVM()
-                        {
-                            IdChiTietLopHoc = Guid.Parse(idCTLH),
-                            IdSinhVien = _selectedSinhVienId,
-                            IdDiemSo = item.Id,
-                            Diem = 0,
-                            NgayTao = DateTime.Now,
-                            TrangThai = 1
-                        });
+                    _iToast.ShowError("Thêm thất bại, lớp đầy", "Thông báo");
                 }
-                _iToast.ShowSuccess("Thêm thành công", "Thông báo");
+                else {
+                    foreach (var item in listDiemSoTemp)
+                    {
+                        var checkExist = _listCTDS.Any(c => c.IdDiemSo == item.Id && c.IdSinhVien == _selectedSinhVienId && c.IdChiTietLopHoc == Guid.Parse(idCTLH));
+                        if (checkExist)
+                        {
+                            continue;
+                        }
+                        bool a = await _repoCTDS.CreateAsync(new ChiTietDiemSoCreateVM()
+                            {
+                                IdChiTietLopHoc = Guid.Parse(idCTLH),
+                                IdSinhVien = _selectedSinhVienId,
+                                IdDiemSo = item.Id,
+                                Diem = 0,
+                                NgayTao = DateTime.Now,
+                                TrangThai = 1
+                            });
+                    }
+                    _iToast.ShowSuccess("Thêm thành công", "Thông báo");
+                    _selectedSinhVienId = Guid.Empty;
+                    _listCTDSHienTai = null;
+                    await LoadListSVTrongLop();
+                    StateHasChanged();
+                }
+                    
+
             }
             else {
                 _iToast.ShowError("Thêm thất bại, lớp chưa có đầu điểm", "Thông báo");
@@ -221,7 +234,7 @@ else
     }
 
     private async Task LoadCurrentData() {
-        
+
         inputIdGiangVien = _CTLHHienTai.IdGiangVien;
         inputIdMonHoc = _CTLHHienTai.IdMonHoc;
         inputIdKiHoc = _CTLHHienTai.IdKiHoc;
@@ -250,14 +263,19 @@ else
         //
         _listSinhVienVM = await _repoSinhVien.GetAllActiveAsync(new SinhVienSearchVM());
         _listDiemSoVM = await _repoDiemSo.GetAllActiveAsync(new DiemSoSearchVM());
+        await LoadListSVTrongLop();
+
+    }
+
+    private async Task LoadListSVTrongLop() {
         _listCTDS = await _repoCTDS.GetAllActiveAsync(new ChiTietDiemSoSearchVM());
         _listCTDSHienTai = new List<ChiTietDiemSoVM>();
-        foreach (var i in _listCTDS) 
+        foreach (var i in _listCTDS)
         {
-            if(i.IdChiTietLopHoc == _CTLHHienTai.Id) {
+            if (i.IdChiTietLopHoc == _CTLHHienTai.Id)
+            {
                 _listCTDSHienTai.Add(i);
             }
         }
-
     }
 }

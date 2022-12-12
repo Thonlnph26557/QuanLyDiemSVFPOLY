@@ -33,7 +33,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
 
         public async Task<bool> UpdateAsync(DoiMatKhauVM vm)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/TaiKhoans", vm);
+            var result = await _httpClient.PutAsJsonAsync("api/TaiKhoans", vm);
             if (result.IsSuccessStatusCode) return true;
             return false;
         }

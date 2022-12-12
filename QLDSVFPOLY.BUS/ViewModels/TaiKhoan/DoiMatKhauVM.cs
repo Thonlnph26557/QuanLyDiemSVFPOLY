@@ -11,11 +11,15 @@ namespace QLDSVFPOLY.BUS.ViewModels.TaiKhoan
     {
         [Required(ErrorMessage = ("Trường này không được để trống"))]
         public string? TaiKhoan { get; set; }
+
         [Required(ErrorMessage =("Trường này không được để trống"))]
         public string? MatKhau { get; set; }
 
         [Required(ErrorMessage = ("Trường này không được để trống"))]
-        [Compare(nameof(MatKhau), ErrorMessage = ("Nhập lại mật khẩu không đúng"))]
+        public string? MatKhauMoi { get; set; }
+
+        [Required(ErrorMessage = ("Trường này không được để trống"))]
+        [Compare(nameof(MatKhauMoi), ErrorMessage = ("Nhập lại mật khẩu không đúng"))]
         public string? NhapLaiMatKhau { get; set; }
         public string ChucVu { get; set; }
     }

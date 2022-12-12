@@ -16,6 +16,7 @@
                         @*<MudText Typo="Typo.h5">Đổi mật khẩu</MudText>*@
                         <MudTextField Label="Tài khoản" @bind-Value="_dmkVM.TaiKhoan" For="() => _dmkVM.TaiKhoan"></MudTextField>
                         <MudTextField Label="Mật khẩu" @bind-Value="_dmkVM.MatKhau" For="() => _dmkVM.MatKhau" InputType="InputType.Password"></MudTextField>
+                        <MudTextField Label="Mật khẩu mới" @bind-Value="_dmkVM.MatKhauMoi" For="() => _dmkVM.MatKhauMoi" InputType="InputType.Password"></MudTextField>
                         <MudTextField Label="Nhập lại mật khẩu" @bind-Value="_dmkVM.NhapLaiMatKhau" For="() => _dmkVM.NhapLaiMatKhau" InputType="InputType.Password"></MudTextField>
                         <MudSelect T="string" Label="Chức vụ" @bind-Value="_dmkVM.ChucVu" AnchorOrigin="Origin.BottomCenter">
                             <MudSelectItem Value="@("DaoTao")">Đào tạo</MudSelectItem>
@@ -38,6 +39,7 @@
     private async Task DoiMatKhauAsync() {
         bool result = await _repo.UpdateAsync(_dmkVM);
         if(result) {
+            _iToast.ShowSuccess("Đổi mật khẩu thành công", "Thông báo");
             _navManager.NavigateTo("/taikhoan/dangnhap/");
         }
     }

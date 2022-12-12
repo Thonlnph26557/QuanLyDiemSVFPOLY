@@ -129,7 +129,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                         var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
                         if (temp != null)
                         {
-                            temp.MatKhau = vm.MatKhau;
+                            temp.MatKhau = vm.MatKhauMoi;
+                            await _repoDaoTao.SaveChangesAsync();
                             return true;
                         }
                         return false;
@@ -140,7 +141,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                         var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
                         if (temp != null)
                         {
-                            temp.MatKhau = vm.MatKhau;
+                            temp.MatKhau = vm.MatKhauMoi;
+                            await _repoGiangVien.SaveChangesAsync();
                             return true;
                         }
                         return false;
@@ -151,7 +153,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                         var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
                         if (temp != null)
                         {
-                            temp.MatKhau = vm.MatKhau;
+                            temp.MatKhau = vm.MatKhauMoi;
+                            await _repoNhanVienDaoTao.SaveChangesAsync();
                             return true;
                         }
                         return false;
@@ -161,7 +164,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                         var list = await _repoSinhVien.GetAllAsync();
                         var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
                         if (temp != null) {
-                            temp.MatKhau = vm.MatKhau;
+                            temp.MatKhau = vm.MatKhauMoi;
+                            await _repoSinhVien.SaveChangesAsync();
                             return true;
                         }
                         return false;

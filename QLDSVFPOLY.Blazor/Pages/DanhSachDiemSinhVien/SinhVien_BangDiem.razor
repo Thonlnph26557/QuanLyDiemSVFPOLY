@@ -1,4 +1,4 @@
-﻿@page "/diemso/hienthi/{_idSinhVien}"
+﻿@page "/diemso/hienthi"
 
 @*Sinh Viên Side*@
 
@@ -27,7 +27,7 @@ else {
     @foreach(var item in _listCTLH_SV) {
         <MudPaper Outlined="true">
             <MudText>Lớp học: @(_listLopHoc.FirstOrDefault(c => c.Id == item.IdLopHoc) != null ? _listLopHoc.FirstOrDefault(c => c.Id == item.IdLopHoc).Ma : "<Bị xóa>")</MudText>
-                <MudText>Môn học: @(_listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc) != null ? _listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc).Ten : "<Bị xóa>")</MudText>
+            <MudText>Môn học: @(_listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc) != null ? _listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc).Ten : "<Bị xóa>")</MudText>
         </MudPaper>
 
 
@@ -48,7 +48,7 @@ else {
     protected override async Task OnInitializedAsync()
     {
         
-        //_idSinhVien = await _SStorage.GetItemAsync<string>("Id");
+        _idSinhVien = await _SStorage.GetItemAsync<string>("Id");
         await LoadData();
     }
 
@@ -64,7 +64,7 @@ else {
     //Stage 1: Tìm kiếm CTDS > sv
     //Stage 2: Tìm kiếm CTLH theo CTDS
 
-
+    
 
 
 
