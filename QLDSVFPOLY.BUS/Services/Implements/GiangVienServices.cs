@@ -53,26 +53,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).ToList();
 
-            if (searchVm.Ma != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ma.Contains(searchVm.Ma)).ToList();
-            }
-            if (searchVm.Ho != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ho.Contains(searchVm.Ho)).ToList();
-            }
-            if (searchVm.Ten != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ten.Contains(searchVm.Ten)).ToList();
-            }
-            if (searchVm.TenDem != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.TenDem.Contains(searchVm.TenDem)).ToList();
-            }
-            if (searchVm.Email != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Email.Contains(searchVm.Email)).ToList();
-            }
+
 
             return listGiangVienViewmodel;
         }
@@ -103,26 +84,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).ToList();
 
-            if (searchVm.Ma != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ma.Contains(searchVm.Ma)).ToList();
-            }
-            if (searchVm.Ho != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ho.Contains(searchVm.Ho)).ToList();
-            }
-            if (searchVm.Ten != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Ten.Contains(searchVm.Ten)).ToList();
-            }
-            if (searchVm.TenDem != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.TenDem.Contains(searchVm.TenDem)).ToList();
-            }
-            if (searchVm.Email != null)
-            {
-                listGiangVienViewmodel = listGiangVienViewmodel.Where(c => c.Email.Contains(searchVm.Email)).ToList();
-            }
+
 
             return listGiangVienViewmodel;
         }
@@ -209,6 +171,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             temp.DuongDanAnh = updateVm.DuongDanAnh;
             temp.NgayTao = updateVm.NgayTao;
             temp.TrangThai = updateVm.TrangThai;
+            temp.Ho = updateVm.Ho;
+            temp.TenDem = updateVm.TenDem;
+            temp.Ten = updateVm.Ten;
 
             await _iGiangVienRepositories.UpdateAsync(temp);
             await _iGiangVienRepositories.SaveChangesAsync();

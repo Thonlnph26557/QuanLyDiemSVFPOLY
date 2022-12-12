@@ -41,11 +41,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).ToList();
 
-            //Tìm kiếm theo Mã, TT, Ngày tạo
-            if (searchVm.Ma != null)
-            {
-                return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
-            }
+
             return listLopHocViewmodel;
         }
 
@@ -64,11 +60,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai
             }).ToList();
 
-            //Tìm kiếm theo Mã, TT, Ngày tạo
-            if (searchVm.Ma != null)
-            {
-                return listLopHocViewmodel.Where(c => c.Ma == searchVm.Ma).ToList();
-            }
+
             return listLopHocViewmodel;
         }
 

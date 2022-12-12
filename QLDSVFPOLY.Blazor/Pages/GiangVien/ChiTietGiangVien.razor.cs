@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
+using QLDSVFPOLY.Blazor.Shared;
 using QLDSVFPOLY.BUS.ViewModels.GiangVien;
 using QLDSVFPOLY.DAL.Entities;
 using System.Text.Json;
@@ -20,6 +21,8 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
         [Parameter]
         public string idDaoTao { set; get; }
 
+        [CascadingParameter]
+        public QLDSVLayout _Layout { get; set; }
 
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
@@ -40,7 +43,8 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
             await LoadDataUpdate();
             obj = _listGiangViens.FirstOrDefault(c => c.Id == Guid.Parse(idGiangVien));
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
-
+            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         }
 
         //
@@ -67,23 +71,27 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
 
 
 
-        private async Task ChinhSua(Guid idGiangVien, GiangVienUpdateVM updateVM)
+        private async Task ChinhSua(bool y)
         {
-            await giangVienRepos.UpdateAsync(idGiangVien, updateVM);
-
-            await LoadData();
-
-            bool x = await giangVienRepos.UpdateAsync(idGiangVien, updateVM);
-
-            if (x == true)
+            if (y)
             {
-                ToastService.ShowSuccess($"Sửa thành công");
-            }
-            else
-            {
-                ToastService.ShowError($"Sửa thất bại");
-            }
+                await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
 
+                await LoadData();
+
+                bool x = await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
+
+                if (x == true)
+                {
+                    navigationManager.NavigateTo("/giangvien/hienthi");
+                    ToastService.ShowSuccess($"Sửa thành công");
+                }
+                else
+                {
+                    ToastService.ShowError($"Sửa thất bại");
+                }
+
+            }
         }
 
 

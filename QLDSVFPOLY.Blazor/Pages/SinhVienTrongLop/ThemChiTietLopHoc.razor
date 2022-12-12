@@ -13,6 +13,7 @@
 @inject IGiangVienRepos _repoGiangVien
 @inject IKiHocRepos _repoKiHoc
 @inject IChiTietLopHocRepos _repoChiTietLopHoc
+
 @inject ISessionStorageService _SStorage
 @inject IToastService _iToast
 @inject NavigationManager _navManager
@@ -92,6 +93,8 @@ else
             </div>
         </MudForm>
     </MudPaper>
+
+    
 }
 
 @code {
@@ -104,6 +107,8 @@ else
     private List<GiangVienVM> ListGiangVienVM;
     private List<LopHocVM> ListLopHocVM;
     private List<KiHocViewmodel> ListKiHocVM;
+
+   
 
     private Guid inputIdMonHoc;
     private Guid inputIdGiangVien;
@@ -146,5 +151,7 @@ else
         ListGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
         ListLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
         ListKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
+
+        
     }
 }

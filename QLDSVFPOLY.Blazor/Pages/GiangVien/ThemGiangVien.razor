@@ -103,8 +103,8 @@
 
                     <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.TrangThai">
 
-                        <MudSelectItem Value=1>Đang học</MudSelectItem>
-                        <MudSelectItem Value=2>Đang nghỉ học</MudSelectItem>
+                        <MudSelectItem Value=1>Đang làm</MudSelectItem>
+                        <MudSelectItem Value=2>Đang nghỉ làm</MudSelectItem>
 
                     </MudSelect>
 
@@ -127,8 +127,8 @@
                 </MudItem>
 
                 <MudItem class="col">
-
-                    <MudTextField T="DateTime" class="form-control" Format="yyyy/MM/dd" Label="Ngày Sinh" InputType="InputType.Date"></MudTextField>
+                    <label>Ngày Sinh</label>
+                    <input  @bind="giangVien.NgaySinh" type="date" class="form-control">
 
                 </MudItem>
 
@@ -157,7 +157,7 @@
 </MudContainer>
 
 
-<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="()=>Them()"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="Them"></Confirmation>
 
 
 
@@ -165,6 +165,10 @@
     //
     [Parameter]
     public string idDaoTao { get; set; }
+
+
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
 
     //
     protected Confirmation _confirmThem { get; set; }
@@ -180,27 +184,32 @@
 
     //
     [Inject] private IGiangVienRepos giangVienRepos { set; get; }
+    [Inject] private NavigationManager navigationManager { get; set; }
 
     //
-    private async Task Them()
+    private async Task Them(bool y)
     {
-        giangVien.MatKhau = "aa";
-        giangVien.TenDangNhap = "png";
-        giangVien.IdDaoTao = Guid.Parse(idDaoTao);
-        await giangVienRepos.CreateAsync(giangVien);
-
-
-        bool x = await giangVienRepos.CreateAsync(giangVien);
-
-        if (x == true)
+        if (y)
         {
-            ToastService.ShowSuccess($"Thêm thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Thêm thất bại");
-        }
+            giangVien.MatKhau = "aa";
+            giangVien.TenDangNhap = "png";
+            giangVien.IdDaoTao = Guid.Parse(idDaoTao);
+            await giangVienRepos.CreateAsync(giangVien);
 
+
+            bool x = await giangVienRepos.CreateAsync(giangVien);
+
+            if (x == true)
+            {
+                navigationManager.NavigateTo("/giangvien/hienthi");
+                ToastService.ShowSuccess($"Thêm thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Thêm thất bại");
+            }
+
+        }
     }
 
 
@@ -228,6 +237,11 @@
     {
         idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
         module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+        giangVien.DuongDanAnh = defImg.DefaultAvatar();
+
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+
     }
 
     DefaultImages defImg = new DefaultImages();

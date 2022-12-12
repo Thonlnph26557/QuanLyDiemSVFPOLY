@@ -35,11 +35,11 @@ else
 		<div style="float:left" class="w-75">
 			<div class="row pl-5">
 				<div class="col">
-					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@chuyenNganh.Ma" />
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@chuyenNganh.Ma" For="() => chuyenNganh.Ma" />
 
-					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@chuyenNganh.TenChuyenNganh" />
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@chuyenNganh.TenChuyenNganh" For="() => chuyenNganh.TenChuyenNganh"/>
 
-					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@chuyenNganh.TrangThai">
+					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@chuyenNganh.TrangThai"For="() => chuyenNganh.TrangThai">
 						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
 						<MudSelectItem T="int" Value="2">Tạm dừng hoạt động</MudSelectItem>
 					</MudSelect>
@@ -78,6 +78,7 @@ else
 		idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
 		await LoadData();
 		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+		imgUrl = defImg.LogoFPL();
 	}
 
 	private async Task LoadData()

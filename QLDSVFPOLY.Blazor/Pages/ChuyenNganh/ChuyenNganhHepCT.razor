@@ -33,11 +33,11 @@ else
 		<div style="float:left" class="w-75">
 			<div class="row pl-5">
 				<div class="col">
-					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" />
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" For="() => updateVm.Ma"/>
 
-					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" />
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" For="() => updateVm.TenChuyenNganh"/>
 
-					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai">
+					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai" For="() => updateVm.TrangThai">
 						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
 						<MudSelectItem T="int" Value="2">Tạm dừng hoạt động</MudSelectItem>
 					</MudSelect>

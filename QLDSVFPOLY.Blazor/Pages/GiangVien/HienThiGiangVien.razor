@@ -81,13 +81,13 @@ else
     </MudTable>
 
 }
-<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteGiangVien(idDeleted)"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="OnDeleteGiangVien"></Confirmation>
 
 
 @code {
 
     //
-    private int stt = 0;
+    private int stt = 1;
 
     //
     private Guid idDeleted { get; set; }
@@ -97,8 +97,10 @@ else
 
     private async Task ShowConfirmXoa(Guid IdDelete)
     {
+        
         idDeleted = IdDelete;
         _confirmXoa.show();
+
     }
 
 

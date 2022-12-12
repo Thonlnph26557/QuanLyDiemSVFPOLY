@@ -1,4 +1,4 @@
-﻿@page "/sinhvien/hienthi/{idDaoTao?}"
+﻿@page "/sinhvien/hienthi"
 
 @inject IConfiguration Configuration
 
@@ -8,7 +8,7 @@
 
 
 @inject IToastService ToastService
-
+@inject ISessionStorageService _SStorage
 
 @if (_listSinhViens == null || _listChuyenNganh == null)
 {
@@ -25,7 +25,7 @@ else
 
         <MudSpacer></MudSpacer>
 
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/sinhvien/themmoi/{idDaoTao}">Thêm</MudButton>
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/sinhvien/themmoi">Thêm</MudButton>
 
     </ToolBarContent>
 
@@ -67,7 +67,7 @@ else
 
             <MudTd>@context.Email</MudTd>
 
-            <MudTd>@_listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh).TenChuyenNganh</MudTd>
+                <MudTd>@(_listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh) == null ? "<Không tồn tại/Bị xóa>" : _listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh).TenChuyenNganh)</MudTd>
 
             <MudTd>@context.NgayTao.ToString("MM/dd/yyyy")</MudTd>
 
@@ -92,13 +92,13 @@ else
 }
 
 
-<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteSinhVien(idDeleted)"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="OnDeleteSinhVien"></Confirmation>
 
 
 @code {
 
     //
-    private int stt = 0;
+    private int stt = 1;
 
     //
     private Guid idDeleted { get; set; }

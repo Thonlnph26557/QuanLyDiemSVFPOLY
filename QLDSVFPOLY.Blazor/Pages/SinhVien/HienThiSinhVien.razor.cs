@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Identity.Client.Extensions.Msal;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
+using QLDSVFPOLY.Blazor.Shared;
 using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 
@@ -11,7 +13,8 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         //
         [Parameter]
         public string idDaoTao { get; set; }
-
+        [CascadingParameter]
+        public QLDSVLayout _Layout { get; set; }
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
 
@@ -40,9 +43,13 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         //Ghi đè phương thức OnInitializedAsync
         protected override async Task OnInitializedAsync()
         {
-            idDaoTao = "9D01FB1F-6D12-4B11-9962-871C333E659B";
+            idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+            stt = 1;
 
             await LoadData();
+
         }
 
 
@@ -50,7 +57,6 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         private async Task LoadData()
 
         {
-
             _listChuyenNganh = await chuyenNganhRepo.GetAllActiveAsync(_searchVM);
 
             _listChuyenNganh = _listChuyenNganh.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
@@ -60,40 +66,31 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
             _listSinhViens = await sinhVienRepos.GetAllActiveAsync(_search);
             //_listSinhViens = _listSinhViens.Where(c => _listChuyenNganh.Any(x => x.Id == c.IdChuyenNganh))
 
-            foreach (var item in _listSinhViens)
-            {
-                if (_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
-                {
-
-                }
-                else
-                {
-                    _listSinhViens.Remove(item);
-                }
-            }
-
         }
 
 
         //
-        public async Task OnDeleteSinhVien(Guid IdDelete)
+        public async Task OnDeleteSinhVien(bool y)
         {
-            await sinhVienRepos.RemoveAsync(IdDelete);
-            await LoadData();
-
-
-            bool x = await sinhVienRepos.RemoveAsync(IdDelete);
-
-            if (x == true)
+            if (y)
             {
-                ToastService.ShowSuccess($"Xóa thành công");
-            }
-            else
-            {
-                ToastService.ShowError($"Xóa thất bại");
-            }
+                await sinhVienRepos.RemoveAsync(idDeleted);
+                await LoadData();
 
 
+                bool x = await sinhVienRepos.RemoveAsync(idDeleted);
+
+                if (x == true)
+                {
+                    ToastService.ShowSuccess($"Xóa thành công");
+                }
+                else
+                {
+                    ToastService.ShowError($"Xóa thất bại");
+                }
+
+            }
+            stt = 1;
         }
 
         //

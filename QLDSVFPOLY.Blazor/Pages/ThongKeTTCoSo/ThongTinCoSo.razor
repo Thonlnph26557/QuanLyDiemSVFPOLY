@@ -4,12 +4,16 @@
 @using QLDSVFPOLY.BUS.ViewModels.LopHoc
 @using QLDSVFPOLY.BUS.ViewModels.SinhVien
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
-
+@inject ISessionStorageService _SStorage
 <h3>ThongTinCoSo</h3>
 
 
 
 @code {
+
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
+
 
 	[Parameter]
 	public string idDaoTao { set; get; }
@@ -37,7 +41,6 @@
 	protected override async Task OnInitializedAsync()
 	{
 		idDaoTao = "9d01fb1f-6d12-4b11-9962-871c333e659b";
-
 		await LoadData();
 	}
 

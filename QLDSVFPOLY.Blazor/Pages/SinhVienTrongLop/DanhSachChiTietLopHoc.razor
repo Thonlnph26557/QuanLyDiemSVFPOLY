@@ -8,11 +8,13 @@
 @using QLDSVFPOLY.BUS.ViewModels.KiHoc
 @using QLDSVFPOLY.BUS.ViewModels.GiangVien
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
 @inject IMonHocRepo _repoMonHoc
 @inject ILopHocRepos _repoLopHoc
 @inject IGiangVienRepos _repoGiangVien
 @inject IKiHocRepos _repoKiHoc
 @inject IChiTietLopHocRepos _repoChiTietLopHoc
+@inject ISinhVienRepo _repoSinhVien
 @inject NavigationManager _navManager
 @inject ISessionStorageService _SStorage
 @inject IToastService _iToast
@@ -51,6 +53,8 @@ else {
             <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
         </PagerContent>
     </MudTable>
+
+    
 }
 
 @code {
@@ -67,6 +71,7 @@ else {
     private List<LopHocVM> _listLopHocVM;
     private List<KiHocViewmodel> _listKiHocVM;
 
+
     protected override async Task OnInitializedAsync()
     {
         _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
@@ -81,6 +86,12 @@ else {
         _listGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
         _listLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
         _listKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
+
+
+
+        
+
+
     }
 
     private void navChinhSua(Guid id) {

@@ -22,174 +22,174 @@
 else
 {
 
-<MudText Typo="Typo.h5">Thêm Sinh Viên</MudText>
+    <MudText Typo="Typo.h5">Thêm Sinh Viên</MudText>
 
-<MudContainer class="d-flex justify-center align-center w-70 h-75">
+    <MudContainer class="d-flex justify-center align-center w-70 h-75">
 
-    <style>
-        #dd {
-            border: 1px black;
-            width: 17vw;
-            height: 46vh;
-            margin-left: 10px;
-        }
-    </style>
-
-
-    <EditForm Model="@sinhVien">
-
-        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <style>
+            #dd {
+                border: 1px black;
+                width: 17vw;
+                height: 46vh;
+                margin-left: 10px;
+            }
+        </style>
 
 
-         <MudGrid class="w-25" style="float: left; margin-top:20px">
+        <EditForm Model="@sinhVien">
 
-        <MudImage Src="@imgUrl" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;"  Fluid="true"/>
-<InputFile OnChange="@OnInputFileChanged"></InputFile>
+            <DataAnnotationsValidator></DataAnnotationsValidator>
 
-        </MudGrid>
 
-        <MudGrid class="w-75" Style="float: right;padding-left:20px;">
+            <MudGrid class="w-25" style="float: left; margin-top:20px">
 
-            <MudGrid class="row">
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Mã Sinh Viên" class="form-control" @bind-Value="sinhVien.Ma" For="() => sinhVien.Ma"></MudTextField>
-
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Email" class="form-control" @bind-Value="sinhVien.Email" For="() => sinhVien.Email"></MudTextField>
-
-                </MudItem>
+                <MudImage Src="@imgUrl" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+                <InputFile OnChange="@OnInputFileChanged"></InputFile>
 
             </MudGrid>
 
-            <MudGrid class="row" style="margin-top:10px">
+            <MudGrid class="w-75" Style="float: right;padding-left:20px;">
 
-                <MudItem class="col">
+                <MudGrid class="row">
 
-                    <MudTextField Label="Họ" class="form-control" @bind-Value="sinhVien.Ho" For="() => sinhVien.Ho"></MudTextField>
+                    <MudItem class="col">
 
-                </MudItem>
+                        <MudTextField Label="Mã Sinh Viên" class="form-control" @bind-Value="sinhVien.Ma" For="() => sinhVien.Ma"></MudTextField>
 
-                <MudItem class="col">
+                    </MudItem>
 
-                    <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Nhập Học" InputType="InputType.Date"></MudTextField>
+                    <MudItem class="col">
 
-                </MudItem>
+                        <MudTextField Label="Email" class="form-control" @bind-Value="sinhVien.Email" For="() => sinhVien.Email"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Họ" class="form-control" @bind-Value="sinhVien.Ho" For="() => sinhVien.Ho"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+                        <label>Ngày Nhập Học</label>
+                        <input disabled="true" @bind="sinhVien.NgayTao" type="date" class="form-control">
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="sinhVien.TenDem" For="() => sinhVien.TenDem"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="sinhVien.SoDienThoai" For="() => sinhVien.SoDienThoai"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Tên" class="form-control" @bind-Value="sinhVien.Ten" For="() => sinhVien.Ten"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.TrangThai">
+
+                            <MudSelectItem Value=1>Đang học</MudSelectItem>
+                            <MudSelectItem Value=2>Bảo lưu</MudSelectItem>
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.GioiTinh">
+
+                            <MudSelectItem Value=0>Nam</MudSelectItem>
+                            <MudSelectItem Value=1>Nữ</MudSelectItem>
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudSelect T="Guid" Label="Chuyên Ngành" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.IdChuyenNganh">
+
+                            @foreach (var i in _listChuyenNganh)
+                            {
+                                <MudSelectItem Value="i.Id">@i.TenChuyenNganh</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+                        <label>Ngày Sinh</label>
+                        <input @bind="sinhVien.NgaySinh" type="date" class="form-control">
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="sinhVien.DiaChi" For="() => sinhVien.DiaChi"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
+
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ShowConfirmThem()">THÊM</MudButton>
+
+                    </MudItem>
+
+                </MudGrid>
 
             </MudGrid>
 
+        </EditForm>
 
-            <MudGrid class="row" style="margin-top:10px">
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="sinhVien.TenDem" For="() => sinhVien.TenDem"></MudTextField>
-
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="sinhVien.SoDienThoai" For="() => sinhVien.SoDienThoai"></MudTextField>
-
-                </MudItem>
-
-            </MudGrid>
-
-
-            <MudGrid class="row" style="margin-top:10px">
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Tên" class="form-control" @bind-Value="sinhVien.Ten" For="() => sinhVien.Ten"></MudTextField>
-
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.TrangThai">
-
-                        <MudSelectItem Value=1>Đang học</MudSelectItem>
-                        <MudSelectItem Value=2>Đang nghỉ học</MudSelectItem>
-
-                    </MudSelect>
-
-                </MudItem>
-
-            </MudGrid>
-
-
-            <MudGrid class="row" style="margin-top:10px">
-
-                <MudItem class="col">
-
-                    <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.GioiTinh">
-
-                        <MudSelectItem Value=0>Nam</MudSelectItem>
-                        <MudSelectItem Value=1>Nữ</MudSelectItem>
-
-                    </MudSelect>
-
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudSelect T="Guid" Label="Chuyên Ngành" AnchorOrigin="Origin.BottomCenter" @bind-Value="sinhVien.IdChuyenNganh">
-
-                        @foreach (var i in _listChuyenNganh)
-                        {
-                            <MudSelectItem Value="i.Id">@i.TenChuyenNganh</MudSelectItem>
-                        }
-                    </MudSelect>
-
-                </MudItem>
-
-            </MudGrid>
-
-
-            <MudGrid class="row" style="margin-top:10px">
-
-                <MudItem class="col">
-
-                    <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Sinh" InputType="InputType.Date"></MudTextField>
-
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="sinhVien.DiaChi" For="() => sinhVien.DiaChi"></MudTextField>
-
-                </MudItem>
-
-            </MudGrid>
-
-
-            <MudGrid class="row" style="margin-top:10px">
-
-                <MudItem class="col">
-                </MudItem>
-
-                <MudItem class="col">
-
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:left" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
-
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:left" @onclick="()=>Them()">THÊM</MudButton>
-
-                </MudItem>
-
-            </MudGrid>
-
-        </MudGrid>
-
-    </EditForm>
-
-</MudContainer>
+    </MudContainer>
 }
 
-<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="()=>Them()"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="Them"></Confirmation>
 
 
 @code {
@@ -208,29 +208,34 @@ else
 
     //
     [Inject] private ISinhVienRepo sinhVienRepos { set; get; }
+    [Inject] private NavigationManager navigationManager { get; set; }
 
     //
-    private async Task Them()
+    private async Task Them(bool y)
     {
-        sinhVien.DuongDanAnh = imgUrl;
-        sinhVien.MatKhau = "aa";
-        sinhVien.TenDangNhap = "png";
-        //sinhVien.IdChuyenNganh = Guid.Parse("D26286EF-2FAD-40B2-954D-4B629FCE5E67");
-        await sinhVienRepos.CreateAsync(sinhVien);
 
-
-        bool x = await sinhVienRepos.CreateAsync(sinhVien);
-
-        if (x == true)
+        if (y)
         {
-            ToastService.ShowSuccess($"Thêm thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Thêm thất bại");
-        }
+            sinhVien.DuongDanAnh = imgUrl;
+            sinhVien.MatKhau = "aa";
+            sinhVien.TenDangNhap = "png";
+            //sinhVien.IdChuyenNganh = Guid.Parse("D26286EF-2FAD-40B2-954D-4B629FCE5E67");
+            await sinhVienRepos.CreateAsync(sinhVien);
 
 
+            bool x = await sinhVienRepos.CreateAsync(sinhVien);
+
+            if (x)
+            {
+                navigationManager.NavigateTo("/sinhvien/hienthi");
+                ToastService.ShowSuccess($"Thêm thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Thêm thất bại");
+            }
+
+        }
     }
 
 
@@ -258,6 +263,8 @@ else
     public string idDaoTao { get; set; }
 
 
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
 
     // Khai báo
     private List<SinhVienVM> _listSinhViens;
@@ -275,10 +282,13 @@ else
     //Ghi đè phương thức OnInitializedAsync
     protected override async Task OnInitializedAsync()
     {
-        idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao"); 
-        await ReLoad();
-
+        idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
         await LoadData();
+        module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+        imgUrl = defImg.DefaultAvatar();
+        sinhVien.NgayTao = DateTime.Now;
     }
 
 
@@ -294,17 +304,7 @@ else
         _listSinhViens = await sinhVienRepos.GetAllActiveAsync(_search);
         //_listSinhViens = _listSinhViens.Where(c => _listChuyenNganh.Any(x => x.Id == c.IdChuyenNganh))
 
-        foreach (var item in _listSinhViens)
-        {
-            if (_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
-            {
 
-            }
-            else
-            {
-                _listSinhViens.Remove(item);
-            }
-        }
     }
 
     DefaultImages defImg = new DefaultImages();

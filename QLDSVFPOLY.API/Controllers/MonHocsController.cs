@@ -39,9 +39,9 @@ namespace QLDSVFPOLY.API.Controllers
         // GetById ??? 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetMonHocById(Guid IdMonHoc)
+        public async Task<IActionResult> GetMonHocById(Guid id)
         {
-            var monHoc = await _monHocServices.GetByIdAsync(IdMonHoc);
+            var monHoc = await _monHocServices.GetByIdAsync(id);
             return Ok(monHoc);
         }
 

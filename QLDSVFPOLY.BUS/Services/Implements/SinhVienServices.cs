@@ -58,22 +58,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
 
 
-            if (obj.Ma != null ||
-                obj.Ho != null ||
-                obj.TenDem != null ||
-                obj.Ten != null 
-                )
-            {
-                return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.Ho.Contains(obj.Ho)
-                                                    || c.TenDem.Contains(obj.TenDem)
-                                                    || c.Ten.Contains(obj.Ten)
-                                                    ).ToList();
-            }
-            else
-            {
                 return listSinhVienVM;
-            }
         }
 
 
@@ -107,22 +92,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             }).ToList();
 
 
-            if (obj.Ma != null ||
-                obj.Ho != null ||
-                obj.TenDem != null ||
-                obj.Ten != null 
-                )
-            {
-                return listSinhVienVM.Where(c => c.Ma.Contains(obj.Ma)
-                                                    || c.Ho.Contains(obj.Ho)
-                                                    || c.TenDem.Contains(obj.TenDem)
-                                                    || c.Ten.Contains(obj.Ten)
-                                                    ).ToList();
-            }
-            else
-            {
                 return listSinhVienVM;
-            }
         }
 
         //

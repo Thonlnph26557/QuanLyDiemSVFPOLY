@@ -1,41 +1,93 @@
-﻿@page "/diemso/hienthi"
+﻿@page "/diemso/hienthi/{_idSinhVien}"
+
+@*Sinh Viên Side*@
 
 @using QLDSVFPOLY.Blazor.Components
-@using QLDSVFPOLY.Blazor.Repository.Implements
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.BUS.ViewModels.SinhVien
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 
-@inject SinhVienRepo _repoSinhVien
-@inject DiemSoRepos _repoDiemSo
-@inject ChiTietDiemSoRepo _repoCTDS
-@inject ChiTietLopHocRepos _repoCTLH
+@inject ISinhVienRepo _repoSinhVien
+@inject IDiemSoRepos _repoDiemSo
+@inject IChiTietDiemSoRepo _repoCTDS
+@inject IChiTietLopHocRepos _repoCTLH
+@inject ILopHocRepos _repoLopHoc
+@inject IMonHocRepo _repoMonHoc
 @inject ISessionStorageService _SStorage
 
 @if(1 + 1 != 2) {
     <LoadingIndicator></LoadingIndicator>
 }
 else {
+    @*Chia bảng theo môn*@
+    @foreach(var item in _listCTLH_SV) {
+        <MudPaper Outlined="true">
+            <MudText>Lớp học: @(_listLopHoc.FirstOrDefault(c => c.Id == item.IdLopHoc) != null ? _listLopHoc.FirstOrDefault(c => c.Id == item.IdLopHoc).Ma : "<Bị xóa>")</MudText>
+                <MudText>Môn học: @(_listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc) != null ? _listMonHoc.FirstOrDefault(c => c.Id == item.IdMonHoc).Ten : "<Bị xóa>")</MudText>
+        </MudPaper>
+
+
+
+    }
+
+
+
+
 
 }
 
 
 @code {
     [Parameter]
-    public string idSinhVien { get; set; }
-
-    private List<SinhVienVM> _listSinhVien;
-
-
+    public string _idSinhVien { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        idSinhVien = await _SStorage.GetItemAsync<string>("Id");
+        
+        //_idSinhVien = await _SStorage.GetItemAsync<string>("Id");
         await LoadData();
     }
 
-    private async Task LoadData() {
-        
+    List<ChiTietDiemSoVM> _listCTDS;
+
+    List<ChiTietLopHocVM> _listCTLH_SV;
+
+    List<LopHocVM> _listLopHoc;
+    List<MonHocVM> _listMonHoc;
+
+
+
+    //Stage 1: Tìm kiếm CTDS > sv
+    //Stage 2: Tìm kiếm CTLH theo CTDS
+
+
+
+
+
+    private async Task LoadData() 
+    {
+        //Lấy list CTDS
+        _listCTDS = await _repoCTDS.GetAllAsync(new ChiTietDiemSoSearchVM());
+        _listCTDS = _listCTDS.Where(c => c.IdSinhVien == Guid.Parse(_idSinhVien)).ToList();
+        //Lấy list CTLH
+
+        _listCTLH_SV = new List<ChiTietLopHocVM>();
+
+        foreach(var item in _listCTDS) 
+        {
+            var CTLH_VM = await _repoCTLH.GetByIdAsync(item.IdDiemSo);
+            if(CTLH_VM != null) 
+            {
+                _listCTLH_SV.Add(CTLH_VM);
+            }
+        }
+
+        _listLopHoc = await _repoLopHoc.GetAllAsync(new LopHocSearchVM());
+        _listMonHoc = await _repoMonHoc.GetAllAsync(new MonHocSearchVM());
+
     }
 }

@@ -63,7 +63,8 @@ else
 
                     <MudItem class="col">
 
-                        <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Sinh" InputType="InputType.Date"></MudTextField>
+                    <label>Ngày Sinh</label>
+                        <input  @bind="updateVM.NgaySinh" type="date" class="form-control">
 
                     </MudItem>
 
@@ -169,7 +170,7 @@ else
     </MudContainer>
 }
 
-<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin nhân viên đào tạo không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="()=>ChinhSua(Guid.Parse(idNhanVienDaoTao), updateVM)"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin nhân viên đào tạo không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="ChinhSua"></Confirmation>
 
 @code {
     //
@@ -184,7 +185,7 @@ else
         _confirmSua.show();
     }
 
-        // Khai báo
+    // Khai báo
     private NhanVienDaoTaoVM obj;
 
     private List<NhanVienDaoTaoVM> _listNhanVienDaoTaos;
@@ -193,30 +194,34 @@ else
 
     private NhanVienDaoTaoUpdateVM updateVM = new();
 
-    
+
 
     //
-    private async Task ChinhSua(Guid idNhanVienDaoTao, NhanVienDaoTaoUpdateVM updateVM)
+    private async Task ChinhSua(bool y)
     {
-        await nhanVienDaoTaoRepos.UpdateAsync(idNhanVienDaoTao, updateVM);
-
-        await LoadData();
-
-        bool x = await nhanVienDaoTaoRepos.UpdateAsync(idNhanVienDaoTao, updateVM);
-
-        if (x == true)
+        if (y)
         {
-            ToastService.ShowSuccess($"Sửa thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Sửa thất bại");
-        }
+            await nhanVienDaoTaoRepos.UpdateAsync(Guid.Parse(idNhanVienDaoTao), updateVM);
 
+            await LoadData();
+
+            bool x = await nhanVienDaoTaoRepos.UpdateAsync(Guid.Parse(idNhanVienDaoTao), updateVM);
+
+            if (x)
+            {
+                navigationManager.NavigateTo("/nhanviendaotao/hienthi");
+                ToastService.ShowSuccess($"Sửa thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Sửa thất bại");
+            }
+
+        }
 
     }
 
-
+    
     //
     private async Task LoadData()
     {

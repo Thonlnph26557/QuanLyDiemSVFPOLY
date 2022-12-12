@@ -48,10 +48,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
             }).ToList();
-            if (obj.Ten != null)
-            {
-                listKiHocViewmodel = listKiHocViewmodel.Where(c => c.Ten.Contains(obj.Ten)).ToList();
-            }
+
             return listKiHocViewmodel;
         }
 
@@ -72,10 +69,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 NgayTao = c.NgayTao,
                 TrangThai = c.TrangThai,
             }).ToList();
-            if(obj.Ten != null)
-            {
-                listKiHocViewmodel = listKiHocViewmodel.Where(c => c.Ten.Contains(obj.Ten)).ToList();
-            }
+
             return listKiHocViewmodel;
         }
 

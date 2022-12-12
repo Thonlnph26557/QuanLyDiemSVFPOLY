@@ -78,8 +78,8 @@ else
                 </MudItem>
 
                 <MudItem class="col">
-
-                    <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Nhập Học" InputType="InputType.Date"></MudTextField>
+                    <label>Ngày Nhập Học</label>
+                        <input @bind="updateVM.NgayTao" type="date" class="form-control">
 
                 </MudItem>
 
@@ -116,7 +116,7 @@ else
                     <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.TrangThai">
 
                         <MudSelectItem Value=1>Đang học</MudSelectItem>
-                        <MudSelectItem Value=2>Đang nghỉ học</MudSelectItem>
+                        <MudSelectItem Value=2>Bảo lưu</MudSelectItem>
 
                     </MudSelect>
 
@@ -158,8 +158,8 @@ else
             <MudGrid class="row" style="margin-top:10px">
 
                 <MudItem class="col">
-
-                    <MudTextField T="DateTime?" class="form-control" Format="yyyy/MM/dd" Label="Ngày Sinh" InputType="InputType.Date"></MudTextField>
+                    <label>Ngày Sinh</label>
+                        <input  @bind="updateVM.NgaySinh" type="date" class="form-control">
 
                 </MudItem>
 
@@ -179,9 +179,9 @@ else
 
                 <MudItem class="col">
 
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:left" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</MudButton>
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</MudButton>
 
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="btn btn-primary" style="float:right" @onclick="ShowConfirmSua">CHỈNH SỬA</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="ShowConfirmSua">CHỈNH SỬA</MudButton>
 
                 </MudItem>
 
@@ -194,7 +194,7 @@ else
 </MudContainer>
 }
 
-<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="()=>ChinhSua(Guid.Parse(idSinhVien), updateVM)"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="ChinhSua"></Confirmation>
 
 @code {
     //
@@ -242,40 +242,33 @@ else
             _listSinhViens = await sinhVienRepos.GetAllActiveAsync(_search);
             //_listSinhViens = _listSinhViens.Where(c => _listChuyenNganh.Any(x => x.Id == c.IdChuyenNganh))
 
-            foreach (var item in _listSinhViens)
-            {
-                if(_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
-                {
-
-                }
-                else
-                {
-                    _listSinhViens.Remove(item);
-                }
-            }
 
         obj = _listSinhViens.FirstOrDefault(c => c.Id == Guid.Parse(idSinhVien));
 
     }
 
     //
-    private async Task ChinhSua(Guid idSinhVien, SinhVienUpdateVM updateVM)
+    private async Task ChinhSua(bool y)
     {
-        await sinhVienRepos.UpdateAsync(idSinhVien, updateVM);
-
-        await LoadData();
-
-        bool x = await sinhVienRepos.UpdateAsync(idSinhVien, updateVM);
-
-        if (x == true)
+        if (y)
         {
-            ToastService.ShowSuccess($"Sửa thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Sửa thất bại");
-        }
+            await sinhVienRepos.UpdateAsync(Guid.Parse(idSinhVien), updateVM);
 
+            await LoadData();
+
+            bool x = await sinhVienRepos.UpdateAsync(Guid.Parse(idSinhVien), updateVM);
+
+            if (x == true)
+            {
+                navigationManager.NavigateTo("/sinhvien/hienthi");
+                ToastService.ShowSuccess($"Sửa thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Sửa thất bại");
+            }
+
+        }
     }
 
 }

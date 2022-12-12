@@ -56,15 +56,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai,
             }).ToList();
 
-            //Tìm kiếm, tìm theo trạng thái, ngày tạo
-            if (obj.TrangThai != null)
-            {
-                return listChuyenNganhMonHocVM.Where(c => c.TrangThai == obj.TrangThai).ToList();
-            }
-            if (obj.NgayTao != null)
-            {
-                return listChuyenNganhMonHocVM.Where(c => c.NgayTao == obj.NgayTao).ToList();
-            }
 
             return listChuyenNganhMonHocVM;
         }
@@ -87,15 +78,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
                 TrangThai = c.TrangThai,
             }).ToList();
 
-            //Tìm kiếm, tìm theo trạng thái, ngày tạo
-            if (obj.TrangThai != null)
-            {
-                return listChuyenNganhMonHocVM.Where(c => c.TrangThai == obj.TrangThai).ToList();
-            }
-            if (obj.NgayTao != null)
-            {
-                return listChuyenNganhMonHocVM.Where(c => c.NgayTao == obj.NgayTao).ToList();
-            }
 
             return listChuyenNganhMonHocVM;
         }

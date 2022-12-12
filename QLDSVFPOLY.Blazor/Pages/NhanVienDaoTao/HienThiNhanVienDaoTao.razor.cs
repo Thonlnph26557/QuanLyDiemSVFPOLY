@@ -31,15 +31,19 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
         //Ghi đè phương thức OnInitializedAsync
         protected override async Task OnInitializedAsync()
         {
+            stt = 1;
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao"); ;
             await LoadData();
+            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+            stt = 1;
         }
 
 
         //
         private async Task LoadData()
         {
-
+            stt = 1;
             _listNhanVienDaoTaos = await nhanVienDaoTaoRepos.GetAllActiveAsync(_search);
 
             _listNhanVienDaoTaos = _listNhanVienDaoTaos.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
@@ -47,24 +51,29 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
 
 
         //
-        public async Task OnDeleteNhanVienDaoTao(Guid IdDelete)
+        public async Task OnDeleteNhanVienDaoTao(bool y)
         {
-            await nhanVienDaoTaoRepos.RemoveAsync(IdDelete);
-            await LoadData();
-
-
-            bool x = await nhanVienDaoTaoRepos.RemoveAsync(IdDelete);
-
-            if (x == true)
+            if (y)
             {
-                ToastService.ShowSuccess($"Xóa thành công");
-            }
-            else
-            {
-                ToastService.ShowError($"Xóa thất bại");
-            }
+                await nhanVienDaoTaoRepos.RemoveAsync(idDeleted);
+                await LoadData();
 
 
+                bool x = await nhanVienDaoTaoRepos.RemoveAsync(IdDelete);
+
+                if (x == true)
+                {
+                    ToastService.ShowSuccess($"Xóa thành công");
+                }
+                else
+                {
+                    ToastService.ShowError($"Xóa thất bại");
+                }
+
+
+            }
+
+            stt = 1;
         }
 
         //

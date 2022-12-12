@@ -86,14 +86,15 @@ else
 
 }
 
-<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteNhanVienDaoTao(idDeleted)"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="OnDeleteNhanVienDaoTao"></Confirmation>
 
 
 @code {
 
     //
-    private int stt = 0;
-
+    private int stt = 1;
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
     //
     private Guid idDeleted { get; set; }
 

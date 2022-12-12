@@ -44,7 +44,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
 
         public async Task<MonHocVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.GetFromJsonAsync<MonHocVM>($"/api/MonHocs/all?Id={id}");
+            var result = await _httpClient.GetFromJsonAsync<MonHocVM>($"/api/MonHocs/{id}");
             return result;
         }
 
