@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Identity.Client.Extensions.Msal;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
-using QLDSVFPOLY.Blazor.Shared;
 using QLDSVFPOLY.BUS.ViewModels.GiangVien;
 using QLDSVFPOLY.DAL.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -15,10 +14,6 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
         //
         [Parameter]
         public string idDaoTao { get; set; }
-
-
-        [CascadingParameter]
-        public QLDSVLayout _Layout { get; set; }
 
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
@@ -41,9 +36,6 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
         {
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
             await LoadData();
-            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
-            stt = 1;
         }
 
 
@@ -53,6 +45,37 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
             _listGiangViens = await giangVienRepos.GetAllActiveAsync(_search);
 
             _listGiangViens = _listGiangViens.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+        }
+
+        //
+        public string Ma { get; set; }
+        public string Ho { get; set; }
+        public string TenDem { get; set; }
+        public string Ten { get; set; }
+        public int GioiTinh { get; set; }
+
+        public DateTime NgaySinh = DateTime.Now;
+        public string DiaChi { get; set; }
+        public string Email { get; set; }
+        public string SoDienThoai { get; set; }
+        public string DuongDanAnh { get; set; }
+        public int TrangThai { get; set; } = 1;
+
+
+        //
+        private async Task LamMoi()
+        {
+            Ma = null;
+            Ho = null;
+            Ten = null;
+            TenDem = null;
+            NgaySinh = DateTime.Now;
+            GioiTinh = 0;
+            DiaChi = null;
+            Email = null;
+            SoDienThoai = null;
+            DuongDanAnh = null;
+            TrangThai = 1;
         }
 
 
@@ -76,7 +99,7 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
                 }
 
             }
-            stt = 1;
+            LamMoi();
         }
 
         //

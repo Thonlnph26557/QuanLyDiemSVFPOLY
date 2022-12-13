@@ -17,17 +17,17 @@
 else
 {
 
-    <MudTable Items = "@_listSinhViens">
+    <MudTable Items="@_listSinhViens">
 
-    <ToolBarContent>
+        <ToolBarContent>
 
-        <MudText Typo=" Typo.h5">Danh Sách Sinh Viên</MudText>
+            <MudText Typo=" Typo.h5">Danh Sách Sinh Viên</MudText>
 
-        <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
 
             <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/sinhvien/themmoi">Thêm</MudButton>
 
-    </ToolBarContent>
+        </ToolBarContent>
 
         <HeaderContent>
 
@@ -53,25 +53,25 @@ else
 
         <RowTemplate>
 
-            <MudTd>@(stt++)</MudTd>
+            <MudTd>@(_listSinhViens.IndexOf(context) + 1)</MudTd>
 
-            <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
+                <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
 
-            <MudTd>@(context.GioiTinh == 1 ? "Nữ" : "Nam")</MudTd>
+                <MudTd>@(context.GioiTinh == 1 ? "Nữ" : "Nam")</MudTd>
 
-            <MudTd>@context.NgaySinh.ToString("MM/dd/yyyy")</MudTd>
+                <MudTd>@context.NgaySinh.ToString("MM/dd/yyyy")</MudTd>
 
-            <MudTd>@context.DiaChi</MudTd>
+                <MudTd>@context.DiaChi</MudTd>
 
-            <MudTd>@context.SoDienThoai</MudTd>
+                <MudTd>@context.SoDienThoai</MudTd>
 
-            <MudTd>@context.Email</MudTd>
+                <MudTd>@context.Email</MudTd>
 
-                <MudTd>@(_listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh) == null ? "<Không tồn tại/Bị xóa>" : _listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh).TenChuyenNganh)</MudTd>
+                <MudTd>@_listChuyenNganh.FirstOrDefault(c => c.Id == @context.IdChuyenNganh).TenChuyenNganh</MudTd>
 
-            <MudTd>@context.NgayTao.ToString("MM/dd/yyyy")</MudTd>
+                <MudTd>@context.NgayTao.ToString("MM/dd/yyyy")</MudTd>
 
-            <MudTd>
+                <MudTd>
 
                     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=> NavigationChiTiet(context.Id)">Chi Tiết</MudButton>
 
@@ -81,13 +81,13 @@ else
 
             </RowTemplate>
 
-        <PagerContent>
+            <PagerContent>
 
-            <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+                <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
 
-        </PagerContent>
+            </PagerContent>
 
-    </MudTable>
+        </MudTable>
 
 }
 
@@ -98,7 +98,7 @@ else
 @code {
 
     //
-    private int stt = 1;
+    private int stt = 0;
 
     //
     private Guid idDeleted { get; set; }

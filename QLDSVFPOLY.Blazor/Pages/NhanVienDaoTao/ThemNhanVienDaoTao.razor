@@ -168,9 +168,6 @@ else {
     [Parameter]
     public string idDaoTao { get; set; }
 
-    [CascadingParameter]
-    public QLDSVLayout _Layout { get; set; }
-
     DefaultImages _defImg = new DefaultImages();
     string imgUrl;
     //
@@ -200,7 +197,7 @@ else {
     }
 
     private NhanVienDaoTaoCreateVM nhanVienDaoTao = new() {
-            NgaySinh = DateTime.Now,
+
     };
 
     [Inject] private INhanVienDaoTaoRepos nhanVienDaoTaoRepos { set; get; }
@@ -214,6 +211,8 @@ else {
             nhanVienDaoTao.MatKhau = "aa";
             nhanVienDaoTao.TenDangNhap = "png";
             nhanVienDaoTao.IdDaoTao = Guid.Parse(idDaoTao);
+            await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
+
 
             bool x = await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
 
@@ -229,9 +228,27 @@ else {
 
         }
 
+        ReLoad();
     }
 
-    private NhanVienDaoTaoUpdateVM updateVM = new();
+    //
+    public string Ma { get; set; }
+    public string Ho { get; set; }
+    public string TenDem { get; set; }
+    public string Ten { get; set; }
+    public int GioiTinh { get; set; }
+
+    public DateTime NgaySinh = DateTime.Now;
+    public string DiaChi { get; set; }
+    public string Email { get; set; }
+    public string SoDienThoai { get; set; }
+    public string DuongDanAnh { get; set; }
+    public int TrangThai { get; set; } = 1;
+
+
+    private NhanVienDaoTaoUpdateVM updateVM = new() {
+            NgaySinh = DateTime.Now
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -239,8 +256,7 @@ else {
         module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
         idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");;
         nhanVienDaoTao.TrangThai = 1;
-        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+        nhanVienDaoTao.NgaySinh = DateTime.Now;
     }
 
     // Khai báo
@@ -264,7 +280,7 @@ else {
         nhanVienDaoTao.DuongDanAnh = null;
         nhanVienDaoTao.SoDienThoai = null;
         nhanVienDaoTao.DiaChi = null;
-        nhanVienDaoTao.TrangThai = 0;
+        nhanVienDaoTao.TrangThai = 1;
         nhanVienDaoTao.GioiTinh = 0;
         nhanVienDaoTao.NgaySinh = DateTime.Now;
     }

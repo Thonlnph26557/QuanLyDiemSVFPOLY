@@ -9,8 +9,7 @@
 
 @inject ISessionStorageService _SStorage
 
-@if (listDiemSos == null
-													|| listCTDiemSos == null || listLopHocs == null)
+@if (listDiemSos == null || listCTDiemSos == null || listLopHocs == null || listCTLHs ==null || listSinhViens==null)
 {
 	<LoadingIndicator></LoadingIndicator>
 }
@@ -97,7 +96,6 @@ else
 
 	private async Task LoadData()
 	{
-		listDiemSos = await diemSoRepo.GetAllActiveAsync(diemSoSearchVm);
 		listCTDiemSos = await cTDiemSoRepo.GetAllActiveAsync(cTDiemSoSearchVm);
 		//CTDiemSo cua SV
 		listCTDiemSos = listCTDiemSos.Where(c => c.IdSinhVien == Guid.Parse(idSinhVien)).ToList();
@@ -110,8 +108,11 @@ else
 
 		listSinhViens = await sinhVienRepo.GetAllActiveAsync(sinhVienSearchVm);
 
+		listDiemSos = await diemSoRepo.GetAllActiveAsync(diemSoSearchVm);
 
-		string maLH = listLopHocs.FirstOrDefault(c => c.Id == listCTLHs.FirstOrDefault(x => x.Id == Guid.Parse(idCTLH)).IdLopHoc).Ma;
+
+
+		//string maLH = listLopHocs.FirstOrDefault(c => c.Id == listCTLHs.FirstOrDefault(x => x.Id == Guid.Parse(idCTLH)).IdLopHoc).Ma;
 	}
 
 	private double TinhDiem(Guid idSV, Guid idCTLopHoc)

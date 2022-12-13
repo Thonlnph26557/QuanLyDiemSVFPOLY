@@ -32,15 +32,19 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
         protected override async Task OnInitializedAsync()
         {
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao"); ;
+
             await LoadData();
+
             _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
             _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+
         }
 
 
         //
         private async Task LoadData()
         {
+
             _listNhanVienDaoTaos = await nhanVienDaoTaoRepos.GetAllActiveAsync(_search);
 
             _listNhanVienDaoTaos = _listNhanVienDaoTaos.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
@@ -52,7 +56,7 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
         {
             if (y)
             {
-                await nhanVienDaoTaoRepos.RemoveAsync(idDeleted);
+                await nhanVienDaoTaoRepos.RemoveAsync(IdDelete);
                 await LoadData();
 
 
@@ -69,7 +73,42 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
 
 
             }
+
+            LamMoi();
         }
+
+        //
+        public string Ma { get; set; }
+        public string Ho { get; set; }
+        public string TenDem { get; set; }
+        public string Ten { get; set; }
+        public int GioiTinh { get; set; }
+
+        public DateTime NgaySinh = DateTime.Now;
+        public string DiaChi { get; set; }
+        public string Email { get; set; }
+        public string SoDienThoai { get; set; }
+        public string DuongDanAnh { get; set; }
+        public int TrangThai { get; set; } = 1;
+
+        //
+        private async Task LamMoi()
+        {
+            Ma = null;
+            Ho = null;
+            Ten = null;
+            TenDem = null;
+            NgaySinh = DateTime.Now;
+            GioiTinh = 0;
+            DiaChi = null;
+            Email = null;
+            SoDienThoai = null;
+            DuongDanAnh = null;
+            TrangThai = 1;
+        }
+
+
+
 
         //
         private void NavigationChiTiet(Guid idNhanVienDaoTao)

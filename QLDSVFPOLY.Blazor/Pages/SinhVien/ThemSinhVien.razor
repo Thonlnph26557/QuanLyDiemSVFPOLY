@@ -1,5 +1,6 @@
 ﻿@page "/sinhvien/themmoi"
 
+@using QLDSVFPOLY.BUS.Utilities
 @using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
 @using QLDSVFPOLY.BUS.ViewModels.SinhVien
 @using QLDSVFPOLY.Blazor.Repository.Implements
@@ -153,6 +154,7 @@ else
                 <MudGrid class="row" style="margin-top:10px">
 
                     <MudItem class="col">
+
                         <label>Ngày Sinh</label>
                         <input @bind="sinhVien.NgaySinh" type="date" class="form-control">
 
@@ -211,9 +213,18 @@ else
     [Inject] private NavigationManager navigationManager { get; set; }
 
     //
+    private Utility utility = new Utility();
+    //
     private async Task Them(bool y)
     {
-
+        //if(!utility.CheckMa(Ma)
+        //    && utility.CheckName(Ho)
+        //    && utility.CheckName(TenDem)
+        //    && utility.CheckName(Ten)
+        //    && utility.CheckDC(DiaChi)
+        //    && utility.CheckSDT(SoDienThoai)
+        //    )
+        //{
         if (y)
         {
             sinhVien.DuongDanAnh = imgUrl;
@@ -236,12 +247,35 @@ else
             }
 
         }
+
+        //}
+        //else
+        //{
+        //    ToastService.ShowError($"Trường này không chứa ký tự đặc biệt");
+        //}
+
+        ReLoad();
     }
+
+    //
+    public string Ma { get; set; }
+    public string Ho { get; set; }
+    public string TenDem { get; set; }
+    public string Ten { get; set; }
+    public int GioiTinh { get; set; }
+    public Guid IdChuyenNganh { get; set; }
+    public DateTime NgaySinh = DateTime.Now;
+    public string DiaChi { get; set; }
+    public string Email { get; set; }
+    public string SoDienThoai { get; set; }
+    public string DuongDanAnh { get; set; }
+    public int TrangThai { get; set; } = 1;
 
 
     //
     private async Task ReLoad()
     {
+        //sinhVien.Id = Guid.Empty;
         sinhVien.Ma = null;
         sinhVien.Ho = null;
         sinhVien.TenDem = null;
@@ -254,8 +288,9 @@ else
         sinhVien.DuongDanAnh = null;
         sinhVien.SoDienThoai = null;
         sinhVien.DiaChi = null;
-        sinhVien.TrangThai = 0;
+        sinhVien.TrangThai = 1;
         sinhVien.IdChuyenNganh = Guid.Empty;
+        sinhVien.IdChuyenNganh = _listChuyenNganh[0].Id;
     }
 
     //
@@ -263,8 +298,6 @@ else
     public string idDaoTao { get; set; }
 
 
-    [CascadingParameter]
-    public QLDSVLayout _Layout { get; set; }
 
     // Khai báo
     private List<SinhVienVM> _listSinhViens;
@@ -283,12 +316,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
-        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+
         await LoadData();
         module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
         imgUrl = defImg.DefaultAvatar();
         sinhVien.NgayTao = DateTime.Now;
+        sinhVien.IdChuyenNganh = _listChuyenNganh[0].Id;
     }
 
 
@@ -304,9 +337,21 @@ else
         _listSinhViens = await sinhVienRepos.GetAllActiveAsync(_search);
         //_listSinhViens = _listSinhViens.Where(c => _listChuyenNganh.Any(x => x.Id == c.IdChuyenNganh))
 
+        foreach (var item in _listSinhViens)
+        {
+            if (_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
+            {
 
+            }
+            else
+            {
+                _listSinhViens.Remove(item);
+            }
+        }
+        ReLoad();
     }
 
+    //
     DefaultImages defImg = new DefaultImages();
     string imgUrl;
     IJSObjectReference module;

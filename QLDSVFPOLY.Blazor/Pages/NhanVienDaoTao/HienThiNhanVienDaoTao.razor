@@ -12,7 +12,7 @@
 
 @if (_listNhanVienDaoTaos == null)
 {
-	<LoadingIndicator></LoadingIndicator>
+    <LoadingIndicator></LoadingIndicator>
 }
 else
 {
@@ -90,10 +90,11 @@ else
 
 
 @code {
-
     //
     [CascadingParameter]
     public QLDSVLayout _Layout { get; set; }
+
+
     //
     private Guid idDeleted { get; set; }
 

@@ -23,12 +23,12 @@ else
 
             <MudSpacer></MudSpacer>
 
-                
-            
+
+
             <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>NavigationThemMoi()">Thêm</MudButton>
         </ToolBarContent>
 
-            <HeaderContent>
+        <HeaderContent>
 
             <MudTh>STT</MudTh>
 
@@ -48,7 +48,7 @@ else
 
         <RowTemplate>
 
-            <MudTd>@(stt++)</MudTd>
+            <MudTd>@(_listGiangViens.IndexOf(context) + 1)</MudTd>
 
                 <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
 
@@ -70,15 +70,15 @@ else
 
                 </MudTd>
 
-        </RowTemplate>
+            </RowTemplate>
 
-        <PagerContent>
+            <PagerContent>
 
-            <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+                <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
 
-        </PagerContent>
+            </PagerContent>
 
-    </MudTable>
+        </MudTable>
 
 }
 <Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="OnDeleteGiangVien"></Confirmation>
@@ -97,7 +97,7 @@ else
 
     private async Task ShowConfirmXoa(Guid IdDelete)
     {
-        
+
         idDeleted = IdDelete;
         _confirmXoa.show();
 

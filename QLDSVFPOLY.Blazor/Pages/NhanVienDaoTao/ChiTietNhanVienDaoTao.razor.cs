@@ -4,7 +4,6 @@ using Microsoft.Identity.Client.Extensions.Msal;
 using Microsoft.JSInterop;
 using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
-using QLDSVFPOLY.Blazor.Shared;
 using QLDSVFPOLY.BUS.ViewModels.NhanVienDaoTao;
 using QLDSVFPOLY.DAL.Entities;
 using System.Text.Json;
@@ -17,8 +16,6 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
         [Parameter]
         public string idDaoTao { get; set; }
 
-        [CascadingParameter]
-        public QLDSVLayout _Layout { get; set; }
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
 
@@ -34,8 +31,6 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
             await LoadData();
 
-            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
             await LoadDataUpdate();
         }
 
@@ -57,7 +52,7 @@ namespace QLDSVFPOLY.Blazor.Pages.NhanVienDaoTao
             updateVM.IdDaoTao = nhanVienDaoTao.IdDaoTao;
             updateVM.MatKhau = nhanVienDaoTao.MatKhau;
             updateVM.TrangThai = nhanVienDaoTao.TrangThai;
-            
+
         }
 
         DefaultImages defImg = new DefaultImages();

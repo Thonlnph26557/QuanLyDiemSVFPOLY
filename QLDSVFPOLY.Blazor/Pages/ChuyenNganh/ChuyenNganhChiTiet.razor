@@ -23,7 +23,15 @@
 }
 else
 {
-	<MudText Typo="Typo.h5">Danh sách chuyên ngành</MudText>
+	@if (updateVm.IdChuyenNganh == null)
+	{
+		<MudText Typo="Typo.h5">Thông tin chuyên ngành</MudText>
+	}
+	else
+	{
+		<MudText Typo="Typo.h5">Thông tin chuyên ngành hẹp</MudText>
+	}
+
 
 	<EditForm class="m-4" Model=@updateVm>
 		<div style="float:left" class="w-25">
@@ -62,10 +70,14 @@ else
 else if (updateVm.IdChuyenNganh == null)
 {
 	<MudToolBar>
-		<MudText Typo="Typo.h5">Danh sách chuyên ngành hẹp</MudText>
 		<MudSpacer></MudSpacer>
 		<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/chuyennganh/themmoichuyennganhhep/{idChuyenNganh}" OnClick="@(()=>NavigationThemMoiCNH())">THÊM CHUYÊN NGÀNH HẸP</MudButton>
 	</MudToolBar>
+	<MudToolBar>
+		<MudText Typo="Typo.h5">Danh sách chuyên ngành hẹp</MudText>
+	</MudToolBar>
+
+
 	<MudTable Items="@listChuyenNganhHeps">
 		<ToolBarContent>
 			<MudSpacer></MudSpacer>
@@ -148,6 +160,7 @@ else if (updateVm.IdChuyenNganh == null)
 		await LoadDataUpdate();
 		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
 		updateVm.DuongDanAnh = defImg.DefaultAvatar();
+
 	}
 
 	private async Task LoadData()
@@ -165,6 +178,8 @@ else if (updateVm.IdChuyenNganh == null)
 		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == idDaoTao).ToList();
 
 		listSinhViens = await sinhVienRepo.GetAllActiveAsync(searchSV);
+
+		chuyenNganh.TrangThai = 1;
 	}
 
 	//UpdateChuyenNganh

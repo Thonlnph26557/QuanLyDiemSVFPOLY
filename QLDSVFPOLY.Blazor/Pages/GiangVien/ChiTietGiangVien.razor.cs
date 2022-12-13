@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
-using QLDSVFPOLY.Blazor.Shared;
+using QLDSVFPOLY.BUS.Utilities;
 using QLDSVFPOLY.BUS.ViewModels.GiangVien;
 using QLDSVFPOLY.DAL.Entities;
 using System.Text.Json;
@@ -21,8 +21,6 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
         [Parameter]
         public string idDaoTao { set; get; }
 
-        [CascadingParameter]
-        public QLDSVLayout _Layout { get; set; }
 
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
@@ -31,6 +29,19 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
 
         [Inject] private NavigationManager navigationManager { get; set; }
 
+        //
+        public string Ma { get; set; }
+        public string Ho { get; set; }
+        public string TenDem { get; set; }
+        public string Ten { get; set; }
+        public int GioiTinh { get; set; }
+
+        public DateTime NgaySinh = DateTime.Now;
+        public string DiaChi { get; set; }
+        public string Email { get; set; }
+        public string SoDienThoai { get; set; }
+        public string DuongDanAnh { get; set; }
+        public int TrangThai { get; set; } = 1;
 
         //Ghi đè phương thức OnInitializedAsync
 
@@ -43,8 +54,7 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
             await LoadDataUpdate();
             obj = _listGiangViens.FirstOrDefault(c => c.Id == Guid.Parse(idGiangVien));
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
-            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+
         }
 
         //
@@ -64,34 +74,44 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
             updateVM.DuongDanAnh = giangVien.DuongDanAnh;
             //updateVM.MatKhau = giangVien.MatKhau;
             //updateVM.tendangnhap = giangVien.TenDangNhap;
-            updateVM.TrangThai = giangVien.TrangThai;
+            updateVM.TrangThai = 1;
 
         }
         private GiangVienUpdateVM updateVM = new();
 
-
+        //
+        private Utility utility = new Utility();
 
         private async Task ChinhSua(bool y)
         {
-            if (y)
+            if (utility.CheckMa(Ma))
             {
-                await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
 
-                await LoadData();
-
-                bool x = await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
-
-                if (x == true)
+                if (y)
                 {
-                    navigationManager.NavigateTo("/giangvien/hienthi");
-                    ToastService.ShowSuccess($"Sửa thành công");
-                }
-                else
-                {
-                    ToastService.ShowError($"Sửa thất bại");
-                }
+                    await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
 
+                    await LoadData();
+
+                    bool x = await giangVienRepos.UpdateAsync(Guid.Parse(idGiangVien), updateVM);
+
+                    if (x == true)
+                    {
+                        navigationManager.NavigateTo("/giangvien/hienthi");
+                        ToastService.ShowSuccess($"Sửa thành công");
+                    }
+                    else
+                    {
+                        ToastService.ShowError($"Sửa thất bại");
+                    }
+
+                }
             }
+            else
+            {
+                ToastService.ShowError($"Trường này không chứa ký tự đặc biệt");
+            }
+            LamMoi();
         }
 
 
@@ -111,6 +131,23 @@ namespace QLDSVFPOLY.Blazor.Pages.GiangVien
 
 
         }
+
+        //
+        private async Task LamMoi()
+        {
+            Ma = null;
+            Ho = null;
+            Ten = null;
+            TenDem = null;
+            NgaySinh = DateTime.Now;
+            GioiTinh = 0;
+            DiaChi = null;
+            Email = null;
+            SoDienThoai = null;
+            DuongDanAnh = null;
+            TrangThai = 1;
+        }
+
 
         DefaultImages defImg = new DefaultImages();
         IJSObjectReference module;

@@ -5,7 +5,6 @@ using Microsoft.JSInterop;
 using QLDSVFPOLY.Blazor.Repository;
 using QLDSVFPOLY.Blazor.Repository.Implements;
 using QLDSVFPOLY.Blazor.Repository.Interfaces;
-using QLDSVFPOLY.Blazor.Shared;
 using QLDSVFPOLY.BUS.ViewModels.SinhVien;
 using QLDSVFPOLY.DAL.Entities;
 using System.Text.Json;
@@ -17,8 +16,7 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         //
         [Parameter]
         public string idDaoTao { get; set; }
-        [CascadingParameter]
-        public QLDSVLayout _Layout { get; set; }
+
         // Inject
         [Inject] private HttpClient _httpClient { get; set; }
 
@@ -32,11 +30,10 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
         {
             idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
-            _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-            _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+
             await LoadData();
             await LoadDataUpdate();
-            
+
         }
 
         //
@@ -52,12 +49,13 @@ namespace QLDSVFPOLY.Blazor.Pages.SinhVien
             updateVM.DiaChi = sinhVien.DiaChi;
             updateVM.Email = sinhVien.Email;
             updateVM.SoDienThoai = sinhVien.SoDienThoai;
-            updateVM.TenDangNhap = sinhVien.TenDangNhap;
+            // updateVM.TenDangNhap = sinhVien.TenDangNhap;
             updateVM.DuongDanAnh = sinhVien.DuongDanAnh;
             updateVM.IdChuyenNganh = sinhVien.IdChuyenNganh;
-            updateVM.MatKhau = sinhVien.MatKhau;
+            //updateVM.MatKhau = sinhVien.MatKhau;
             updateVM.TrangThai = sinhVien.TrangThai;
-            updateVM.NgayTao = sinhVien.NgayTao;
+            updateVM.NgayTao = DateTime.Now;
+
         }
 
         DefaultImages defImg = new DefaultImages();
