@@ -23,7 +23,7 @@
 else
 {
 	<MudText Typo="Typo.h5">Danh sách chuyên ngành</MudText>
-	<MudForm class="m-4">
+	<EditForm class="m-4" Model="@updateVm">
 		<div style="float:left" class="w-25">
 			<MudSpacer></MudSpacer>
 			<MudImage Src="@updateVm.Ma" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
@@ -33,9 +33,10 @@ else
 		<div style="float:left" class="w-75">
 			<div class="row pl-5">
 				<div class="col">
-					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" For="() => updateVm.Ma"/>
+		<DataAnnotationsValidator/>
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" For="() => updateVm.Ma" />
 
-					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" For="() => updateVm.TenChuyenNganh"/>
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" For="() => updateVm.TenChuyenNganh" />
 
 					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai" For="() => updateVm.TrangThai">
 						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
@@ -48,9 +49,15 @@ else
 				</div>
 			</div>
 		</div>
-	</MudForm>
+	</EditForm>
 
-	<Confirmation ConfirmationMessage="Bạn có muốn sửa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="()=>UpdateCN(IdSua,confirmchuyenNganhSua)"></Confirmation>
+	<Confirmation ConfirmationMessage="Bạn có muốn sửa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="UpdateCN"></Confirmation>
+
+@*	<Confirmation ConfirmationMessage="Are you sure to delete?"
+			  ConfirmationTitle="Delete Task"
+			  @ref="_confirmSua"
+			  ConfirmationChanged="UpdateCN">
+	</Confirmation>*@
 
 }
 @code {
@@ -77,7 +84,7 @@ else
 	{
 		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
 		await LoadDataUpdate();
-
+		updateVm.DuongDanAnh = defImg.DefaultAvatar();
 	}
 
 	private async Task LoadData()
@@ -101,20 +108,7 @@ else
 		updateVm.TrangThai = chuyenNganhHep.TrangThai;
 	}
 
-	private async Task UpdateCN(Guid idChuyenNganh, ChuyenNganhUpdateVM updateVm)
-	{
-		bool x = await chuyenNganhRepo.UpdateAsync(idChuyenNganh, updateVm);
-		if (x)
-		{
-			toastService.ShowSuccess($"Sửa thành công");
-			await LoadData();
-		}
-		else
-		{
-			toastService.ShowError($"Sửa thất bại");
-		}
 
-	}
 
 	private async Task Clear()
 	{
@@ -129,12 +123,44 @@ else
 	private Guid IdSua { set; get; }
 	private ChuyenNganhUpdateVM confirmchuyenNganhSua = new ChuyenNganhUpdateVM();
 
+
 	private async Task ShowConfirmSua(Guid suaId, ChuyenNganhUpdateVM chuyenNganh)
 	{
 		IdSua = suaId;
 		confirmchuyenNganhSua = chuyenNganh;
 		_confirmSua.show();
 	}
+
+	//public void OnDeleteTask(Guid deleteId)
+	//{
+	//	DeleteId = deleteId;
+	//	DeleteConfirmation.Show();
+	//}
+
+	private async Task UpdateCN(bool updateConfirm)
+	{
+		if (updateConfirm == true)
+		{
+			await chuyenNganhRepo.UpdateAsync(IdSua, confirmchuyenNganhSua);
+
+			toastService.ShowSuccess($"Sửa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Sửa thất bại");
+		}
+
+	}
+	//check xem xác nhận xóa ko>
+	//public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+	//{
+	//	if (deleteConfirmed)
+	//	{
+	//		await TaskApiClient.DeleteTask(DeleteId);
+	//		// await GetTasks();
+	//	}
+	//}
 
 	DefaultImages defImg = new DefaultImages();
 	IJSObjectReference module;

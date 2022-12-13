@@ -68,33 +68,33 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryStringParam = new Dictionary<string, string>();
 
-            //Add search Mã
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryStringParam.Add("Ma", vm.Ma);
+            ////Add search Mã
+            //if (!String.IsNullOrEmpty(vm.Ma))
+            //    queryStringParam.Add("Ma", vm.Ma);
 
-            //Add search Ho
-            if (!String.IsNullOrEmpty(vm.Ho))
-                queryStringParam.Add("Ho", vm.Ho);
+            ////Add search Ho
+            //if (!String.IsNullOrEmpty(vm.Ho))
+            //    queryStringParam.Add("Ho", vm.Ho);
 
-            //Add search TenDem
-            if (!String.IsNullOrEmpty(vm.TenDem))
-                queryStringParam.Add("TenDem", vm.TenDem);
+            ////Add search TenDem
+            //if (!String.IsNullOrEmpty(vm.TenDem))
+            //    queryStringParam.Add("TenDem", vm.TenDem);
 
-            //Add search Ten
-            if (!String.IsNullOrEmpty(vm.Ten))
-                queryStringParam.Add("Ten", vm.Ten);
+            ////Add search Ten
+            //if (!String.IsNullOrEmpty(vm.Ten))
+            //    queryStringParam.Add("Ten", vm.Ten);
 
-            //Add search DiaChi
-            if (!String.IsNullOrEmpty(vm.DiaChi))
-                queryStringParam.Add("DiaChi", vm.DiaChi);
+            ////Add search DiaChi
+            //if (!String.IsNullOrEmpty(vm.DiaChi))
+            //    queryStringParam.Add("DiaChi", vm.DiaChi);
 
-            //Add search SoDienThoai
-            if (!String.IsNullOrEmpty(vm.SoDienThoai))
-                queryStringParam.Add("SoDienThoai", vm.SoDienThoai);
+            ////Add search SoDienThoai
+            //if (!String.IsNullOrEmpty(vm.SoDienThoai))
+            //    queryStringParam.Add("SoDienThoai", vm.SoDienThoai);
 
-            //Add search Email
-            if (!String.IsNullOrEmpty(vm.Email))
-                queryStringParam.Add("Email", vm.Email);
+            ////Add search Email
+            //if (!String.IsNullOrEmpty(vm.Email))
+            //    queryStringParam.Add("Email", vm.Email);
 
             ////Add search IdChuyenNganh
             //if (vm.IdChuyenNganh.HasValue)

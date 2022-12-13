@@ -16,10 +16,10 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryString = new Dictionary<string, string>();
 
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryString.Add("Ma", vm.Ma);
-            if (!String.IsNullOrEmpty(vm.Ten))
-                queryString.Add("TenNganhHoc", vm.Ten);
+            //if (!String.IsNullOrEmpty(vm.Ma))
+            //    queryString.Add("Ma", vm.Ma);
+            //if (!String.IsNullOrEmpty(vm.Ten))
+            //    queryString.Add("TenNganhHoc", vm.Ten);
 
 
             string url = QueryHelpers.AddQueryString("/api/Monhocs/all", queryString);
@@ -31,10 +31,10 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryString = new Dictionary<string, string>();
 
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryString.Add("Ma", vm.Ma);
-            if (!String.IsNullOrEmpty(vm.Ten))
-                queryString.Add("TenNganhHoc", vm.Ten);
+            //if (!String.IsNullOrEmpty(vm.Ma))
+            //    queryString.Add("Ma", vm.Ma);
+            //if (!String.IsNullOrEmpty(vm.Ten))
+            //    queryString.Add("TenNganhHoc", vm.Ten);
 
 
             string url = QueryHelpers.AddQueryString("/api/Monhocs/allactive", queryString);
