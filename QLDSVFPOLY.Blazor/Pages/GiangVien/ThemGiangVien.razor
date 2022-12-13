@@ -180,7 +180,10 @@
     }
 
     //
-    private GiangVienCreateVM giangVien = new();
+    private GiangVienCreateVM giangVien = new(){
+        NgaySinh = DateTime.Now,
+        TrangThai = 1
+    };
 
     //
     [Inject] private IGiangVienRepos giangVienRepos { set; get; }
@@ -229,7 +232,8 @@
         giangVien.DuongDanAnh = imgUrl;
         giangVien.SoDienThoai = null;
         giangVien.DiaChi = null;
-        giangVien.TrangThai = 0;
+        giangVien.TrangThai = 1;
+        imgUrl = defImg.DefaultAvatar();
     }
 
     //Ghi đè phương thức OnInitializedAsync

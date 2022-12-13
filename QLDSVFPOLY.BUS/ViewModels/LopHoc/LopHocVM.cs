@@ -13,8 +13,8 @@ namespace QLDSVFPOLY.BUS.ViewModels.LopHoc
     public class LopHocVM
     {
         public Guid Id { get; set; }
-        [Required]
-        [MaxLength(10, ErrorMessage = ("Mã lớp học tối đa 10 kí tự"))]
+        [Required(ErrorMessage = "Mã lớp học không được để trống")]
+        [MaxLength(50, ErrorMessage = "Mã lớp học tối đa 10 kí tự")]
         public string? Ma { get; set; }
         public Guid? IdDaoTao { get; set; }
         public DateTime NgayTao { get; set; }
