@@ -11,12 +11,14 @@ namespace QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
     {
         public Guid Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Mã chuyên ngành không được để trống")]
         [MaxLength(10, ErrorMessage = "Mã chuyên ngành không qua 10 tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
         public string Ma { get; set; }
 
-        [Required]
-
+        [Required(ErrorMessage = "Tên chuyên ngành không được để trống")]
+        [MaxLength(50, ErrorMessage = "Tên chuyên ngành không qua 50 tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
         public string TenChuyenNganh { get; set; }
 
         public string DuongDanAnh { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.GiangVien
         public int GioiTinh { get; set; }
         public DateTime NgaySinh { get; set; }
         public string? DiaChi { get; set; }
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Số điện thoại")]
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
         public string? TenDangNhap { get; set; }

@@ -17,142 +17,141 @@
 
 <MudContainer class="d-flex justify-center align-center w-70 h-75">
 
-    <style>
-        #dd {
-            border: 1px black;
-            width: 17vw;
-            height: 46vh;
-            margin-left: 10px;
-        }
-    </style>
+	<style>
+		#dd {
+			border: 1px black;
+			width: 17vw;
+			height: 46vh;
+			margin-left: 10px;
+		}
+	</style>
 
 
-    <EditForm Model="@giangVien">
+	<EditForm Model="@giangVien">
 
-        <DataAnnotationsValidator></DataAnnotationsValidator>
+		<MudGrid class="w-25" Style="float: left; margin-top:20px">
 
+			<MudImage Src="@giangVien.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+			<InputFile OnChange="@OnInputFileChanged"></InputFile>
 
-        <MudGrid class="w-25" Style="float: left; margin-top:20px">
+		</MudGrid>
 
-            <MudImage Src="@giangVien.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
-            <InputFile OnChange="@OnInputFileChanged"></InputFile>
+		<MudGrid class="w-75" Style="float: right;padding-left:20px;">
 
-        </MudGrid>
+			<MudGrid class="row">
 
-        <MudGrid class="w-75" Style="float: right;padding-left:20px;">
+				<MudItem class="col">
+					<DataAnnotationsValidator />
 
-            <MudGrid class="row">
 
-                <MudItem class="col">
+					<MudTextField Label="Mã Giảng Viên" class="form-control" @bind-Value="giangVien.Ma" For="() => giangVien.Ma"></MudTextField>
 
-                    <MudTextField Label="Mã Giảng Viên" class="form-control" @bind-Value="giangVien.Ma" For="() => giangVien.Ma"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Email" class="form-control" @bind-Value="giangVien.Email" For="() => giangVien.Email"></MudTextField>
 
-                    <MudTextField Label="Email" class="form-control" @bind-Value="giangVien.Email" For="() => giangVien.Email"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
+			<MudGrid class="row" style="margin-top:10px">
 
-            <MudGrid class="row" style="margin-top:10px">
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Họ" class="form-control" @bind-Value="giangVien.Ho" For="() => giangVien.Ho"></MudTextField>
 
-                    <MudTextField Label="Họ" class="form-control" @bind-Value="giangVien.Ho" For="() => giangVien.Ho"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="giangVien.SoDienThoai" For="() => giangVien.SoDienThoai"></MudTextField>
 
-                    <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="giangVien.SoDienThoai" For="() => giangVien.SoDienThoai"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
 
+			<MudGrid class="row" style="margin-top:10px">
 
-            <MudGrid class="row" style="margin-top:10px">
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Tên Đệm" class="form-control" @bind-Value="giangVien.TenDem" For="() => giangVien.TenDem"></MudTextField>
 
-                    <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="giangVien.TenDem" For="() => giangVien.TenDem"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="giangVien.DiaChi" For="() => giangVien.DiaChi"></MudTextField>
 
-                    <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="giangVien.DiaChi" For="() => giangVien.DiaChi"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
 
+			<MudGrid class="row" style="margin-top:10px">
 
-            <MudGrid class="row" style="margin-top:10px">
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudTextField Label="Tên" class="form-control" @bind-Value="giangVien.Ten" For="() => giangVien.Ten"></MudTextField>
 
-                    <MudTextField Label="Tên" class="form-control" @bind-Value="giangVien.Ten" For="() => giangVien.Ten"></MudTextField>
+				</MudItem>
 
-                </MudItem>
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.TrangThai">
 
-                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.TrangThai">
+						<MudSelectItem Value=1>Đang làm</MudSelectItem>
+						<MudSelectItem Value=2>Đang nghỉ làm</MudSelectItem>
 
-                        <MudSelectItem Value=1>Đang làm</MudSelectItem>
-                        <MudSelectItem Value=2>Đang nghỉ làm</MudSelectItem>
+					</MudSelect>
 
-                    </MudSelect>
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
 
+			<MudGrid class="row" style="margin-top:10px">
 
-            <MudGrid class="row" style="margin-top:10px">
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.GioiTinh">
 
-                    <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.GioiTinh">
+						<MudSelectItem Value=0>Nam</MudSelectItem>
+						<MudSelectItem Value=1>Nữ</MudSelectItem>
 
-                        <MudSelectItem Value=0>Nam</MudSelectItem>
-                        <MudSelectItem Value=1>Nữ</MudSelectItem>
+					</MudSelect>
 
-                    </MudSelect>
+				</MudItem>
 
-                </MudItem>
+				<MudItem class="col">
+					<label>Ngày Sinh</label>
+					<input @bind="giangVien.NgaySinh" type="date" class="form-control">
 
-                <MudItem class="col">
-                    <label>Ngày Sinh</label>
-                    <input  @bind="giangVien.NgaySinh" type="date" class="form-control">
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
 
+			<MudGrid class="row" style="margin-top:10px">
 
-            <MudGrid class="row" style="margin-top:10px">
+				<MudItem class="col">
+				</MudItem>
 
-                <MudItem class="col">
-                </MudItem>
+				<MudItem class="col">
 
-                <MudItem class="col">
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
 
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmThem())">THÊM</MudButton>
 
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmThem())">THÊM</MudButton>
+				</MudItem>
 
-                </MudItem>
+			</MudGrid>
 
-            </MudGrid>
+		</MudGrid>
 
-        </MudGrid>
-
-    </EditForm>
+	</EditForm>
 
 </MudContainer>
 
@@ -162,111 +161,109 @@
 
 
 @code {
-    //
-    [Parameter]
-    public string idDaoTao { get; set; }
+	//
+	[Parameter]
+	public string idDaoTao { get; set; }
 
 
-    [CascadingParameter]
-    public QLDSVLayout _Layout { get; set; }
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
 
-    //
-    protected Confirmation _confirmThem { get; set; }
+	//
+	protected Confirmation _confirmThem { get; set; }
 
-    //
-    private async Task ShowConfirmThem()
-    {
-        _confirmThem.show();
-    }
+	//
+	private async Task ShowConfirmThem()
+	{
+		_confirmThem.show();
+	}
 
-    //
-    private GiangVienCreateVM giangVien = new(){
-        NgaySinh = DateTime.Now,
-        TrangThai = 1
-    };
+	//
+	private GiangVienCreateVM giangVien = new();
 
-    //
-    [Inject] private IGiangVienRepos giangVienRepos { set; get; }
-    [Inject] private NavigationManager navigationManager { get; set; }
+	//
+	[Inject] private IGiangVienRepos giangVienRepos { set; get; }
+	[Inject] private NavigationManager navigationManager { get; set; }
 
-    //
-    private async Task Them(bool y)
-    {
-        if (y)
-        {
-            giangVien.MatKhau = "aa";
-            giangVien.TenDangNhap = "png";
-            giangVien.IdDaoTao = Guid.Parse(idDaoTao);
-            await giangVienRepos.CreateAsync(giangVien);
+	//
+	private async Task Them(bool y)
+	{
+		if (y)
+		{
+			giangVien.MatKhau = "aa";
+			giangVien.TenDangNhap = "png";
+			giangVien.IdDaoTao = Guid.Parse(idDaoTao);
+			await giangVienRepos.CreateAsync(giangVien);
 
 
-            bool x = await giangVienRepos.CreateAsync(giangVien);
+			bool x = await giangVienRepos.CreateAsync(giangVien);
 
-            if (x == true)
-            {
-                navigationManager.NavigateTo("/giangvien/hienthi");
-                ToastService.ShowSuccess($"Thêm thành công");
-            }
-            else
-            {
-                ToastService.ShowError($"Thêm thất bại");
-            }
+			if (x == true)
+			{
+				navigationManager.NavigateTo("/giangvien/hienthi");
+				ToastService.ShowSuccess($"Thêm thành công");
+			}
+			else
+			{
+				ToastService.ShowError($"Thêm thất bại");
+			}
 
-        }
-    }
+		}
+	}
 
 
-    //
-    private async Task ReLoad()
-    {
-        giangVien.IdDaoTao = Guid.Empty;
-        giangVien.Ma = null;
-        giangVien.Ho = null;
-        giangVien.TenDem = null;
-        giangVien.Ten = null;
-        giangVien.GioiTinh = 0;
-        giangVien.NgaySinh = DateTime.Now;
-        giangVien.Email = null;
-        giangVien.TenDangNhap = null;
-        giangVien.MatKhau = null;
-        giangVien.DuongDanAnh = imgUrl;
-        giangVien.SoDienThoai = null;
-        giangVien.DiaChi = null;
-        giangVien.TrangThai = 1;
-        imgUrl = defImg.DefaultAvatar();
-    }
+	//
+	private async Task ReLoad()
+	{
+		imgUrl = defImg.DefaultAvatar();
+		giangVien.IdDaoTao = Guid.Empty;
+		giangVien.Ma = null;
+		giangVien.Ho = null;
+		giangVien.TenDem = null;
+		giangVien.Ten = null;
+		giangVien.GioiTinh = 0;
+		giangVien.NgaySinh = DateTime.Now;
+		giangVien.Email = null;
+		giangVien.TenDangNhap = null;
+		giangVien.MatKhau = null;
+		giangVien.DuongDanAnh = imgUrl;
+		giangVien.SoDienThoai = null;
+		giangVien.DiaChi = null;
+		giangVien.TrangThai = 1;
+	}
 
-    //Ghi đè phương thức OnInitializedAsync
-    protected override async Task OnInitializedAsync()
-    {
-        idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
-        module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
-        giangVien.DuongDanAnh = defImg.DefaultAvatar();
 
-        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+	//Ghi đè phương thức OnInitializedAsync
+	protected override async Task OnInitializedAsync()
+	{
+		idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+		giangVien.DuongDanAnh = defImg.DefaultAvatar();
 
-    }
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
 
-    DefaultImages defImg = new DefaultImages();
-    IJSObjectReference module;
-    string imgUrl;
-    record ImageDimensions(int Width, int Height);
-    private async Task OnInputFileChanged(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-        var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
-        var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
-        var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
-        if (dimensions.Width > 250)
-        {
-            file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
-        }
-        var buffers = new byte[file.Size];
-        await file.OpenReadStream().ReadAsync(buffers);
-        string imageType = file.ContentType;
-        giangVien.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
-        imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
-    }
+	}
+
+	DefaultImages defImg = new DefaultImages();
+	IJSObjectReference module;
+	string imgUrl;
+	record ImageDimensions(int Width, int Height);
+	private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+		var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+		var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+		if (dimensions.Width > 250)
+		{
+			file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+		}
+		var buffers = new byte[file.Size];
+		await file.OpenReadStream().ReadAsync(buffers);
+		string imageType = file.ContentType;
+		giangVien.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+		imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+	}
 
 }

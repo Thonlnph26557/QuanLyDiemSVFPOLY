@@ -1,4 +1,4 @@
-﻿@page "/bangdiemSV/hienthi"
+﻿@page "/bangdiemSV/hienthi/{idSinhVien}"
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
 @using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
@@ -8,7 +8,7 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.Blazor.Components
 
-@inject ISessionStorageService _SStorage
+@*@inject ISessionStorageService _SStorage*@
 
 @if (listCTLHs == null
 	|| listDiemSos == null
@@ -99,9 +99,9 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		idSinhVien = await _SStorage.GetItemAsync<string>("IdNguoiDung");
-		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+		//idSinhVien = await _SStorage.GetItemAsync<string>("IdNguoiDung");
+		//_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		//_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
 		await LoadData();
 	}
 

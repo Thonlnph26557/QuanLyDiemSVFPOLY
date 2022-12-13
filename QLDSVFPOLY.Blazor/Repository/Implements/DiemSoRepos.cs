@@ -33,12 +33,9 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryString = new Dictionary<string, string>();
 
-            if (!String.IsNullOrEmpty(vm.TrongSo.ToString()))
-                queryString.Add("TrongSo", vm.TrongSo.ToString());
-            if (!String.IsNullOrEmpty(vm.TenDauDiem))
-                queryString.Add("TenDauDiem", vm.TenDauDiem);
-            if (!String.IsNullOrEmpty(vm.TrangThai.ToString()))
-                queryString.Add("TrangThai", vm.TrangThai.ToString());
+            
+            ////if (!String.IsNullOrEmpty(vm.TenDauDiem))
+            //    queryString.Add("TenDauDiem", vm.TenDauDiem);
 
             string url = QueryHelpers.AddQueryString("/api/DiemSos/allactive", queryString);
             var result = await _httpClient.GetFromJsonAsync<List<DiemSoVM>>(url);

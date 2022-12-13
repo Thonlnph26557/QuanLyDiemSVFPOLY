@@ -24,9 +24,9 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryStringParam = new Dictionary<string, string>();
 
-            //Add search Mã
-            if (!String.IsNullOrEmpty(searchVM.Ma))
-                queryStringParam.Add("Ma", searchVM.Ma);
+            ////Add search Mã
+            //if (!String.IsNullOrEmpty(searchVM.Ma))
+            //    queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
             string url = QueryHelpers.AddQueryString("/api/LopHocs/all", queryStringParam);
@@ -38,9 +38,9 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryStringParam = new Dictionary<string, string>();
 
-            //Add search Mã
-            if (!String.IsNullOrEmpty(searchVM.Ma))
-                queryStringParam.Add("Ma", searchVM.Ma);
+            ////Add search Mã
+            //if (!String.IsNullOrEmpty(searchVM.Ma))
+            //    queryStringParam.Add("Ma", searchVM.Ma);
 
             //....
             string url = QueryHelpers.AddQueryString("/api/LopHocs/allactive", queryStringParam);

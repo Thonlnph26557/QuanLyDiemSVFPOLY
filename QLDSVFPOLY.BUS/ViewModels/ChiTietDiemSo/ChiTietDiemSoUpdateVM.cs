@@ -11,6 +11,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
         public Guid IdChiTietLopHoc { get; set; }
         public Guid IdSinhVien { get; set; }
         public Guid IdDiemSo { get; set; }
+
         public double Diem { get; set; }
         public DateTime? NgayTao { get; set; }
         public int TrangThai { get; set; }

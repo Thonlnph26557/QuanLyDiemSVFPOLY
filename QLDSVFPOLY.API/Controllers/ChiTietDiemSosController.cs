@@ -46,6 +46,7 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         [HttpPut]
+        [Route("{idDS}/{idLH}/{idSV}")]
         public async Task<IActionResult> UpdateAsync(Guid idDS, Guid idLH, Guid idSV, [FromBody] ChiTietDiemSoUpdateVM obj)
         {
             var temp = await _sv.UpdateAsync(idDS, idLH, idSV, obj);

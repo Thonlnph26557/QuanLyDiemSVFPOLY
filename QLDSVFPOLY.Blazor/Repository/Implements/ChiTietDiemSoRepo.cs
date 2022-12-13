@@ -15,14 +15,14 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryString = new Dictionary<string, string>();
 
-            if (vm.IdChiTietLopHoc.HasValue)
-                queryString.Add("IdChiTietLopHoc", vm.IdChiTietLopHoc.ToString());
-            if (vm.IdSinhVien.HasValue)
-                queryString.Add("IdSinhVien", vm.IdSinhVien.ToString());
-            if (vm.IdDiemSo.HasValue)
-                queryString.Add("IdDiemSo", vm.IdDiemSo.ToString());
-            if (!String.IsNullOrEmpty(vm.TrangThai.ToString()))
-                queryString.Add("TrangThai", vm.TrangThai.ToString());
+            //if (vm.IdChiTietLopHoc.HasValue)
+            //    queryString.Add("IdChiTietLopHoc", vm.IdChiTietLopHoc.ToString());
+            //if (vm.IdSinhVien.HasValue)
+            //    queryString.Add("IdSinhVien", vm.IdSinhVien.ToString());
+            //if (vm.IdDiemSo.HasValue)
+            //    queryString.Add("IdDiemSo", vm.IdDiemSo.ToString());
+            //if (!String.IsNullOrEmpty(vm.TrangThai.ToString()))
+            //    queryString.Add("TrangThai", vm.TrangThai.ToString());
 
 
             string url = QueryHelpers.AddQueryString("/api/ChiTietDiemSos/all", queryString);
@@ -34,12 +34,12 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             var queryString = new Dictionary<string, string>();
 
-            if (vm.IdChiTietLopHoc.HasValue)
-                queryString.Add("IdChiTietLopHoc", vm.IdChiTietLopHoc.ToString());
-            if (vm.IdSinhVien.HasValue)
-                queryString.Add("IdSinhVien", vm.IdSinhVien.ToString());
-            if (vm.IdDiemSo.HasValue)
-                queryString.Add("IdDiemSo", vm.IdDiemSo.ToString());
+            //if (vm.IdChiTietLopHoc.HasValue)
+            //    queryString.Add("IdChiTietLopHoc", vm.IdChiTietLopHoc.ToString());
+            //if (vm.IdSinhVien.HasValue)
+            //    queryString.Add("IdSinhVien", vm.IdSinhVien.ToString());
+            //if (vm.IdDiemSo.HasValue)
+            //    queryString.Add("IdDiemSo", vm.IdDiemSo.ToString());
 
 
 
@@ -60,10 +60,12 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             if (result.IsSuccessStatusCode) return true;
             return false;
         }
-        public async Task<bool> UpdateAsync(Guid id, ChiTietDiemSoUpdateVM vm)
+
+        //Thảo: có chỉnh sửa update
+        public async Task<bool> UpdateAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien, ChiTietDiemSoUpdateVM obj)
         {
-            var url = Path.Combine("/api/ChiTietDiemSos", id.ToString());
-            var result = await _httpClient.PutAsJsonAsync(url, vm);
+            var url = Path.Combine($"/api/ChiTietDiemSos/{idDiemSo}/{idLopHoc}/{idSinhVien}");
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
             if (result.IsSuccessStatusCode) return true;
             return false;
         }

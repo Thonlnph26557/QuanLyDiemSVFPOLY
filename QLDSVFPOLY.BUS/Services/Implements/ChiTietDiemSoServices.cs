@@ -117,7 +117,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             var temp = _listCTDiemSo.FirstOrDefault(c =>
             c.IdSinhVien == idSinhVien
-            && c.IdSinhVien == idSinhVien
+            && c.IdDiemSo == idDiemSo
             && c.IdChiTietLopHoc == idLopHoc);
 
             if (temp == null) return false;
