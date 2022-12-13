@@ -12,8 +12,8 @@ namespace QLDSVFPOLY.BUS.ViewModels.DiemSo
         public Guid Id { get; set; }
         public Guid IdMonHoc { get; set; }
         public double TrongSo { get; set; }
-        [Required]
-        [MaxLength(50, ErrorMessage = ("Tên điểm số tối đa 50 kí tự"))]
+        [Required (ErrorMessage ="Tên điểm số không được để trống")]
+        [MaxLength(50, ErrorMessage = "Tên điểm số tối đa 50 kí tự")]
         public string TenDauDiem { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }

@@ -4,83 +4,84 @@
 @using QLDSVFPOLY.Blazor.Repository.Interfaces
 @using QLDSVFPOLY.BUS.ViewModels.DiemSo
 @using System.Linq;
+@using QLDSVFPOLY.Blazor.Utilities;
 @inject ISessionStorageService _SStorage
 @inject IToastService ToastService
 @inject IMonHocRepo MonHocRepos
 @inject HttpClient httpClient
 
-@if(listDiemSo == null || listMonHoc == null)
+@if (listDiemSo == null || listMonHoc == null)
 {
-    <LoadingIndicator></LoadingIndicator>
+	<LoadingIndicator></LoadingIndicator>
 }
 else
 {
-<div class="m-4">
-    <EditForm Model="@diemso">
-        <MudText Typo="Typo.h5">Quản Lý Điểm Số</MudText>
-            <div class="row" style="margin-top:15px">
-                <div class="col">
-                    <MudTextField @bind-Value="TenDiemSo" Label="Tên Điểm Số" For="() => diemso.TenDauDiem" Variant="Variant.Outlined"/>
-                </div>
-                <div class="col">
-                    <MudNumericField @bind-Value="@TrongSo" Label="Trọng Số" Variant="Variant.Outlined" Min="0" Max="100" Step="5"/>
-                </div>
-            </div>
-            <div class="row" style="margin-top:15px">
-                <div class="col">
-                    <MudSelect T="Guid" Label="Môn Học" AnchorOrigin="Origin.BottomCenter" @bind-Value="IdMonHoc" Variant="Variant.Outlined">
-                            @foreach(var item in listMonHoc)
-                                {
-                                    <MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
-                                }
-                        </MudSelect>
-                </div> 
-                <div class="col">
-                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="TrangThai" Variant="Variant.Outlined">
-                        <MudSelectItem Value="1">Hoạt Động</MudSelectItem>
-                        <MudSelectItem Value="0">Không hoạt động</MudSelectItem>
-                    </MudSelect>
-                </div> 
-            </div>
-            <div class="row" style="margin-top:15px">
-                <div class="col"></div>  
-                <div class="col" >
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmThem">Thêm</MudButton>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Clear" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="LamMoi">Làm Mới</MudButton>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmSua">Chỉnh Sửa</MudButton>
-                </div>  
-            </div>
-    </EditForm>
-    <div style="clear:both"></div>
-    <MudTable Items="@listDiemSo">
-        <ToolBarContent>
-            <MudText Typo="Typo.h5">Danh Sách Điểm Số</MudText>
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh><MudText>STT</MudText></MudTh>
-            <MudTh>Môn Học</MudTh>
-            <MudTh>Tên Điểm Số</MudTh>
-            <MudTh>Trọng Số</MudTh>
-            <MudTh>Ngày Tạo</MudTh>
-            <MudTh>Hành động</MudTh>
-        </HeaderContent>
+	<div class="m-4">
+		<EditForm Model="@diemso">
+			<MudText Typo="Typo.h5">Quản Lý Điểm Số</MudText>
+			<div class="row" style="margin-top:15px">
+				<div class="col">
+					<MudTextField @bind-Value="TenDiemSo" Label="Tên Điểm Số" For="() => diemso.TenDauDiem" Variant="Variant.Outlined" />
+				</div>
+				<div class="col">
+					<MudNumericField @bind-Value="@TrongSo" Disabled="@DisableTrongSo" Label="Trọng Số" Variant="Variant.Outlined" Min="0" Max="100" Step="5" />
+				</div>
+			</div>
+			<div class="row" style="margin-top:15px">
+				<div class="col">
+					<MudSelect T="Guid" Label="Môn Học" AnchorOrigin="Origin.BottomCenter" @bind-Value="IdMonHoc" Variant="Variant.Outlined">
+						@foreach (var item in listMonHoc)
+						{
+							<MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
+						}
+					</MudSelect>
+				</div>
+				<div class="col">
+					<MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="TrangThai" Variant="Variant.Outlined">
+						<MudSelectItem Value="1">Hoạt Động</MudSelectItem>
+						<MudSelectItem Value="0">Không hoạt động</MudSelectItem>
+					</MudSelect>
+				</div>
+			</div>
+			<div class="row" style="margin-top:15px">
+				<div class="col"></div>
+				<div class="col">
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmThem">Thêm</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Clear" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="LamMoi">Làm Mới</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmSua">Chỉnh Sửa</MudButton>
+				</div>
+			</div>
+		</EditForm>
+		<div style="clear:both"></div>
+		<MudTable Items="@listDiemSo">
+			<ToolBarContent>
+				<MudText Typo="Typo.h5">Danh Sách Điểm Số</MudText>
+			</ToolBarContent>
+			<HeaderContent>
+				<MudTh><MudText>STT</MudText></MudTh>
+				<MudTh>Môn Học</MudTh>
+				<MudTh>Tên Điểm Số</MudTh>
+				<MudTh>Trọng Số</MudTh>
+				<MudTh>Ngày Tạo</MudTh>
+				<MudTh>Hành động</MudTh>
+			</HeaderContent>
 
-        <RowTemplate>
-            <MudTd>@(listDiemSo.IndexOf(context) + 1)</MudTd>
-            <MudTd>@(listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc) == null? "<bị xóa>" : listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc).Ten)</MudTd>
-            <MudTd>@context.TenDauDiem</MudTd>
-            <MudTd>@context.TrongSo</MudTd>
-            <MudTd>@context.NgayTao</MudTd>
-            <MudTd>
-                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => LoadBanGhi(context.Id))">Bản ghi</MudButton> 
-                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
-            </MudTd>
-        </RowTemplate>
-        <PagerContent>
-		    <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
-	    </PagerContent>
-    </MudTable>
-</div>
+			<RowTemplate>
+				<MudTd>@(listDiemSo.IndexOf(context) + 1)</MudTd>
+				<MudTd>@(listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc) == null? "<bị xóa>" : listMonHoc.FirstOrDefault(c=>c.Id == context.IdMonHoc).Ten)</MudTd>
+				<MudTd>@context.TenDauDiem</MudTd>
+				<MudTd>@context.TrongSo</MudTd>
+				<MudTd>@context.NgayTao</MudTd>
+				<MudTd>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => LoadBanGhi(context.Id))">Chỉnh sửa</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
+				</MudTd>
+			</RowTemplate>
+			<PagerContent>
+				<MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+			</PagerContent>
+		</MudTable>
+	</div>
 }
 
 <Confirmation ConfirmationMessage="Bạn có muốn thêm điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="ThemDiemSo"></Confirmation>
@@ -88,154 +89,161 @@ else
 <Confirmation ConfirmationMessage="Bạn có muốn xóa điểm số không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteDiemSo(idDelete)"></Confirmation>
 
 @code {
-    [CascadingParameter]
-    public QLDSVLayout _Layout { get; set; }
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
 
 
-    protected Confirmation _confirmThem { get; set; }
-    protected Confirmation _confirmSua { get; set; }
-    protected Confirmation _confirmXoa { get; set; }
-    DiemSoVM diemso = new DiemSoVM();
-    [Parameter]
-    public string idDaoTao { get; set; }
-    
-    //Inject Repo cua DiemSo
-    [Inject] private IDiemSoRepos DiemSoRepos { get; set; }
-    //Khai bao ra listDiemSo
-    private List<DiemSoVM> listDiemSo;
-    private DiemSoSearchVM searchVM = new DiemSoSearchVM();
+	protected Confirmation _confirmThem { get; set; }
+	protected Confirmation _confirmSua { get; set; }
+	protected Confirmation _confirmXoa { get; set; }
+	DiemSoVM diemso = new DiemSoVM();
+	[Parameter]
+	public string idDaoTao { get; set; }
 
+	//Inject Repo cua DiemSo
+	[Inject] private IDiemSoRepos DiemSoRepos { get; set; }
+	//Khai bao ra listDiemSo
+	private List<DiemSoVM> listDiemSo;
+	private DiemSoSearchVM searchVM = new DiemSoSearchVM();
+	private Utility utility = new Utility();
+	private List<MonHocVM> listMonHoc;
+	private MonHocSearchVM searchMonHoc = new MonHocSearchVM();
+	private string TenDiemSo { get; set; }
+	private double TrongSo { get; set; }
+	private int TrangThai { get; set; } = 1;
+	private Guid IdMonHoc { get; set; }
+	private Guid IdDiemSo { get; set; }
+	private bool DisableTrongSo = false;
+	//Id khi xoa
+	protected override async Task OnInitializedAsync()
+	{
+		//Gan listDiemSo = GetAll de lay ra list
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+		await LoadData();
 
-    private List<MonHocVM> listMonHoc;
-    private MonHocSearchVM searchMonHoc = new MonHocSearchVM();
-    //Id khi xoa
-    protected override async Task OnInitializedAsync()
-    {
-        //Gan listDiemSo = GetAll de lay ra list
-        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
-        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
-        await LoadData();
+	}
+	private async Task LoadData()
+	{
+		listDiemSo = await DiemSoRepos.GetAllActiveAsync(searchVM);
+		listMonHoc = await MonHocRepos.GetAllActiveAsync(searchMonHoc);
+		IdMonHoc = listMonHoc[0].Id;
+	}
 
-    }
-    private async Task LoadData()
-    {
-        listDiemSo = await DiemSoRepos.GetAllActiveAsync(searchVM);
-        listMonHoc = await MonHocRepos.GetAllActiveAsync(searchMonHoc);
-    }
+	public async Task OnDeleteDiemSo(Guid deleteId)
+	{
+		bool x = await DiemSoRepos.RemoveAsync(deleteId);
+		if (x == true)
+		{
+			ToastService.ShowSuccess($"Xóa thành công");
+		}
+		else
+		{
+			ToastService.ShowError($"Xóa thất bại");
+		}
+		await LoadData();
+		LamMoi();
+	}
 
+	private async Task ThemDiemSo()
+	{
+		if (utility.CheckMa(TenDiemSo))
+		{
+			DiemSoCreateVM createVm = new DiemSoCreateVM();
+			createVm.TenDauDiem = TenDiemSo;
+			createVm.TrongSo = TrongSo;
+			createVm.TrangThai = TrangThai;
+			createVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString());
+			bool x = await DiemSoRepos.CreateAsync(createVm);
+			if (x == true)
+			{
+				ToastService.ShowSuccess($"Thêm thành công");
+			}
+			else
+			{
+				ToastService.ShowError($"Thêm thất bại");
+			}
+			await LoadData();
+			await LamMoi();
+		}
+		else
+		{
+			ToastService.ShowError($"Không nhập kí tự đặc biệt");
+		}
+	}
 
+	private async Task SuaDiemSo()
+	{
+		if (utility.CheckMa(TenDiemSo))
+		{
+			DiemSoUpdateVM updateVm = new DiemSoUpdateVM();
+			updateVm.TenDauDiem = TenDiemSo;
+			updateVm.TrongSo = TrongSo;
+			updateVm.TrangThai = TrangThai;
+			updateVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString());
+			bool x = await DiemSoRepos.UpdateAsync(IdDiemSo, updateVm);
+			if (x == true)
+			{
+				ToastService.ShowSuccess($"Sửa thành công");
+			}
+			else
+			{
+				ToastService.ShowError($"Sửa thất bại");
+			}
+			await LoadData();
+			LamMoi();
+		}
+		else
+		{
+			ToastService.ShowError($"Không nhập kí tự đặc biệt");
+		}
+	}
 
-    public async Task OnDeleteDiemSo(Guid deleteId)
-    {
-        bool x =await DiemSoRepos.RemoveAsync(deleteId);
-        if (x==true)
-        {
-            ToastService.ShowSuccess($"Xóa thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Xóa thất bại");
-        }
-        await LoadData();
-    }
+	private async Task LoadBanGhi(Guid id)
+	{
+		DisableTrongSo = true;
+		DiemSoVM diemSoVM = await DiemSoRepos.GetByIdAsync(id);
+		IdDiemSo = diemSoVM.Id;
+		TenDiemSo = diemSoVM.TenDauDiem;
+		TrongSo = diemSoVM.TrongSo;
+		TrangThai = diemSoVM.TrangThai;
+		IdMonHoc = diemSoVM.IdMonHoc;
+	}
 
-    private async Task ThemDiemSo()
-    {
-        DiemSoCreateVM createVm = new DiemSoCreateVM();
-        createVm.TenDauDiem = TenDiemSo;
-        createVm.TrongSo = TrongSo;
-        createVm.TrangThai = TrangThai;
-        createVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString()) ;
-        bool x = await DiemSoRepos.CreateAsync(createVm);
-        if (x==true)
-        {
-            ToastService.ShowSuccess($"Thêm thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Thêm thất bại");
-        }
-        TenDiemSo = null;
-        TrongSo = 0;
-        TrangThai = 1;
-        IdMonHoc = Guid.Empty;
-        await LoadData();
-    }
+	private async Task LamMoi()
+	{
+		DisableTrongSo = false;
+		IdDiemSo = Guid.Empty;
+		IdMonHoc = Guid.Empty;
+		TenDiemSo = null;
+		TrongSo = 0;
+		TrangThai = 1;
+		IdMonHoc = listMonHoc[0].Id;
+	}
 
+	private Guid idDelete { get; set; }
 
+	private async Task ShowConfirmXoa(Guid deleteId)
+	{
+		idDelete = deleteId;
+		_confirmXoa.show();
+	}
 
-    private async Task SuaDiemSo()
-    {
-        DiemSoUpdateVM updateVm = new DiemSoUpdateVM();
-        updateVm.TenDauDiem = TenDiemSo;
-        updateVm.TrongSo = TrongSo;
-        updateVm.TrangThai = TrangThai;
-        updateVm.IdMonHoc = Guid.Parse(IdMonHoc.ToString()) ;
-        bool x = await DiemSoRepos.UpdateAsync(IdDiemSo,updateVm);
-        if (x==true)
-        {
-            ToastService.ShowSuccess($"Sửa thành công");
-        }
-        else
-        {
-            ToastService.ShowError($"Sửa thất bại");
-        }
-        await LoadData();
-        TenDiemSo = null;
-        TrongSo = 0;
-        TrangThai = 1;
-        IdMonHoc = Guid.Empty;
-    }
+	private async Task ShowConfirmSua()
+	{
+		_confirmSua.show();
+	}
 
+	private async Task ShowConfirmThem()
+	{
+		_confirmThem.show();
+	}
 
-    private string TenDiemSo{ get; set; }
-    private double TrongSo{ get; set; }
-    private int TrangThai{ get; set; }
-    private Guid IdMonHoc{ get; set; }
-    private Guid IdDiemSo { get; set; }
+	//Extension
+	//Thêm các bảng CTDS theo đầu điểm
+	private async Task UpdateSinhVien()
+	{
 
-    private async Task LoadBanGhi(Guid id)
-    {
-        DiemSoVM diemSoVM = await DiemSoRepos.GetByIdAsync(id);
-        IdDiemSo = diemSoVM.Id;
-        TenDiemSo = diemSoVM.TenDauDiem;
-        TrongSo = diemSoVM.TrongSo ;
-        TrangThai = diemSoVM.TrangThai;
-        IdMonHoc = diemSoVM.IdMonHoc;
-    }
-
-    private async Task LamMoi()
-    {
-        IdDiemSo = Guid.Empty;
-        IdMonHoc = Guid.Empty;
-        TenDiemSo = null;
-        TrongSo = 0;
-        TrangThai = 1;
-    }
-
-    private Guid idDelete { get; set; }
-
-    private async Task ShowConfirmXoa(Guid deleteId)
-    {
-        idDelete = deleteId;
-         _confirmXoa.show();
-    }
-
-    private async Task ShowConfirmSua()
-    {
-        _confirmSua.show();
-    }
-
-    private async Task ShowConfirmThem()
-    {
-         _confirmThem.show();
-    }
-
-    //Extension
-    //Thêm các bảng CTDS theo đầu điểm
-    private async Task UpdateSinhVien() 
-    {
-
-    }
+	}
 
 }
