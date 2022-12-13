@@ -108,7 +108,7 @@ else
     private List<LopHocVM> ListLopHocVM;
     private List<KiHocViewmodel> ListKiHocVM;
 
-   
+
 
     private Guid inputIdMonHoc;
     private Guid inputIdGiangVien;
@@ -151,7 +151,9 @@ else
         ListGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
         ListLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
         ListKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
-
-        
+        inputIdMonHoc = ListMonHocVM[0].Id;
+        inputIdKiHoc = ListKiHocVM[0].Id;
+        inputIdLopHoc = ListLopHocVM[0].Id;
+        inputIdGiangVien = ListGiangVienVM[0].Id;
     }
 }

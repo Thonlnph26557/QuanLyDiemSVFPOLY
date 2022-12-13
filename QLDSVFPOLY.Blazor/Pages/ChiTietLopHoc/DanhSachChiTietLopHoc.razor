@@ -39,13 +39,13 @@ else {
             <MudTh><MudText>Hành động</MudText></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd>@(stt++)</MudTd>
-            <MudTd>@_listLopHocVM.FirstOrDefault(c => c.Id == context.IdLopHoc).Ma</MudTd>
-            <MudTd>@_listMonHocVM.FirstOrDefault(c => c.Id == context.IdMonHoc).Ten</MudTd>
-                <MudTd>@_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).Ho @_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).TenDem @_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).Ten</MudTd>
-            <MudTd>@_listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc).Ten</MudTd>
+            <MudTd>@(_listCTLHVM.IndexOf(context) + 1)</MudTd>
+            <MudTd>@(_listLopHocVM.FirstOrDefault(c => c.Id == context.IdLopHoc) != null ? _listLopHocVM.FirstOrDefault(c => c.Id == context.IdLopHoc).Ma : "<Không tồn tại/Bị xóa>")</MudTd>
+            <MudTd>@(_listMonHocVM.FirstOrDefault(c => c.Id == context.IdMonHoc) != null ? _listMonHocVM.FirstOrDefault(c => c.Id == context.IdMonHoc).Ten : "<Không tồn tại/Bị xóa>")</MudTd>
+            <MudTd>@GetFullName(context.IdGiangVien)</MudTd>
+            <MudTd>@(_listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc) != null ? _listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc).Ten : "<Không tồn tại/Bị xóa>")</MudTd>
             <MudTd>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.InfoOutlined" Color="Color.Primary" OnClick="@(() => navChiTietChinhSua(context.Id))">Chi tiết</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.Info" Color="Color.Primary" OnClick="@(() => navChiTiet(context.Id))">Chi tiết</MudButton>
                     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => navChinhSua(context.Id))">Chỉnh sửa</MudButton>
                     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => btn_Delete(context.Id))">Xóa</MudButton>
             </MudTd>
@@ -90,7 +90,7 @@ else {
 
 
 
-        
+
 
 
     }
@@ -120,5 +120,16 @@ else {
         {
             _navManager.NavigateTo($"/chitietdiemso/hienthi/{id}");
         }
+    }
+
+    private string GetFullName(Guid idGiangVien) {
+        if (_listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien) == null) return "<Không tồn tại/Bị xóa>";
+        string Ten = "";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).Ho;
+        Ten += " ";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).TenDem;
+        Ten += " ";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).Ten;
+        return Ten;
     }
 }
