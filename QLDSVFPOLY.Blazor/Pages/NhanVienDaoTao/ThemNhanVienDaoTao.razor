@@ -200,7 +200,7 @@ else {
     }
 
     private NhanVienDaoTaoCreateVM nhanVienDaoTao = new() {
-        
+            NgaySinh = DateTime.Now,
     };
 
     [Inject] private INhanVienDaoTaoRepos nhanVienDaoTaoRepos { set; get; }
@@ -214,8 +214,6 @@ else {
             nhanVienDaoTao.MatKhau = "aa";
             nhanVienDaoTao.TenDangNhap = "png";
             nhanVienDaoTao.IdDaoTao = Guid.Parse(idDaoTao);
-            await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
-
 
             bool x = await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
 
