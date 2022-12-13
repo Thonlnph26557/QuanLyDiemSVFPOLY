@@ -45,6 +45,7 @@ else {
                 <MudTd>@_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).Ho @_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).TenDem @_listGiangVienVM.FirstOrDefault(c => c.Id == context.IdGiangVien).Ten</MudTd>
             <MudTd>@_listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc).Ten</MudTd>
             <MudTd>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.InfoOutlined" Color="Color.Primary" OnClick="@(() => navChiTietChinhSua(context.Id))">Chi tiết</MudButton>
                     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => navChinhSua(context.Id))">Chỉnh sửa</MudButton>
                     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => btn_Delete(context.Id))">Xóa</MudButton>
             </MudTd>
@@ -112,5 +113,12 @@ else {
             _iToast.ShowError("Xóa thất bại", "Thông báo");
         }
         await LoadListsAsync();
+    }
+
+    private void navChiTiet(Guid id) {
+        if (id != null)
+        {
+            _navManager.NavigateTo($"/chitietdiemso/hienthi/{id}");
+        }
     }
 }
