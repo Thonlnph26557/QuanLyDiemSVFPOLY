@@ -1,0 +1,138 @@
+﻿@page "/chitietdiem/{idSinhVien}/{idCTLH}"
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.Blazor.Components
+
+@inject ISessionStorageService _SStorage
+
+@if (listDiemSos == null || listCTDiemSos == null || listLopHocs == null || listCTLHs ==null || listSinhViens==null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<MudTable Items="@listCTDiemSos">
+		<ToolBarContent>
+			<MudText Typo="Typo.h5">Bảng điểm sinh viên</MudText>
+			<MudSpacer></MudSpacer>
+		</ToolBarContent>
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudText>Tên Đầu Điểm</MudText></MudTh>
+			<MudTh><MudText>Trọng Số</MudText></MudTh>
+			<MudTh><MudText>Điểm</MudText></MudTh>
+			<MudTh><MudText>Trạng Thái</MudText></MudTh>
+		</HeaderContent>
+		<RowTemplate>
+			<MudTd>@(stt++)</MudTd>
+			<MudTd>@listDiemSos.FirstOrDefault(c=>c.Id==context.IdDiemSo).TenDauDiem</MudTd>
+			<MudTd>@listDiemSos.FirstOrDefault(c=>c.Id==@context.IdDiemSo).TrongSo</MudTd>
+			<MudTd>@context.Diem</MudTd>
+			@if (context.TrangThai == 1)
+			{
+			<MudTd>Hoạt động</MudTd>
+			}
+			else
+			{
+			<MudTd>Tạm dừng hoạt động</MudTd>
+			}
+	</RowTemplate>
+</MudTable>
+			<MudSpacer></MudSpacer>
+			<MudSpacer></MudSpacer>
+			<MudText Typo="Typo.body1" Style="color:orangered; font-weight:bold;font-size:15;">Điểm trung bình:
+			@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),Guid.Parse(idCTLH)),2)</MudText>
+
+}
+
+@code {
+	[Parameter]
+	public string idSinhVien { set; get; }
+
+	[Parameter]
+	public string idCTLH { set; get; }
+
+	private int stt = 0;
+
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
+
+	//DiemSo
+	[Inject] private IDiemSoRepos diemSoRepo { set; get; }
+	private List<DiemSoVM> listDiemSos;
+	private DiemSoSearchVM diemSoSearchVm = new DiemSoSearchVM();
+
+	//cTDiemSo
+	[Inject] private IChiTietDiemSoRepo cTDiemSoRepo { set; get; }
+	private List<ChiTietDiemSoVM> listCTDiemSos;
+	private ChiTietDiemSoSearchVM cTDiemSoSearchVm = new ChiTietDiemSoSearchVM();
+
+	//ChiTietLopHoc
+	[Inject] private IChiTietLopHocRepos CTLHRepo { set; get; }
+	private List<ChiTietLopHocVM> listCTLHs;
+	private ChiTietLopHocSearchVM searchCTLHVm = new ChiTietLopHocSearchVM();
+
+
+	//LopHoc
+	[Inject] private ILopHocRepos lopHocRepo { set; get; }
+	private List<LopHocVM> listLopHocs;
+	private LopHocSearchVM lopHocSearchVm = new LopHocSearchVM();
+
+	//SinhVien
+	[Inject] private ISinhVienRepo sinhVienRepo { set; get; }
+	private List<SinhVienVM> listSinhViens;
+	private SinhVienSearchVM sinhVienSearchVm = new SinhVienSearchVM();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		listCTDiemSos = await cTDiemSoRepo.GetAllActiveAsync(cTDiemSoSearchVm);
+		//CTDiemSo cua SV
+		listCTDiemSos = listCTDiemSos.Where(c => c.IdSinhVien == Guid.Parse(idSinhVien)).ToList();
+		//list IdCTLH
+		var listIdCTLH = listCTDiemSos.GroupBy(c => c.IdChiTietLopHoc).Select(x => x.Key).ToList();
+		listCTLHs = await CTLHRepo.GetAllActiveAsync(searchCTLHVm);
+		listCTLHs = listCTLHs.Where(c => listIdCTLH.Any(x => x == c.Id)).ToList();
+
+		listLopHocs = await lopHocRepo.GetAllActiveAsync(lopHocSearchVm);
+
+		listSinhViens = await sinhVienRepo.GetAllActiveAsync(sinhVienSearchVm);
+
+		listDiemSos = await diemSoRepo.GetAllActiveAsync(diemSoSearchVm);
+
+
+
+		//string maLH = listLopHocs.FirstOrDefault(c => c.Id == listCTLHs.FirstOrDefault(x => x.Id == Guid.Parse(idCTLH)).IdLopHoc).Ma;
+	}
+
+	private double TinhDiem(Guid idSV, Guid idCTLopHoc)
+	{
+		try
+		{
+			var listDiem = listCTDiemSos.Where(c => c.IdSinhVien == idSV && c.IdChiTietLopHoc == idCTLopHoc).
+	Select(c => new { c.Diem, listDiemSos.FirstOrDefault(x => x.Id == c.IdDiemSo).TrongSo }).ToList();
+
+			double diemTB = 0;
+			foreach (var i in listDiem)
+			{
+				diemTB += i.Diem * i.TrongSo / 100;
+			}
+			return diemTB;
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
+}

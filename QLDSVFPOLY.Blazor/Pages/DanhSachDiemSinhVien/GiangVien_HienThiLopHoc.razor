@@ -1,0 +1,93 @@
+﻿@page "/lophoc/hienthi"
+
+@attribute [Authorize(Roles = "GiangVien")]
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.KiHoc
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@inject ILopHocRepos _repoLopHoc
+@inject IMonHocRepo _repoMonHoc
+@inject IChiTietLopHocRepos _repoCTLH 
+@inject IKiHocRepos _repoKH
+@inject IChiTietDiemSoRepo _repoCTDS
+@inject ISessionStorageService _SStorage
+@inject NavigationManager _navManager
+
+@if(_listCTLH == null) {
+    <LoadingIndicator></LoadingIndicator>
+}
+else if (_listCTLH.Count == 0) {
+    <MudAlert Severity="Severity.Error">Không có lớp học nào!</MudAlert>
+}
+else {
+    <MudTable Items="@_listCTLH" Class="p-2">
+
+        <HeaderContent>
+            <MudTh>STT</MudTh>
+            <MudTh>Mã lớp học</MudTh>
+            <MudTh>Tên môn học</MudTh>
+            <MudTh>Kì học</MudTh>
+            <MudTh>Số lượng sinh viên</MudTh>
+            <MudTh>Hành động</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@(_listCTLH.IndexOf(context) + 1)</MudTd>
+            <MudTd>@(_listLH.FirstOrDefault(c => c.Id == context.IdLopHoc) == null ? "<Không tồn tại/Bị xóa>" : _listLH.FirstOrDefault(c => c.Id == context.IdLopHoc).Ma)</MudTd>
+            <MudTd>@(_listMH.FirstOrDefault(c => c.Id == context.IdMonHoc) == null ? "<Không tồn tại/Bị xóa>" : _listMH.FirstOrDefault(c => c.Id == context.IdMonHoc).Ten)</MudTd>
+            <MudTd>@(_listKH.FirstOrDefault(c => c.Id == context.IdKiHoc) == null ? "<Không tồn tại/Bị xóa>" : _listKH.FirstOrDefault(c => c.Id == context.IdKiHoc).Ten)</MudTd>
+            <MudTd>@CountSVTrongLop(context.Id)</MudTd>
+            <MudTd>
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" @onclick="() => navChinhSua(context.IdLopHoc)">Chi tiết</MudButton> 
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+    private string _idGiangVien;
+
+    List<ChiTietLopHocVM> _listCTLH;
+
+    List<LopHocVM> _listLH;
+    List<MonHocVM> _listMH;
+    List<KiHocViewmodel> _listKH;
+    List<ChiTietDiemSoVM> _listCTDS;
+    List<Guid> _listIdSVTrongLop;
+
+    protected override async Task OnInitializedAsync() {
+        _idGiangVien = await _SStorage.GetItemAsync<string>("IdNguoiDung");
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+        _listCTLH = await _repoCTLH.GetAllActiveAsync(new ChiTietLopHocSearchVM());
+        _listCTLH = _listCTLH.Where(c => c.IdGiangVien.ToString() == _idGiangVien).ToList();
+
+        _listLH = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
+        _listMH = await _repoMonHoc.GetAllActiveAsync(new MonHocSearchVM());
+        _listKH = await _repoKH.GetAllActiveAsync(new KiHocSearchViewmodel());
+        _listCTDS = await _repoCTDS.GetAllActiveAsync(new ChiTietDiemSoSearchVM());
+
+    }
+
+    private void navChinhSua(Guid idLopHoc) {
+        _navManager.NavigateTo($"/lophoc/chitiet/{idLopHoc}");
+    }
+
+    private int CountSVTrongLop(Guid idCTLH) {
+        //Count SinhVien
+        _listIdSVTrongLop = new List<Guid>();
+        foreach (var item in _listCTDS.Where(c => c.IdChiTietLopHoc == idCTLH))
+        {
+            _listIdSVTrongLop.Add(item.IdSinhVien);
+        }
+        _listIdSVTrongLop = _listIdSVTrongLop.Distinct().ToList();
+        return _listIdSVTrongLop.Count;
+    }
+
+}

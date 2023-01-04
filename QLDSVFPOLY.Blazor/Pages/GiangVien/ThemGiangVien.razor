@@ -1,0 +1,292 @@
+﻿@page "/giangvien/themmoi"
+
+@using QLDSVFPOLY.BUS.ViewModels.GiangVien
+@using QLDSVFPOLY.Blazor.Repository.Implements
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+
+@inject IToastService ToastService
+@inject ISessionStorageService _SStorage
+@inject IJSRuntime JS
+
+
+<MudText Typo="Typo.h5">Thêm Giảng Viên</MudText>
+
+<MudContainer class="d-flex justify-center align-center w-70 h-75">
+
+    <style>
+        #dd {
+            border: 1px black;
+            width: 17vw;
+            height: 46vh;
+            margin-left: 10px;
+        }
+    </style>
+
+
+    <EditForm Model="@giangVien">
+
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+
+        <MudGrid class="w-25" Style="float: left; margin-top:20px">
+
+            <MudImage Src="@giangVien.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+            <InputFile OnChange="@OnInputFileChanged"></InputFile>
+
+        </MudGrid>
+
+        <MudGrid class="w-75" Style="float: right;padding-left:20px;">
+
+            <MudGrid class="row">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Mã Giảng Viên" class="form-control" @bind-Value="giangVien.Ma" For="() => giangVien.Ma"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Email" class="form-control" @bind-Value="giangVien.Email" For="() => giangVien.Email"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Họ" class="form-control" @bind-Value="giangVien.Ho" For="() => giangVien.Ho"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="giangVien.SoDienThoai" For="() => giangVien.SoDienThoai"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="giangVien.TenDem" For="() => giangVien.TenDem"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="giangVien.DiaChi" For="() => giangVien.DiaChi"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên" class="form-control" @bind-Value="giangVien.Ten" For="() => giangVien.Ten"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.TrangThai">
+
+                        <MudSelectItem Value=1>Đang làm</MudSelectItem>
+                        <MudSelectItem Value=2>Đang nghỉ làm</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="giangVien.GioiTinh">
+
+                        <MudSelectItem Value=0>Nam</MudSelectItem>
+                        <MudSelectItem Value=1>Nữ</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+                <MudItem class="col">
+                    <label>Ngày Sinh</label>
+                    <input  @bind="giangVien.NgaySinh" type="date" class="form-control">
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmThem())">THÊM</MudButton>
+
+                </MudItem>
+
+            </MudGrid>
+
+        </MudGrid>
+
+    </EditForm>
+
+</MudContainer>
+
+
+<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="Them"></Confirmation>
+
+
+
+@code {
+    //
+    [Parameter]
+    public string idDaoTao { get; set; }
+
+    //
+    protected Confirmation _confirmThem { get; set; }
+
+    //
+    private async Task ShowConfirmThem()
+    {
+        _confirmThem.show();
+    }
+
+    //
+    private GiangVienCreateVM giangVien = new();
+
+    //
+    [Inject] private IGiangVienRepos giangVienRepos { set; get; }
+    [Inject] private NavigationManager navigationManager { get; set; }
+
+    //
+    private async Task Them(bool y)
+    {
+        if (y)
+        {
+            giangVien.MatKhau = "aa";
+            giangVien.TenDangNhap = "png";
+            giangVien.IdDaoTao = Guid.Parse(idDaoTao);
+
+            bool x = await giangVienRepos.CreateAsync(giangVien);
+
+            if (x == true)
+            {
+                navigationManager.NavigateTo("/giangvien/hienthi");
+                ToastService.ShowSuccess($"Thêm thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Thêm thất bại");
+            }
+
+        }
+        ReLoad();
+
+    }
+
+    //
+    public string Ma { get; set; }
+    public string Ho { get; set; }
+    public string TenDem { get; set; }
+    public string Ten { get; set; }
+    public int GioiTinh { get; set; }
+
+    public DateTime NgaySinh = DateTime.Now;
+    public string DiaChi { get; set; }
+    public string Email { get; set; }
+    public string SoDienThoai { get; set; }
+    public string DuongDanAnh { get; set; }
+    public int TrangThai { get; set; } = 1;
+
+
+
+    //
+    private async Task ReLoad()
+    {
+        giangVien.IdDaoTao = Guid.Empty;
+        giangVien.Ma = null;
+        giangVien.Ho = null;
+        giangVien.TenDem = null;
+        giangVien.Ten = null;
+        giangVien.GioiTinh = 0;
+        giangVien.NgaySinh = DateTime.Now;
+        giangVien.Email = null;
+        giangVien.TenDangNhap = null;
+        giangVien.MatKhau = null;
+        giangVien.DuongDanAnh = imgUrl;
+        giangVien.SoDienThoai = null;
+        giangVien.DiaChi = null;
+        giangVien.TrangThai = 1;
+    }
+
+    // Khai báo
+    private List<GiangVienVM> _listGiangViens;
+
+    private GiangVienSearchVM _search = new GiangVienSearchVM();
+
+    //
+    private async Task LoadData()
+    {
+        _listGiangViens = await giangVienRepos.GetAllActiveAsync(_search);
+
+        _listGiangViens = _listGiangViens.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+        ReLoad();
+    }
+
+
+    //Ghi đè phương thức OnInitializedAsync
+    protected override async Task OnInitializedAsync()
+    {
+        idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+        module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+        giangVien.DuongDanAnh = defImg.DefaultAvatar();
+        LoadData();
+        ReLoad();
+    }
+
+    DefaultImages defImg = new DefaultImages();
+    IJSObjectReference module;
+    string imgUrl;
+    record ImageDimensions(int Width, int Height);
+    private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+        var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+        var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+        if (dimensions.Width > 250)
+        {
+            file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+        }
+        var buffers = new byte[file.Size];
+        await file.OpenReadStream().ReadAsync(buffers);
+        string imageType = file.ContentType;
+        giangVien.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+        imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+    }
+
+}

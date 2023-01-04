@@ -1,0 +1,2 @@
+﻿        [Required(ErrorMessage = "Tên kì học không được để trống")]
+        [MaxLength(50, ErrorMessage = "Tên kì học tối đa 50 kí tự")]

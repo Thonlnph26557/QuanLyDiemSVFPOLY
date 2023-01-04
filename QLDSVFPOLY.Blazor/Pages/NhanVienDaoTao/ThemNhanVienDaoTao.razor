@@ -1,0 +1,287 @@
+﻿@page "/nhanviendaotao/themmoi"
+
+@using QLDSVFPOLY.BUS.ViewModels.NhanVienDaoTao
+@using QLDSVFPOLY.Blazor.Repository.Implements
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+@inject ISessionStorageService _SStorage
+@inject IToastService ToastService
+@inject IJSRuntime JS
+
+@if(1 + 1 != 2) {
+    <LoadingIndicator></LoadingIndicator>
+}
+else {
+<MudText Typo="Typo.h5">Thêm Nhân Viên Đào Tạo</MudText>
+
+<MudContainer class="d-flex justify-center align-center w-70 h-75">
+
+    <style>
+        #dd {
+            border: 1px black;
+            width: 17vw;
+            height: 46vh;
+            margin-left: 10px;
+        }
+    </style>
+
+
+    <EditForm Model="@nhanVienDaoTao">
+
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+
+        <MudGrid class="w-25" Style="float: left; margin-top:20px">
+
+            <MudImage Src="@imgUrl" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true"/>
+            <InputFile OnChange="@OnInputFileChanged"></InputFile>
+
+        </MudGrid>
+
+        <MudGrid class="w-75" Style="float: right;padding-left:20px;">
+
+            <MudGrid class="row">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Mã Nhân Viên Đào Tạo" class="form-control" @bind-Value="nhanVienDaoTao.Ma" For="() => nhanVienDaoTao.Ma"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <label>Ngày Sinh</label>
+                        <input  @bind="nhanVienDaoTao.NgaySinh" type="date" class="form-control">
+
+                </MudItem>
+
+            </MudGrid>
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Họ" class="form-control" @bind-Value="nhanVienDaoTao.Ho" For="() => nhanVienDaoTao.Ho"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="nhanVienDaoTao.DiaChi" For="() => nhanVienDaoTao.DiaChi"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="nhanVienDaoTao.TenDem" For="() => nhanVienDaoTao.TenDem"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Email" class="form-control" @bind-Value="nhanVienDaoTao.Email" For="() => nhanVienDaoTao.Email"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Tên" class="form-control" @bind-Value="nhanVienDaoTao.Ten" For="() => nhanVienDaoTao.Ten"></MudTextField>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="nhanVienDaoTao.SoDienThoai" For="() => nhanVienDaoTao.SoDienThoai"></MudTextField>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="nhanVienDaoTao.GioiTinh">
+
+                        <MudSelectItem Value=0>Nam</MudSelectItem>
+                        <MudSelectItem Value=1>Nữ</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="nhanVienDaoTao.TrangThai">
+
+                        <MudSelectItem Value=1>Đang làm</MudSelectItem>
+                        <MudSelectItem Value=2>Đang nghỉ làm</MudSelectItem>
+
+                    </MudSelect>
+
+                </MudItem>
+
+            </MudGrid>
+
+
+
+            <MudGrid class="row" style="margin-top:10px">
+
+                <MudItem class="col">
+                </MudItem>
+
+                <MudItem class="col">
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>ReLoad()">LÀM MỚI</MudButton>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmThem())">THÊM</MudButton>
+
+                </MudItem>
+
+            </MudGrid>
+
+        </MudGrid>
+
+    </EditForm>
+
+</MudContainer>
+
+<Confirmation ConfirmationMessage="Bạn có muốn thêm thông tin nhân viên đào tạo không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="Them"></Confirmation>
+}
+
+@code {
+    //
+    [Parameter]
+    public string idDaoTao { get; set; }
+
+    DefaultImages _defImg = new DefaultImages();
+    string imgUrl;
+    //
+    protected Confirmation _confirmThem { get; set; }
+
+    private async Task ShowConfirmThem()
+    {
+        _confirmThem.show();
+    }
+
+    IJSObjectReference module;
+    record ImageDimensions(int Width, int Height);
+    private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+        var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+        var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+        if (dimensions.Width > 250)
+        {
+            file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+        }
+        var buffers = new byte[file.Size];
+        await file.OpenReadStream().ReadAsync(buffers);
+        string imageType = file.ContentType;
+        imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+    }
+
+    private NhanVienDaoTaoCreateVM nhanVienDaoTao = new() {
+
+    };
+
+    [Inject] private INhanVienDaoTaoRepos nhanVienDaoTaoRepos { set; get; }
+    [Inject] private NavigationManager navigationManager { get; set; }
+
+    private async Task Them(bool y)
+    {
+        if(y)
+        {
+            nhanVienDaoTao.DuongDanAnh = imgUrl;
+            nhanVienDaoTao.MatKhau = "aa";
+            nhanVienDaoTao.TenDangNhap = "png";
+            nhanVienDaoTao.IdDaoTao = Guid.Parse(idDaoTao);
+            await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
+
+
+            bool x = await nhanVienDaoTaoRepos.CreateAsync(nhanVienDaoTao);
+
+            if (x == true)
+            {
+                navigationManager.NavigateTo("/nhanviendaotao/hienthi");
+                ToastService.ShowSuccess($"Thêm thành công");
+            }
+            else
+            {
+                ToastService.ShowError($"Thêm thất bại");
+            }
+
+        }
+
+        ReLoad();
+    }
+
+    //
+    public string Ma { get; set; }
+    public string Ho { get; set; }
+    public string TenDem { get; set; }
+    public string Ten { get; set; }
+    public int GioiTinh { get; set; }
+
+    public DateTime NgaySinh = DateTime.Now;
+    public string DiaChi { get; set; }
+    public string Email { get; set; }
+    public string SoDienThoai { get; set; }
+    public string DuongDanAnh { get; set; }
+    public int TrangThai { get; set; } = 1;
+
+
+    private NhanVienDaoTaoUpdateVM updateVM = new() {
+            NgaySinh = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        imgUrl = _defImg.DefaultAvatar();
+        module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+        idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");;
+        nhanVienDaoTao.TrangThai = 1;
+        nhanVienDaoTao.NgaySinh = DateTime.Now;
+    }
+
+    // Khai báo
+    private NhanVienDaoTaoVM obj;
+
+
+    private NhanVienDaoTaoSearchVM _search = new NhanVienDaoTaoSearchVM();
+
+
+    //
+    private async Task ReLoad()
+    {
+        nhanVienDaoTao.IdDaoTao = Guid.NewGuid();
+        nhanVienDaoTao.Ho = null;
+        nhanVienDaoTao.TenDem = null;
+        nhanVienDaoTao.Ten = null;
+        nhanVienDaoTao.Ma = null;
+        nhanVienDaoTao.Email = null;
+        nhanVienDaoTao.TenDangNhap = null;
+        nhanVienDaoTao.MatKhau = null;
+        nhanVienDaoTao.DuongDanAnh = null;
+        nhanVienDaoTao.SoDienThoai = null;
+        nhanVienDaoTao.DiaChi = null;
+        nhanVienDaoTao.TrangThai = 1;
+        nhanVienDaoTao.GioiTinh = 0;
+        nhanVienDaoTao.NgaySinh = DateTime.Now;
+    }
+}

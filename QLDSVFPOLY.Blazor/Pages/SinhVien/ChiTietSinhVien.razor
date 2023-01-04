@@ -1,0 +1,328 @@
+﻿@page "/sinhvien/chitiet/{idSinhVien}"
+
+@using QLDSVFPOLY.BUS.Utilities
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.Blazor.Repository.Implements
+
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+@inject IToastService ToastService
+@inject ISessionStorageService _SStorage
+@inject IJSRuntime JS
+
+@if (_listSinhViens == null || obj == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+
+
+    <MudText Typo="Typo.h5">
+        Sinh Viên
+        : @obj.Ho @obj.TenDem @obj.Ten
+    </MudText>
+
+    <MudContainer class="d-flex justify-center align-center w-70 h-75">
+
+        <style>
+            #dd {
+                border: 1px black;
+                width: 17vw;
+                height: 46vh;
+                margin-left: 10px;
+            }
+        </style>
+
+
+
+        <EditForm Model="@updateVM">
+
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+
+            <MudGrid class="w-25" Style="float: left; margin-top:20px">
+
+                <MudImage Src="@updateVM.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+                <InputFile OnChange="@OnInputFileChanged"></InputFile>
+
+            </MudGrid>
+
+            <MudGrid class="w-75" style="float: right;padding-left:20px;">
+
+                <MudGrid class="row">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Mã Sinh Viên" class="form-control" @bind-Value="updateVM.Ma" For="() => updateVM.Ma"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Email" class="form-control" @bind-Value="updateVM.Email" For="() => updateVM.Email"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Họ" class="form-control" @bind-Value="updateVM.Ho" For="() => updateVM.Ho"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+                        <label>Ngày Nhập Học</label>
+                        <input @bind="updateVM.NgayTao" type="date" class="form-control">
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Tên Đệm" class="form-control" @bind-Value="updateVM.TenDem" For="() => updateVM.TenDem"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Số Điện Thoại" class="form-control" @bind-Value="updateVM.SoDienThoai" For="() => updateVM.SoDienThoai"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Tên" class="form-control" @bind-Value="updateVM.Ten" For="() => updateVM.Ten"></MudTextField>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.TrangThai">
+
+                            <MudSelectItem Value=1>Đang học</MudSelectItem>
+                            <MudSelectItem Value=2>Bảo lưu</MudSelectItem>
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                </MudGrid>
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+
+                        <MudSelect T="int" Label="Giới Tính" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.GioiTinh">
+
+                            <MudSelectItem Value=0>Nam</MudSelectItem>
+                            <MudSelectItem Value=1>Nữ</MudSelectItem>
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudSelect T="Guid" Label="Chuyên Ngành" AnchorOrigin="Origin.BottomCenter" @bind-Value="updateVM.IdChuyenNganh">
+
+                            @if (_listChuyenNganh != null)
+                            {
+                                foreach (var i in _listChuyenNganh)
+                                {
+                                    <MudSelectItem Value="i.Id">@i.TenChuyenNganh</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+                        <label>Ngày Sinh</label>
+                        <input @bind="updateVM.NgaySinh" type="date" class="form-control">
+
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudTextField Label="Địa Chỉ" class="form-control" @bind-Value="updateVM.DiaChi" For="() => updateVM.DiaChi"></MudTextField>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <MudGrid class="row" style="margin-top:10px">
+
+                    <MudItem class="col">
+                    </MudItem>
+
+                    <MudItem class="col">
+
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>LoadDataUpdate()">KHÔI PHỤC</MudButton>
+
+                        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="ShowConfirmSua">CHỈNH SỬA</MudButton>
+
+                    </MudItem>
+
+                </MudGrid>
+
+            </MudGrid>
+
+        </EditForm>
+
+    </MudContainer>
+}
+
+<Confirmation ConfirmationMessage="Bạn có muốn sửa thông tin sinh viên không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="ChinhSua"></Confirmation>
+
+@code {
+    //
+    [Parameter]
+    public string idSinhVien { set; get; }
+
+
+
+    //
+    protected Confirmation _confirmSua { get; set; }
+
+    private async Task ShowConfirmSua()
+    {
+        _confirmSua.show();
+    }
+
+
+    private SinhVienUpdateVM updateVM = new();
+
+    // Khai báo
+    private SinhVienVM obj;
+
+    private List<SinhVienVM> _listSinhViens;
+
+    private SinhVienSearchVM _search = new SinhVienSearchVM();
+
+    [Inject] private IChuyenNganhRepo chuyenNganhRepo { set; get; }
+
+
+    private List<ChuyenNganhVM> _listChuyenNganh;
+
+    private ChuyenNganhSearchVM _searchVM = new ChuyenNganhSearchVM();
+
+
+
+    //
+    private async Task LoadData()
+    {
+
+        _listChuyenNganh = await chuyenNganhRepo.GetAllActiveAsync(_searchVM);
+
+        _listChuyenNganh = _listChuyenNganh.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+
+
+        _listSinhViens = await sinhVienRepos.GetAllActiveAsync(_search);
+        //_listSinhViens = _listSinhViens.Where(c => _listChuyenNganh.Any(x => x.Id == c.IdChuyenNganh))
+
+        foreach (var item in _listSinhViens)
+        {
+            if (_listChuyenNganh.Any(c => c.Id == item.IdChuyenNganh))
+            {
+
+            }
+            else
+            {
+                _listSinhViens.Remove(item);
+            }
+        }
+
+        obj = _listSinhViens.FirstOrDefault(c => c.Id == Guid.Parse(idSinhVien));
+
+    }
+
+    //
+    private Utility utility = new Utility();
+
+    //
+    private async Task ChinhSua(bool y)
+    {
+        if (utility.CheckMa(Ma))
+        {
+            if (y)
+            {
+                await sinhVienRepos.UpdateAsync(Guid.Parse(idSinhVien), updateVM);
+
+                await LoadData();
+
+                bool x = await sinhVienRepos.UpdateAsync(Guid.Parse(idSinhVien), updateVM);
+
+                if (x == true)
+                {
+                    navigationManager.NavigateTo("/sinhvien/hienthi");
+                    ToastService.ShowSuccess($"Sửa thành công");
+                }
+                else
+                {
+                    ToastService.ShowError($"Sửa thất bại");
+                }
+
+            }
+
+        }
+        else
+        {
+            ToastService.ShowError($"Trường này không chứa ký tự đặc biệt");
+        }
+        LamMoi();
+    }
+
+    //
+    public string Ma { get; set; }
+    public string Ho { get; set; }
+    public string TenDem { get; set; }
+    public string Ten { get; set; }
+    public int GioiTinh { get; set; }
+
+    public DateTime NgaySinh = DateTime.Now;
+    public string DiaChi { get; set; }
+    public string Email { get; set; }
+    public string SoDienThoai { get; set; }
+    public string DuongDanAnh { get; set; }
+    public int TrangThai { get; set; }
+
+    //
+    private async Task LamMoi()
+    {
+        Ma = null;
+        Ho = null;
+        Ten = null;
+        TenDem = null;
+        NgaySinh = DateTime.Now;
+        GioiTinh = 1;
+        DiaChi = null;
+        Email = null;
+        SoDienThoai = null;
+        DuongDanAnh = null;
+        TrangThai = 1;
+    }
+
+}

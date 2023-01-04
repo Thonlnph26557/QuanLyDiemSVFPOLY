@@ -1,0 +1,281 @@
+﻿@page "/chitietlophoc/chinhsua/{idCTLH}"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.KiHoc
+@using QLDSVFPOLY.BUS.ViewModels.GiangVien
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using QLDSVFPOLY.Blazor.Components
+@inject IMonHocRepo _repoMonHoc
+@inject ILopHocRepos _repoLopHoc
+@inject IGiangVienRepos _repoGiangVien
+@inject IKiHocRepos _repoKiHoc
+@inject ISinhVienRepo _repoSinhVien
+@inject IChiTietLopHocRepos _repoChiTietLopHoc
+@inject IChiTietDiemSoRepo _repoCTDS
+@inject IDiemSoRepos _repoDiemSo
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
+
+@if (ListGiangVienVM == null || ListKiHocVM == null || ListLopHocVM == null || ListMonHocVM == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <MudPaper Class="px-2 pt-2 pb-10 ma-2" Outlined="true">
+        <MudForm class="m-4">
+            <div class="row">
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Môn học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdMonHoc" Variant="Variant.Outlined">
+                        @if(ListMonHocVM != null) {
+                            foreach(var item in ListMonHocVM) {
+                                <MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
+                            }
+                    
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Lớp học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdLopHoc" Variant="Variant.Outlined">
+                        @if (ListLopHocVM != null)
+                        {
+                            foreach (var item in ListLopHocVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ma</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Giảng viên" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdGiangVien" Variant="Variant.Outlined">
+                        @if (ListGiangVienVM != null)
+                        {
+                            foreach (var item in ListGiangVienVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ma - @item.Ho @item.TenDem @item.Ten</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col p-2">
+                    <MudSelect T="Guid" Label="Kì học" AnchorOrigin="Origin.BottomCenter" @bind-Value="@inputIdKiHoc" Variant="Variant.Outlined">
+                        @if (ListKiHocVM != null)
+                        {
+                            foreach (var item in ListKiHocVM)
+                            {
+                                <MudSelectItem Value="@item.Id">@item.Ten</MudSelectItem>
+                            }
+
+                        }
+                    </MudSelect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col px-2 pt-3 pb-2">
+                    <MudNumericField @bind-Value="@inputSoLuongSinhVien" Label="Số lượng sinh viên" Variant="Variant.Outlined" Min="0"/>
+                </div>
+                <div class="col p-2">
+                        <MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@inputTrangThai">
+                        <MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+                        <MudSelectItem T="int" Value="0">Không hoạt động</MudSelectItem>
+                    </MudSelect>
+                </div>
+            </div>
+    
+            <div style="float:right;" class="pt-2">
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Color="Color.Primary" @onclick="UpdateChiTietLopHoc">Lưu</MudButton>
+            </div>
+        </MudForm>
+    </MudPaper>
+
+    <MudDivider Class="my-2"></MudDivider>
+
+    <MudPaper Class="px-2 pt-2 pb-10 ma-2" Outlined="true">
+        <MudTable Items="@_listCTDSHienTai" Class="m-1">
+            <ToolBarContent>
+                @*<MudTextField T="string" Label="Mã sinh viên" HelperText="Nhập mã sinh viên cụ thể" HelperTextOnFocus="true" Variant="Variant.Outlined" Class="mt-10 mr-3 mb-2"
+                @onchange=""/>*@
+
+                <MudSelect T="Guid" Label="Sinh viên" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="mt-4 mr-3 mb-2" @bind-Value="_selectedSinhVienId">
+                    @foreach (var item in _listSinhVienVM)
+                    {
+                        <MudSelectItem T="Guid" Value="@item.Id">@item.Ma - @item.Ho @item.TenDem @item.Ten</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-4 mb-2" @onclick="AddSinhVien">Thêm</MudButton>
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh>STT</MudTh>
+                <MudTh>Mã</MudTh>
+                <MudTh>Tên</MudTh>
+                <MudTh>Hành động</MudTh>
+            @*<MudTh></MudTh>
+            <MudTh></MudTh>*@
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>@(_listCTDSHienTai.IndexOf(context) + 1)</MudTd>
+                <MudTd>@_listSinhVienVM.FirstOrDefault(c => c.Id == context.IdSinhVien).Ma</MudTd>
+                    <MudTd>@_listSinhVienVM.FirstOrDefault(c => c.Id == context.IdSinhVien).Ho @_listSinhVienVM.FirstOrDefault(c => c.Id == context.IdSinhVien).TenDem @_listSinhVienVM.FirstOrDefault(c => c.Id == context.IdSinhVien).Ten</MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Xóa</MudButton>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+    
+}
+
+@code {
+    [Parameter]
+    public string idCTLH { get; set; }
+
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+
+    //AddSv
+    private List<SinhVienVM> _listSinhVienVM;
+    private List<DiemSoVM> _listDiemSoVM;
+    private List<ChiTietDiemSoVM> _listCTDS;
+    private List<ChiTietDiemSoVM> _listCTDSHienTai;
+    private ChiTietLopHocVM _CTLHHienTai;
+    private MonHocVM _MonHocHienTai;
+    private Guid _selectedSinhVienId;
+
+
+    int inputSoLuongSinhVien = 0;
+
+    private List<MonHocVM> ListMonHocVM;
+    private List<GiangVienVM> ListGiangVienVM;
+    private List<LopHocVM> ListLopHocVM;
+    private List<KiHocViewmodel> ListKiHocVM;
+
+    private Guid inputIdMonHoc;
+    private Guid inputIdGiangVien;
+    private Guid inputIdLopHoc;
+    private Guid inputIdKiHoc;
+    private int inputTrangThai;
+
+    private async Task UpdateChiTietLopHoc()
+    {
+        int result = await _repoChiTietLopHoc.UpdateAsync(Guid.Parse(idCTLH), new ChiTietLopHocUpdateVM()
+            {
+                IdMonHoc = inputIdMonHoc,
+                IdGiangVien = inputIdGiangVien,
+                IdLopHoc = inputIdLopHoc,
+                IdKiHoc = inputIdKiHoc,
+                TrangThai = inputTrangThai,
+                SoLuongSinhVien = inputSoLuongSinhVien,
+            });
+        if(result == 1) {
+            _iToast.ShowSuccess("Cập nhật thành công", "Thông báo");
+            _CTLHHienTai = await _repoChiTietLopHoc.GetByIdAsync(Guid.Parse(idCTLH));
+
+        }
+
+        else {
+            _iToast.ShowError("Cập nhật thất bại", "Thông báo");
+        }
+    }
+
+    private async Task AddSinhVien() {
+        if(_selectedSinhVienId != Guid.Empty) {
+            var listDiemSoTemp = _listDiemSoVM.Where(c => c.IdMonHoc == _MonHocHienTai.Id).ToList();
+            if (listDiemSoTemp.Count != 0)
+            {
+                if (_listCTDSHienTai.Count >= _CTLHHienTai.SoLuongSinhVien)
+                {
+                    _iToast.ShowError("Thêm thất bại, lớp đầy", "Thông báo");
+                }
+                else {
+                    foreach (var item in listDiemSoTemp)
+                    {
+                        var checkExist = _listCTDS.Any(c => c.IdDiemSo == item.Id && c.IdSinhVien == _selectedSinhVienId && c.IdChiTietLopHoc == Guid.Parse(idCTLH));
+                        if (checkExist)
+                        {
+                            continue;
+                        }
+                        bool a = await _repoCTDS.CreateAsync(new ChiTietDiemSoCreateVM()
+                            {
+                                IdChiTietLopHoc = Guid.Parse(idCTLH),
+                                IdSinhVien = _selectedSinhVienId,
+                                IdDiemSo = item.Id,
+                                Diem = 0,
+                                NgayTao = DateTime.Now,
+                                TrangThai = 1
+                            });
+                    }
+                    _iToast.ShowSuccess("Thêm thành công", "Thông báo");
+                    _selectedSinhVienId = Guid.Empty;
+                    _listCTDSHienTai = null;
+                    await LoadListSVTrongLop();
+                    StateHasChanged();
+                }
+                    
+
+            }
+            else {
+                _iToast.ShowError("Thêm thất bại, lớp chưa có đầu điểm", "Thông báo");
+            }
+        }
+    }
+
+    private async Task LoadCurrentData() {
+
+        inputIdGiangVien = _CTLHHienTai.IdGiangVien;
+        inputIdMonHoc = _CTLHHienTai.IdMonHoc;
+        inputIdKiHoc = _CTLHHienTai.IdKiHoc;
+        inputIdLopHoc = _CTLHHienTai.IdLopHoc;
+        inputSoLuongSinhVien = _CTLHHienTai.SoLuongSinhVien;
+        inputTrangThai = _CTLHHienTai.TrangThai;
+
+
+        _MonHocHienTai = await _repoMonHoc.GetByIdAsync(_CTLHHienTai.IdMonHoc);
+    }
+
+    protected override async Task OnInitializedAsync() {
+        _CTLHHienTai = await _repoChiTietLopHoc.GetByIdAsync(Guid.Parse(idCTLH));
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+        await LoadListsAsync();
+        await LoadCurrentData();
+    }
+
+    private async Task LoadListsAsync() {
+        ListMonHocVM = await _repoMonHoc.GetAllActiveAsync(new MonHocSearchVM());
+        ListGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
+        ListLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
+        ListKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
+
+        //
+        _listSinhVienVM = await _repoSinhVien.GetAllActiveAsync(new SinhVienSearchVM());
+        _listDiemSoVM = await _repoDiemSo.GetAllActiveAsync(new DiemSoSearchVM());
+        await LoadListSVTrongLop();
+
+    }
+
+    private async Task LoadListSVTrongLop() {
+        _listCTDS = await _repoCTDS.GetAllActiveAsync(new ChiTietDiemSoSearchVM());
+        _listCTDSHienTai = new List<ChiTietDiemSoVM>();
+        foreach (var i in _listCTDS)
+        {
+            if (i.IdChiTietLopHoc == _CTLHHienTai.Id)
+            {
+                _listCTDSHienTai.Add(i);
+            }
+        }
+    }
+}

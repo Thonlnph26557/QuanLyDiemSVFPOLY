@@ -1,0 +1,152 @@
+﻿@page "/bangdiemSV/hienthi"
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietDiemSo
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.DiemSo
+@using QLDSVFPOLY.BUS.ViewModels.KiHoc
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.Blazor.Components
+
+@inject ISessionStorageService _SStorage
+
+@if (listCTLHs == null
+	|| listDiemSos == null
+	|| listKiHocs == null
+	|| listMonHocs == null
+	|| listSinhViens == null
+	|| listCTDiemSos == null
+																		)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<MudTable Items="@listCTLHs">
+		<ToolBarContent>
+			<MudText Typo="Typo.h5">Bảng điểm sinh viên</MudText>
+			<MudSpacer></MudSpacer>
+		</ToolBarContent>
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudText>Kì Học</MudText></MudTh>
+			<MudTh><MudText>Mã Môn Học</MudText></MudTh>
+			<MudTh><MudText>Tên Môn Học</MudText></MudTh>
+			<MudTh><MudText>Điểm</MudText></MudTh>
+			<MudTh><MudText>Chi Tiết</MudText></MudTh>
+			<MudTh><MudText>Trạng Thái</MudText></MudTh>
+		</HeaderContent>
+		<RowTemplate>
+			<MudTd>@(stt++)</MudTd>
+			<MudTd>@listKiHocs.FirstOrDefault(c=>c.Id==context.IdKiHoc).Ten</MudTd>
+			<MudTd>@listMonHocs.FirstOrDefault(c=>c.Id==context.IdMonHoc).Ma</MudTd>
+			<MudTd>@listMonHocs.FirstOrDefault(c=>c.Id==context.IdMonHoc).Ten</MudTd>
+			<MudTd>@Math.Round(@TinhDiem(Guid.Parse(idSinhVien),context.Id),2)</MudTd>
+			<MudTd>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.Microwave" Color="Color.Primary" OnClick="@(() => NavigationChiTietDiemSo((@listCTDiemSos.FirstOrDefault(c => c.IdChiTietLopHoc == context.Id).IdSinhVien),context.Id))">Chi tiết</MudButton>
+			</MudTd>
+			@if (context.TrangThai == 1)
+				{
+				<MudTd>Hoạt động</MudTd>
+				}
+				else
+				{
+				<MudTd>Tạm dừng hoạt động</MudTd>
+				}
+	</RowTemplate>
+</MudTable>
+}
+
+@code {
+	[Parameter]
+	public string idSinhVien { set; get; }
+	private int stt = 0;
+
+	//MonHoc
+	[Inject] private IMonHocRepo monHocRepo { set; get; }
+	private List<MonHocVM> listMonHocs;
+	private MonHocSearchVM monHocSearchVm = new MonHocSearchVM();
+
+	//KiHoc
+	[Inject] private IKiHocRepos kiHocRepo { set; get; }
+	private List<KiHocViewmodel> listKiHocs;
+	private KiHocSearchViewmodel kiHocSearchVm = new KiHocSearchViewmodel();
+
+	//SinhVien
+	[Inject] private ISinhVienRepo sinhVienRepo { set; get; }
+	private List<SinhVienVM> listSinhViens;
+	private SinhVienSearchVM sinhVienSearchVm = new SinhVienSearchVM();
+
+	//DiemSo
+	[Inject] private IDiemSoRepos diemSoRepo { set; get; }
+	private List<DiemSoVM> listDiemSos;
+	private DiemSoSearchVM diemSoSearchVm = new DiemSoSearchVM();
+
+	//cTDiemSo
+	[Inject] private IChiTietDiemSoRepo cTDiemSoRepo { set; get; }
+	private List<ChiTietDiemSoVM> listCTDiemSos;
+	private ChiTietDiemSoSearchVM cTDiemSoSearchVm = new ChiTietDiemSoSearchVM();
+
+	//ChiTietLopHoc
+	[Inject] private IChiTietLopHocRepos CTLHRepo { set; get; }
+	private List<ChiTietLopHocVM> listCTLHs;
+	private ChiTietLopHocSearchVM searchCTLHVm = new ChiTietLopHocSearchVM();
+
+	[Inject] private NavigationManager navigationManager { get; set; }
+
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		idSinhVien = await _SStorage.GetItemAsync<string>("IdNguoiDung");
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+		await LoadData();
+	}
+
+	private async Task LoadData()
+	{
+		listMonHocs = await monHocRepo.GetAllActiveAsync(monHocSearchVm);
+		listKiHocs = await kiHocRepo.GetAllActiveAsync(kiHocSearchVm);
+		listSinhViens = await sinhVienRepo.GetAllActiveAsync(sinhVienSearchVm);
+		listDiemSos = await diemSoRepo.GetAllActiveAsync(diemSoSearchVm);
+
+		listCTDiemSos = await cTDiemSoRepo.GetAllActiveAsync(cTDiemSoSearchVm);
+		//CTDiemSo cua SV
+		listCTDiemSos = listCTDiemSos.Where(c => c.IdSinhVien == Guid.Parse(idSinhVien)).ToList();
+		//list IdCTLH
+		var listIdCTLH = listCTDiemSos.GroupBy(c => c.IdChiTietLopHoc).Select(x => x.Key).ToList();
+		listCTLHs = await CTLHRepo.GetAllActiveAsync(searchCTLHVm);
+		listCTLHs = listCTLHs.Where(c => listIdCTLH.Any(x => x == c.Id)).ToList();
+		//CTLH cua SV
+		//listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao)).ToList();
+
+	}
+
+	private double TinhDiem(Guid idSV, Guid idCTLopHoc)
+	{
+		try
+		{
+			var listDiem = listCTDiemSos.Where(c => c.IdSinhVien == idSV && c.IdChiTietLopHoc == idCTLopHoc).
+	Select(c => new { c.Diem, listDiemSos.FirstOrDefault(x => x.Id == c.IdDiemSo).TrongSo }).ToList();
+
+			double diemTB = 0;
+			foreach (var i in listDiem)
+			{
+				diemTB += i.Diem * i.TrongSo / 100;
+			}
+			return diemTB;
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
+	//Gọi đến chi tiết chuyên ngành hẹp
+	private void NavigationChiTietDiemSo(Guid idSinhVien, Guid idCTLH)
+	{
+		navigationManager.NavigateTo($"/chitietdiem/{idSinhVien}/{idCTLH}");
+	}
+}

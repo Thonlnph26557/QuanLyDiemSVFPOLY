@@ -1,0 +1,193 @@
+﻿@page "/lophoc/quanlylophoc"
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Utilities;
+@inject IToastService ToastService
+@inject ISessionStorageService _SStorage
+
+
+
+@if (listLopHocs == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<div class="m-4">
+		<EditForm Model="@lophoc">
+			<MudText Typo="Typo.h5">Quản Lý Lớp Học</MudText>
+			<div class="row" style="margin-top:15px">
+				<div class="col">
+					<MudTextField @bind-Value="Ma" Label="Mã Lớp Học" For="() => lophoc.Ma" Variant="Variant.Outlined" />
+				</div>
+				<div class="col">
+					<MudSelect T="int" Label="Trạng Thái" AnchorOrigin="Origin.BottomCenter" @bind-Value="TrangThai" Variant="Variant.Outlined">
+						<MudSelectItem Value="1">Hoạt Động</MudSelectItem>
+						<MudSelectItem Value="0">Không hoạt động</MudSelectItem>
+					</MudSelect>
+				</div>
+			</div>
+			<div class="row" style="margin-top:15px">
+				<div class="col"></div>
+				<div class="col">
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmThem">Thêm</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Clear" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="LamMoi">Làm Mới</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mx-2" style="float:right" @onclick="ShowConfirmSua">Chỉnh Sửa</MudButton>
+				</div>
+			</div>
+		</EditForm>
+		<div style="clear:both"></div>
+		<MudTable Items="@listLopHocs">
+			<ToolBarContent>
+				<MudText Typo="Typo.h5">Danh Sách Lớp Học</MudText>
+			</ToolBarContent>
+			<HeaderContent>
+				<MudTh><MudText>STT</MudText></MudTh>
+				<MudTh>Mã</MudTh>
+				<MudTh>Ngày Tạo</MudTh>
+				<MudTh>Hành động</MudTh>
+			</HeaderContent>
+			<RowTemplate>
+				<MudTd>@(listLopHocs.IndexOf(context) + 1)</MudTd>
+				<MudTd>@context.Ma</MudTd>
+				<MudTd>@context.NgayTao</MudTd>
+				<MudTd>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => LoadBanGhi(context.Id))">Chỉnh Sửa</MudButton>
+					<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
+				</MudTd>
+			</RowTemplate>
+			<PagerContent>
+				<MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+			</PagerContent>
+		</MudTable>
+	</div>
+}
+
+<Confirmation ConfirmationMessage="Bạn có muốn thêm lớp học không?" ConfirmationTitle="Thông báo" @ref="_confirmThem" ConfirmationChanged="ThemLopHoc"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn sửa lớp học không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="SuaLopHoc"></Confirmation>
+<Confirmation ConfirmationMessage="Bạn có muốn xóa lớp học không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteLopHoc(idDelete)"></Confirmation>
+@code {
+
+	[CascadingParameter]
+	public QLDSVLayout _Layout { get; set; }
+
+
+	protected Confirmation _confirmThem { get; set; }
+	protected Confirmation _confirmSua { get; set; }
+	protected Confirmation _confirmXoa { get; set; }
+	LopHocVM lophoc = new LopHocVM();
+	[Parameter]
+	public string idDaoTao { get; set; }
+	[Inject] public HttpClient httpClient { get; set; }
+	[Inject] public ILopHocRepos LopHocRepos { get; set; }
+	private Utility utility = new Utility();
+	private List<LopHocVM> listLopHocs;
+	private LopHocSearchVM searchVM = new LopHocSearchVM();
+	protected override async Task OnInitializedAsync()
+	{
+		_Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+		_Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+		idDaoTao = await _SStorage.GetItemAsync<string>("IdDaoTao");
+		await LoadData();
+	}
+	private async Task LoadData()
+	{
+		listLopHocs = await LopHocRepos.GetAllActiveAsync(searchVM);
+		listLopHocs = listLopHocs.Where(c => c.IdDaoTao == Guid.Parse(idDaoTao.ToString())).ToList();
+	}
+	public Guid Id { get; set; }
+	public string Ma { get; set; }
+	public int TrangThai { get; set; } = 1;
+	private LopHocCreateVM createVm = new LopHocCreateVM();
+	private async Task ThemLopHoc()
+	{
+		if (utility.CheckMa(Ma))
+		{
+			createVm.Ma = Ma;
+			createVm.TrangThai = TrangThai;
+			createVm.IdDaoTao = Guid.Parse(idDaoTao.ToString());
+			bool x = await LopHocRepos.CreateAsync(createVm);
+			if (x == true)
+			{
+				ToastService.ShowSuccess($"Thêm thành công");
+			}
+			else
+			{
+				ToastService.ShowError($"Thêm thất bại");
+			}
+			await LoadData();
+			LamMoi();
+		}
+		else
+		{
+			ToastService.ShowError($"Không nhập kí tự đặc biệt");
+		}
+	}
+	private async Task LoadBanGhi(Guid id)
+	{
+		LopHocVM lopHocVM = await LopHocRepos.GetByIdAsync(id);
+		Id = lopHocVM.Id;
+		Ma = lopHocVM.Ma;
+		TrangThai = lopHocVM.TrangThai;
+	}
+
+	private LopHocUpdateVM updateVm = new LopHocUpdateVM();
+	private async Task SuaLopHoc()
+	{
+		if (utility.CheckMa(Ma))
+		{
+			updateVm.Ma = Ma;
+			updateVm.TrangThai = TrangThai;
+			bool x = await LopHocRepos.UpdateAsync(Id, updateVm);
+			if (x == true)
+			{
+				ToastService.ShowSuccess($"Sửa thành công");
+			}
+			else
+			{
+				ToastService.ShowError($"Sửa thất bại");
+			}
+			await LoadData();
+			LamMoi();
+		}
+		else
+		{
+			ToastService.ShowError($"Không nhập kí tự đặc biệt");
+		}
+	}
+	private async Task LamMoi()
+	{
+		Id = Guid.Empty;
+		Ma = null;
+		TrangThai = 1;
+	}
+	public async Task OnDeleteLopHoc(Guid deleteId)
+	{
+		bool x = await LopHocRepos.RemoveAsync(deleteId);
+		if (x == true)
+		{
+			ToastService.ShowSuccess($"Xóa thành công");
+		}
+		else
+		{
+			ToastService.ShowError($"Xóa thất bại");
+		}
+		await LoadData();
+		await LamMoi();
+	}
+	private Guid idDelete { get; set; }
+	private async Task ShowConfirmXoa(Guid deleteId)
+	{
+		idDelete = deleteId;
+		_confirmXoa.show();
+	}
+	private async Task ShowConfirmSua()
+	{
+		_confirmSua.show();
+	}
+	private async Task ShowConfirmThem()
+	{
+		_confirmThem.show();
+	}
+}

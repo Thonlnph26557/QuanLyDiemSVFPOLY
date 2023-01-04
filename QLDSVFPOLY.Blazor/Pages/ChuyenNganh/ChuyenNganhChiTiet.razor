@@ -1,0 +1,323 @@
+﻿@page "/chuyennganh/chitiet/{idChuyenNganh}"
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganhMonHoc
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@using QLDSVFPOLY.Blazor.Components;
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@inject IToastService toastService;
+@inject IJSRuntime JS
+
+
+<style>
+	#dd {
+		border: 2px black;
+		width: 400px;
+		height: 300px;
+		margin-left: 50px;
+	}
+</style>
+
+@if (updateVm == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	@if (updateVm.IdChuyenNganh == null)
+	{
+		<MudText Typo="Typo.h5">Thông tin chuyên ngành</MudText>
+	}
+	else
+	{
+		<MudText Typo="Typo.h5">Thông tin chuyên ngành hẹp</MudText>
+	}
+
+
+	<EditForm class="m-4" Model=@updateVm>
+		<div style="float:left" class="w-25">
+			<MudSpacer></MudSpacer>
+			<MudImage Src="@updateVm.DuongDanAnh" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+			<InputFile OnChange="@OnInputFileChanged"></InputFile>
+		</div>
+
+		<div style="float:left" class="w-75">
+			<div class="row pl-5">
+				<div class="col">
+					<DataAnnotationsValidator />
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" For="() => updateVm.Ma" />
+
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" For="() => updateVm.TenChuyenNganh" />
+
+					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai" For="() => updateVm.TrangThai">
+						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+						<MudSelectItem T="int" Value="2">Tạm dừng hoạt động</MudSelectItem>
+					</MudSelect>
+					<div style="float:right;" class="pt-1">
+						<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@(()=>ShowConfirmSua())">Lưu</MudButton>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</EditForm>
+}
+
+@if (listChuyenNganhHeps == null || listChuyenNganhMonHocs == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else if (updateVm.IdChuyenNganh == null)
+{
+	<MudToolBar>
+		<MudSpacer></MudSpacer>
+		<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/chuyennganh/themmoichuyennganhhep/{idChuyenNganh}" OnClick="@(()=>NavigationThemMoiCNH())">THÊM CHUYÊN NGÀNH HẸP</MudButton>
+	</MudToolBar>
+	<MudToolBar>
+		<MudText Typo="Typo.h5">Danh sách chuyên ngành hẹp</MudText>
+	</MudToolBar>
+
+
+	<MudTable Items="@listChuyenNganhHeps">
+		<ToolBarContent>
+			<MudSpacer></MudSpacer>
+			@*<MudTextField T="string" Placeholder="Tìm kiếm..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>*@
+		</ToolBarContent>
+
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.Ma)">Mã</MudTableSortLabel></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.TenChuyenNganh)">Tên</MudTableSortLabel></MudTh>
+			<MudTh><MudTableSortLabel SortBy="new Func<ChuyenNganhVM, object>(c => c.TrangThai)">Trạng thái</MudTableSortLabel></MudTh>
+			<MudTh><MudText Typo="Typo.body2">Hành động</MudText></MudTh>
+		</HeaderContent>
+
+		<RowTemplate>
+			<MudTd>@(listChuyenNganhHeps.IndexOf(context) + 1)</MudTd>
+			<MudTd>@context.Ma</MudTd>
+			<MudTd>@context.TenChuyenNganh</MudTd>
+			<MudTd><p style="color: @Color_TrangThai(context.TrangThai); margin: auto">@Convert_TrangThai(context.TrangThai)</p></MudTd>
+			<MudTd>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() =>NavigationChiTietChuyeNganhHep(Guid.Parse(idChuyenNganh),context.Id))">Chỉnh sửa</MudButton>
+				<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(
+    ()=> ShowConfirmXoa(context.Id))">Xóa</MudButton>
+
+			</MudTd>
+		</RowTemplate>
+
+		<PagerContent>
+			<MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+		</PagerContent>
+	</MudTable>
+
+	<Confirmation ConfirmationMessage="Bạn có muốn xóa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="()=>OnDeleteChuyenNganh(IdDelete)"></Confirmation>
+	<Confirmation ConfirmationMessage="Bạn có muốn sửa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="UpdateCN"></Confirmation>
+}
+
+@code {
+	[Parameter]
+	public string idChuyenNganh { get; set; }
+	//private int stt = 0;
+
+
+	//Inject Repo cua ChuyenNganh
+	[Inject] private IChuyenNganhRepo chuyenNganhRepo { set; get; }
+
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhVM> listChuyenNganhs;
+
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhVM> listChuyenNganhHeps;
+
+	private ChuyenNganhSearchVM searchVM = new ChuyenNganhSearchVM();
+
+	//lay listChuyenNganhMonHoc
+	//Inject Repo cua ChuyenNganh
+	[Inject] private IChuyenNganhMonHocRepos ChuyenNganhMonHocRepo { set; get; }
+	private List<ChuyenNganhMonHocVM> listChuyenNganhMonHocs;
+
+	//SinhVien
+	[Inject] private ISinhVienRepo sinhVienRepo { set; get; }
+	private List<SinhVienVM> listSinhViens;
+	private SinhVienSearchVM searchSV = new SinhVienSearchVM();
+
+
+	private ChuyenNganhMonHocSearchVM searchCNMHVM = new ChuyenNganhMonHocSearchVM();
+
+	[Inject] private NavigationManager navigationManager { get; set; }
+
+	//Su dung cho Update
+	private ChuyenNganhUpdateVM updateVm;
+
+	private Guid idDaoTao { set; get; }
+	private Guid idCNforThemCNH { set; get; }
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadData();
+		idCNforThemCNH = Guid.Parse(idChuyenNganh);
+		await LoadDataUpdate();
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+		updateVm.DuongDanAnh = defImg.DefaultAvatar();
+
+	}
+
+	private async Task LoadData()
+	{
+		listChuyenNganhs = await chuyenNganhRepo.GetAllActiveAsync(searchVM);
+		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == idDaoTao).ToList();
+		//lay ra list chuyenNganhMH
+		listChuyenNganhMonHocs = await ChuyenNganhMonHocRepo.GetAllActiveAsync(searchCNMHVM);
+		//lay ra list chuyenNganhHep
+		listChuyenNganhHeps = await chuyenNganhRepo.GetChuyenNganhHepByIdAsync(Guid.Parse(idChuyenNganh));
+		listChuyenNganhHeps = listChuyenNganhHeps.Where(c => c.TrangThai != 0).ToList();
+		var chuyenNganh = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganh));
+		idDaoTao = chuyenNganh.IdDaoTao;
+
+		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == idDaoTao).ToList();
+
+		listSinhViens = await sinhVienRepo.GetAllActiveAsync(searchSV);
+
+		chuyenNganh.TrangThai = 1;
+	}
+
+	//UpdateChuyenNganh
+	private async Task UpdateCN(bool confirm)
+	{
+		bool x = await chuyenNganhRepo.UpdateAsync(Guid.Parse(idChuyenNganh), updateVm);
+		if (x == true)
+		{
+			toastService.ShowSuccess($"Sửa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Sửa thất bại");
+		}
+	}
+
+	public async Task OnDeleteChuyenNganh(Guid deleteId)
+	{
+		bool x = await chuyenNganhRepo.RemoveAsync(deleteId);
+		if (x == true)
+		{
+			toastService.ShowSuccess($"Xóa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Xóa thất bại");
+		}
+
+	}
+
+	//LoadData khi đến trang chỉnh sửa
+	private async Task LoadDataUpdate()
+	{
+		var chuyenNganh = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganh));
+
+		updateVm = new ChuyenNganhUpdateVM();
+		updateVm.Ma = chuyenNganh.Ma;
+		updateVm.TenChuyenNganh = chuyenNganh.TenChuyenNganh;
+		updateVm.IdChuyenNganh = chuyenNganh.IdChuyenNganh;
+		updateVm.TrangThai = chuyenNganh.TrangThai;
+		updateVm.DuongDanAnh = chuyenNganh.DuongDanAnh;
+
+	}
+
+
+	//Gọi đến chi tiết chuyên ngành hẹp
+	private void NavigationChiTietChuyeNganhHep(Guid idChuyenNganh, Guid idChuyenNganhHep)
+	{
+		navigationManager.NavigateTo($"/chuyennganhhep/chitiet/{idChuyenNganh}/{idChuyenNganhHep}");
+	}
+	//gọi đến thêm CNH
+	private void NavigationThemMoiCNH()
+	{
+		navigationManager.NavigateTo($"/chuyennganh/themmoichuyennganhhep/{idChuyenNganh}");
+	}
+
+
+	private string Convert_TrangThai(int tt)
+	{
+		//Có khả năng có nhiều tt & color nên để switch :D
+		switch (tt)
+		{
+			case 0:
+				{
+					return "Đã xóa";
+				}
+			case 1:
+				{
+					return "Hoạt động";
+				}
+			default:
+				{
+					return "Tạm dừng hoạt động";
+				}
+		}
+	}
+
+	private string Color_TrangThai(int tt)
+	{
+		switch (tt)
+		{
+			case 0:
+				{
+					return "red";
+				}
+			case 1:
+				{
+					return "green";
+				}
+			default:
+				{
+					return "red";
+				}
+		}
+	}
+
+
+	//COnfirm
+	protected Confirmation _confirmXoa { set; get; }
+	private Guid IdDelete { set; get; }
+
+	private async Task ShowConfirmXoa(Guid deleteId)
+	{
+		IdDelete = deleteId;
+		_confirmXoa.show();
+	}
+
+
+	///=======================================
+
+	protected Confirmation _confirmSua { set; get; }
+
+	private Guid IdSua { set; get; }
+	private ChuyenNganhUpdateVM confirmchuyenNganhSua = new ChuyenNganhUpdateVM();
+
+	private async Task ShowConfirmSua()
+	{
+		_confirmSua.show();
+	}
+
+	DefaultImages defImg = new DefaultImages();
+	IJSObjectReference module;
+	record ImageDimensions(int Width, int Height);
+	private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+		var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+		var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+		if (dimensions.Width > 250)
+		{
+			file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+		}
+		var buffers = new byte[file.Size];
+		await file.OpenReadStream().ReadAsync(buffers);
+		string imageType = file.ContentType;
+		updateVm.DuongDanAnh = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+	}
+}

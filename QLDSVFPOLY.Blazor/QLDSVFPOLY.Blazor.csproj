@@ -1,9 +1,65 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageProjectUrl></PackageProjectUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor" />
+    <Content Remove="Pages\ChiTietLopHoc\ChinhSuaSinhVienTrongLop.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\GiangVien\ChiTiet.razor" />
+    <None Include="Pages\GiangVien\ChiTietGiangVien.razor" />
+    <None Include="Pages\GiangVien\HienThi.razor" />
+    <None Include="Pages\GiangVien\HienThiGiangVien.razor" />
+    <None Include="Pages\GiangVien\ThemGiangVien.razor" />
+    <None Include="Pages\GiangVien\ThemMoi.razor" />
+    <None Include="Pages\MonHoc\ChinhSuaMonHoc.razor" />
+    <None Include="Pages\MonHoc\DanhSachMonHoc.razor" />
+    <None Include="Pages\NhanVienDaoTao\ChiTietNhanVienDaoTao.razor" />
+    <None Include="Pages\NhanVienDaoTao\HienThiNhanVienDaoTao.razor" />
+    <None Include="Pages\NhanVienDaoTao\ThemNhanVienDaoTao.razor" />
+    <None Include="Pages\SinhVien\ChiTietSinhVien.razor" />
+    <None Include="Pages\SinhVien\HienThiSinhVien.razor" />
+    <None Include="Pages\SinhVien\ThemSinhVien.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
+    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
+    <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization.Policy" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.11" />
+    <PackageReference Include="MudBlazor" Version="6.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QLDSVFPOLY.BUS\QLDSVFPOLY.BUS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>

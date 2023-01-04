@@ -1,0 +1,135 @@
+﻿@page "/chitietlophoc/hienthi/{idDaoTao?}"
+@layout QLDSVLayout
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@using QLDSVFPOLY.BUS.ViewModels.MonHoc
+@using QLDSVFPOLY.BUS.ViewModels.LopHoc
+@using QLDSVFPOLY.BUS.ViewModels.KiHoc
+@using QLDSVFPOLY.BUS.ViewModels.GiangVien
+@using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
+@using QLDSVFPOLY.BUS.ViewModels.SinhVien
+@inject IMonHocRepo _repoMonHoc
+@inject ILopHocRepos _repoLopHoc
+@inject IGiangVienRepos _repoGiangVien
+@inject IKiHocRepos _repoKiHoc
+@inject IChiTietLopHocRepos _repoChiTietLopHoc
+@inject ISinhVienRepo _repoSinhVien
+@inject NavigationManager _navManager
+@inject ISessionStorageService _SStorage
+@inject IToastService _iToast
+
+
+@if(_listGiangVienVM == null || _listKiHocVM == null || _listLopHocVM == null || _listMonHocVM == null || _listCTLHVM == null) {
+    <LoadingIndicator></LoadingIndicator>
+}
+else {
+    <MudTable Items="@_listCTLHVM">
+        <ToolBarContent>
+            <MudText Typo="Typo.h5">Danh sách chi tiết lớp học</MudText>
+            <MudSpacer></MudSpacer>
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" Link="/chitietlophoc/them">Thêm</MudButton>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudText>STT</MudText></MudTh>
+            <MudTh><MudText>Lớp học</MudText></MudTh>
+            <MudTh><MudText>Môn học</MudText></MudTh>
+            <MudTh><MudText>Giảng viên</MudText></MudTh>
+            <MudTh><MudText>Kì học</MudText></MudTh>
+            <MudTh><MudText>Hành động</MudText></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@(_listCTLHVM.IndexOf(context) + 1)</MudTd>
+            <MudTd>@(_listLopHocVM.FirstOrDefault(c => c.Id == context.IdLopHoc) != null ? _listLopHocVM.FirstOrDefault(c => c.Id == context.IdLopHoc).Ma : "<Không tồn tại/Bị xóa>")</MudTd>
+            <MudTd>@(_listMonHocVM.FirstOrDefault(c => c.Id == context.IdMonHoc) != null ? _listMonHocVM.FirstOrDefault(c => c.Id == context.IdMonHoc).Ten : "<Không tồn tại/Bị xóa>")</MudTd>
+            <MudTd>@GetFullName(context.IdGiangVien)</MudTd>
+            <MudTd>@(_listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc) != null ? _listKiHocVM.FirstOrDefault(c => c.Id == context.IdKiHoc).Ten : "<Không tồn tại/Bị xóa>")</MudTd>
+            <MudTd>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.Info" Color="Color.Primary" OnClick="@(() => navChiTiet(context.Id))">Chi tiết</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Filled.MenuOpen" Color="Color.Primary" OnClick="@(() => navChinhSua(context.Id))">Chỉnh sửa</MudButton>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => btn_Delete(context.Id))">Xóa</MudButton>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+        </PagerContent>
+    </MudTable>
+
+    
+}
+
+@code {
+    [Parameter]
+    public string idDaoTao { get; set; }
+
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+    int stt = 1;
+    private List<ChiTietLopHocVM> _listCTLHVM;
+    private List<MonHocVM> _listMonHocVM;
+    private List<GiangVienVM> _listGiangVienVM;
+    private List<LopHocVM> _listLopHocVM;
+    private List<KiHocViewmodel> _listKiHocVM;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _Layout.Title = await _SStorage.GetItemAsync<string>("TenHienThi");
+        _Layout.Role = await _SStorage.GetItemAsync<string>("ChucVu");
+        await LoadListsAsync();
+    }
+
+    private async Task LoadListsAsync()
+    {
+        _listCTLHVM = await _repoChiTietLopHoc.GetAllActiveAsync(new ChiTietLopHocSearchVM());
+        _listMonHocVM = await _repoMonHoc.GetAllActiveAsync(new MonHocSearchVM());
+        _listGiangVienVM = await _repoGiangVien.GetAllActiveAsync(new GiangVienSearchVM());
+        _listLopHocVM = await _repoLopHoc.GetAllActiveAsync(new LopHocSearchVM());
+        _listKiHocVM = await _repoKiHoc.GetAllActiveAsync(new KiHocSearchViewmodel());
+
+
+
+
+
+
+    }
+
+    private void navChinhSua(Guid id) {
+        if (id != null)
+        {
+            _navManager.NavigateTo($"/chitietlophoc/chinhsua/{id}");
+        }
+    }
+
+    private async Task btn_Delete(Guid id)
+    {
+        int result = await _repoChiTietLopHoc.RemoveAsync(id);
+        stt = 1;
+        if(result == 1) {
+            _iToast.ShowSuccess("Xóa thành công", "Thông báo");
+        }
+        else {
+            _iToast.ShowError("Xóa thất bại", "Thông báo");
+        }
+        await LoadListsAsync();
+    }
+
+    private void navChiTiet(Guid id) {
+        if (id != null)
+        {
+            _navManager.NavigateTo($"/chitietdiemso/hienthi/{id}");
+        }
+    }
+
+    private string GetFullName(Guid idGiangVien) {
+        if (_listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien) == null) return "<Không tồn tại/Bị xóa>";
+        string Ten = "";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).Ho;
+        Ten += " ";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).TenDem;
+        Ten += " ";
+        Ten += _listGiangVienVM.FirstOrDefault(c => c.Id == idGiangVien).Ten;
+        return Ten;
+    }
+}

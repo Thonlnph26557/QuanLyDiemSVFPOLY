@@ -1,0 +1,12 @@
+﻿
+        [Required(ErrorMessage = ("Trường này không được để trống"))]
+        [MaxLength(10, ErrorMessage = "Mã giảng viên không nhập quá 10 ký tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
+
+         [Required(ErrorMessage = ("Trường này không được để trống"))]
+        [MaxLength(50, ErrorMessage = "Họ giảng viên không nhập quá 50 ký tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
+
+         [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Số điện thoại phải là số tự nhiên")]
+        [Required(ErrorMessage = ("Trường này không được để trống"))]
+        [MaxLength(11, ErrorMessage = "Số điện thoại không nhập quá 11 ký tự")]

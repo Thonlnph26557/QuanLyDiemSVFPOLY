@@ -1,0 +1,50 @@
+﻿@page "/pagegiday"
+@using QLDSVFPOLY.Blazor.Components
+
+<textarea>Lựa chọn vừa nhập: @GiaTri1</textarea>
+
+<button @onclick="() => PhuongThucTest()" style="border: 1px solid black;">Button gọi phương thức 'PhuongThucTest()'</button>
+
+@*Đây là form xác nhận, gắn vào page, 
+
+Trong đó, thông báo gán trực tiếp như dưới > phải tạo thêm form nếu có nhu cầu thông báo khác nhau,
+    hoặc gán cho thông báo bằng các thuộc tính khác trong @code > dùng chung 1 form luôn
+            VD trường hợp 2: 
+                    - Khai báo: string stringnaoday = "Giá trị nào đấy";
+                    - Sau đó cho: ConfirmationMessage="@stringnaoday"
+                    - Thông báo hiển thị có nội dùng mới là "Giá trị nào đấy" :v
+
+*@
+        
+<Confirmation ConfirmationMessage="Nội dung thông báo" ConfirmationTitle="Tiêu đề của thông báo" @ref="_confirm" ConfirmationChanged="PhuongThucDuocGoiDen"></Confirmation>
+
+@code {
+    protected Confirmation _confirm { get; set; }
+
+    string GiaTri1 = "Chưa có gì";
+
+    private async Task PhuongThucTest() {
+        
+        _confirm.show();
+    }
+
+    private async Task PhuongThucDuocGoiDen(bool Confirm)
+    {
+        if (Confirm) {
+            GiaTri1 = "Chọn xác nhận";
+        }
+        else GiaTri1 = "Hủy xác nhận";
+    }
+
+
+    //Mô tả: Bấm button, nó sẽ chạy phuongthuctest()
+
+    //Trong phuongthuctest(): 
+        //_confirm.show() sẽ khiến form có @ref là _confirm được hiện lên
+
+    //ConfirmationChanged="" trong form trên là phương thức sẽ chạy sau khi hiện form xác nhận, ở đây là PhuongThucDuocGoiDen (tên đặt ví dụ thôi) sẽ chạy sau khi hiện form
+
+    //Trong PhuongThucDuocGoiDen sẽ có 1 biến bool truyền vào để nhận xác nhận từ form, còn mn xử lý nó như thế nào thì tùy, trên là demo qua
+                                                                                                                //(Xử lý: Chạy lệnh Add bên trong khi biến bool đó = true chẳng hạn)
+
+}

@@ -1,0 +1,111 @@
+﻿@page "/nhanviendaotao/hienthi"
+
+@inject IConfiguration Configuration
+@inject ISessionStorageService _SStorage
+
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Pages.Confirmation
+
+
+@inject IToastService ToastService
+
+
+@if (_listNhanVienDaoTaos == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+
+    <MudTable Items="@_listNhanVienDaoTaos">
+
+        <ToolBarContent>
+
+            <MudText Typo=" Typo.h5">Danh Sách Nhân Viên Đào Tạo</MudText>
+
+            <MudSpacer></MudSpacer>
+
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=>NavigationThemMoi()">Thêm</MudButton>
+        </ToolBarContent>
+
+        <HeaderContent>
+
+            <MudTh>STT</MudTh>
+
+            <MudTh>Họ Và Tên </MudTh>
+
+            <MudTh>Giới Tính </MudTh>
+
+            <MudTh>Ngày Sinh </MudTh>
+
+            <MudTh>Địa Chỉ </MudTh>
+
+            <MudTh>Số Điện Thoại </MudTh>
+
+            <MudTh>Email </MudTh>
+
+            <MudTh>Ngày Tạo </MudTh>
+
+        </HeaderContent>
+
+        <RowTemplate>
+
+            <MudTd>@(_listNhanVienDaoTaos.IndexOf(context) + 1)</MudTd>
+
+                <MudTd>@context.Ho @context.TenDem @context.Ten</MudTd>
+
+                <MudTd>@(context.GioiTinh == 1 ? "Nữ" : "Nam")</MudTd>
+
+                <MudTd>@context.NgaySinh.ToString("MM/dd/yyyy")</MudTd>
+
+                <MudTd>@context.DiaChi</MudTd>
+
+                <MudTd>@context.SoDienThoai</MudTd>
+
+                <MudTd>@context.Email</MudTd>
+
+                <MudTd>@context.NgayTao.ToString("MM/dd/yyyy")</MudTd>
+
+                <MudTd>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Class="mr-3 mt-3" @onclick="()=> NavigationChiTiet(context.Id)">Chi Tiết</MudButton>
+
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Class="mr-3 mt-3" OnClick="@(()=>ShowConfirmXoa(context.Id))">Xóa</MudButton>
+
+                </MudTd>
+
+            </RowTemplate>
+
+            <PagerContent>
+
+                <MudTablePager PageSizeOptions="new int[]{10, 50, 100}" />
+
+            </PagerContent>
+
+        </MudTable>
+
+}
+
+<Confirmation ConfirmationMessage="Bạn có muốn xóa thông tin giảng viên không?" ConfirmationTitle="Thông báo" @ref="_confirmXoa" ConfirmationChanged="OnDeleteNhanVienDaoTao"></Confirmation>
+
+
+@code {
+    //
+    [CascadingParameter]
+    public QLDSVLayout _Layout { get; set; }
+
+
+    //
+    private Guid idDeleted { get; set; }
+
+    //
+    protected Confirmation _confirmXoa { get; set; }
+
+    private async Task ShowConfirmXoa(Guid IdDelete)
+    {
+        idDeleted = IdDelete;
+        _confirmXoa.show();
+    }
+
+
+}

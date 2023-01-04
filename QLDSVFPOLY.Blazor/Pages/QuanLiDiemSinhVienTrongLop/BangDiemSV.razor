@@ -1,0 +1,71 @@
+﻿@page "/chitietdiemso/hienthi/{idChiTietLopHoc}"
+
+@if (_listChiTietDiemSos == null || _listChiTietLopHoc == null || _listDiemSos == null || _listSinhViens == null || listIdDiemSo == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<MudTable Items="@_listSinhViens">
+		<ToolBarContent>
+			<MudText Typo="Typo.h6">Danh sách điểm sinh viên trong lớp @MaLop - @MaMon (@TenMon)</MudText>
+			<MudSpacer></MudSpacer>
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="LoadData">Khôi phục</MudButton>
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mr-3 mt-3" OnClick="SaveAsync">Lưu</MudButton>
+
+		</ToolBarContent>
+
+		<HeaderContent>
+			<MudTh><MudText>STT</MudText></MudTh>
+			<MudTh><MudText>Mã Sinh Viên</MudText></MudTh>
+			<MudTh><MudText>Tên Sinh Viên</MudText></MudTh>
+			@foreach (var item in listIdDiemSo)
+			{
+			<MudTh><MudText>@_listDiemSos.FirstOrDefault(c=>c.Id==item).TenDauDiem</MudText></MudTh>
+			}
+		<MudTh><MudText>Điểm Trung Bình</MudText></MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+
+		<MudTd>@(stt++)</MudTd>
+		<MudTd>@context.Ma</MudTd>
+		<MudTd>@(context.Ho + " "+ context.TenDem +" "+ context.Ten)</MudTd>
+		@foreach (var item in listIdDiemSo)
+			{
+			<MudTd>
+				<input type="text" @bind-value="@_listChiTietDiemSoAfterUpdate.FirstOrDefault(c=>c.IdDiemSo==item&& c.IdSinhVien==context.Id).Diem" />
+				<br>
+				<span hidden="@(!(_listChiTietDiemSoAfterUpdate.FirstOrDefault(c=>c.IdDiemSo==item&& c.IdSinhVien==context.Id).Diem < 0 || _listChiTietDiemSoAfterUpdate.FirstOrDefault(c=>c.IdDiemSo==item&& c.IdSinhVien==context.Id).Diem > 10))" style="color:red;">@("Điểm không được < 0 hoặc > 10")</span>
+			</MudTd>
+			}
+		<MudTd>@Math.Round(@TinhDiem(context.Id, Guid.Parse(idChiTietLopHoc)),2)</MudTd>
+
+	</RowTemplate>
+</MudTable>
+}
+
+@code {
+	private double TinhDiem(Guid idSV, Guid idCTLopHoc)
+	{
+		try
+		{
+			var listDiem = _listChiTietDiemSos.Where(c => c.IdSinhVien == idSV && c.IdChiTietLopHoc == idCTLopHoc).
+	Select(c => new { c.Diem, _listDiemSos.FirstOrDefault(x => x.Id == c.IdDiemSo).TrongSo }).ToList();
+
+			double diemTB = 0;
+			foreach (var i in listDiem)
+			{
+				diemTB += i.Diem * i.TrongSo / 100;
+			}
+			return diemTB;
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
+
+
+}

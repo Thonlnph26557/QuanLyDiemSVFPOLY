@@ -1,0 +1,67 @@
+﻿
+
+
+<MudNavMenu Class="mud-width-full h-100" Style="">
+
+    @*<MudAvatar Image=""></MudAvatar>*@
+
+        
+
+    <MudText Typo="Typo.h6" class="pt-3 pl-6" style="color:#9400D3">Danh sách chức năng</MudText>
+
+    <MudDivider Class="my-4 mx-6" DividerType="DividerType.Middle" Style="height:1px; border-color: black"></MudDivider>
+
+
+    <AuthorizeView Roles="DaoTao, NhanVienDaoTao">
+
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.StackedBarChart" Href="/thongke/thongkecoso">Thống kê cơ sở</MudNavLink>
+
+    </AuthorizeView>
+
+    <AuthorizeView Roles="DaoTao">
+
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.Group" Href="/nhanviendaotao/hienthi">Quản lý nhân viên đào tạo</MudNavLink>
+
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="DaoTao, NhanVienDaoTao">
+
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.CoPresent" Href="/giangvien/hienthi">Quản lý giảng viên</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.Group" Href="/sinhvien/hienthi">Quản lý sinh viên</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.AccountTree" Href="/chuyennganh/hienthi">Quản lý chuyên ngành</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.LibraryBooks" Href="monhoc/danhsach">Quản lý môn học</MudNavLink>
+        <MudNavLink Class="my-2" Style="color:#9400D3" Icon="@Icons.Filled.CalendarMonth" Href="/kihoc/chitietkihoc">Quản lý kì học</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.CreditScore" Href="/diemso/quanlydiemso">Quản lý điểm số</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.MeetingRoom" Href="/lophoc/quanlylophoc">Quản lý lớp học</MudNavLink>
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.TextSnippet" Href="/chitietlophoc/hienthi">Quản lý chi tiết lớp học</MudNavLink>
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="GiangVien, DaoTao, NhanVienDaoTao">
+        
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="GiangVien">
+        <MudNavLink Class="my-3" Style="color:#9400D3;" Icon="@Icons.Filled.CreditScore" Href="/lophoc/hienthi">Quản lý điểm số</MudNavLink>
+    </AuthorizeView>
+
+
+
+    <AuthorizeView Roles="SinhVien">
+
+        <MudNavLink Class="my-3" Style="color:#9400D3" Icon="@Icons.Filled.AddChart" Href="/bangdiemSV/hienthi
+">Chi tiết bảng điểm</MudNavLink>
+
+    </AuthorizeView>
+
+    <MudDivider Style="height:1px;" Class="my-2 mx-6" DividerType="DividerType.Middle"></MudDivider>
+
+
+    <MudNavLink Href="/taikhoan/dangnhap" Icon="@Icons.Filled.ExitToApp"><MudText Style="color: red;">Đăng xuất</MudText></MudNavLink>
+</MudNavMenu>
+

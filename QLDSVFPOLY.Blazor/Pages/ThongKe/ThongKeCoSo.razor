@@ -1,0 +1,108 @@
+﻿@page "/thongke/thongkecoso"
+@using QLDSVFPOLY.Blazor.Components
+@using QLDSVFPOLY.Blazor.Data;
+@inject IJSRuntime jsRuntime;
+@inject ISessionStorageService _SStorage
+
+<style>
+	#chartdiv {
+		width: 100%;
+		height: 500px;
+		font-size: 11px;
+	}
+
+		#chartdiv path {
+			fill: #a55eea;
+			stroke: #a55eea;
+		}
+
+		#chartdiv a {
+			opacity: 0 !important;
+		}
+
+	.btn {
+		color: #B500FF;
+		padding: 13px 20px;
+		border: 2px solid #b66dff;
+		font-size: 17px;
+		transition: 0.3s;
+		border-radius: 10px;
+		font-family: Arial;
+		font-weight: 600;
+	}
+
+		.btn:hover {
+			transition: 0.3s;
+			background: linear-gradient(to right, #da8cff, #9a55ff);
+			margin-top: -10px;
+			color: #fff;
+			animation-name: button_animation;
+			animation-duration: 3s;
+			animation-iteration-count: infinite;
+		}
+
+		.btn:active {
+			transform: scale(0.3);
+		}
+</style>
+
+@if (listChuyenNganhs == null || listGiangViens == null || listSinhViens == null || listLopHocs == null || listDaoTaos == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<h1>THÔNG TIN CƠ SỞ: @listDaoTaos.FirstOrDefault(c=>c.Id == Guid.Parse(idDaoTao)).DiaChi </h1>
+	<div style="clear:both"></div>
+	<div class="w-100">
+		<div class="row" style="margin-top:50px">
+			<div class="col"><button type="button" class="btn" style="width: -webkit-fill-available;padding:30px;" @onclick="ChuyenNganhBarChart">Tổng số chuyên ngành: @listChuyenNganhs.Count()</button></div>
+			<div class="col"><button type="button" class="btn" style="width: -webkit-fill-available;padding:30px" @onclick="GiangVienBarChart">Tổng số giảng viên: @listGiangViens.Count()</button></div>
+			<div class="col"><button type="button" class="btn" style="width: -webkit-fill-available;padding:30px" @onclick="SinhVienBarChart">Tổng số sinh viên: @listSinhViens.Count()</button></div>
+			<div class="col"><button type="button" class="btn" style="width: -webkit-fill-available;padding:30px" @onclick="LopHocBarChart">Tổng số lớp học: @listLopHocs.Count()</button></div>
+		</div>
+	</div>
+}
+<h3 style="margin-top:20px;text-align:center">@TenBieuDo</h3>
+<div id="chartdiv"></div>
+
+@code {
+	List<ThongKe> thongKes = new List<ThongKe>();
+	private string TenBieuDo;
+	private async Task ChuyenNganhBarChart()
+	{
+		TenBieuDo = "Biểu đồ thống kê chuyên ngành";
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Hoạt động", SoLuong = ChuyenNganhActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Tạm dừng hoạt động", SoLuong = ChuyenNganhDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Dừng hoạt động", SoLuong = ChuyenNganhNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task GiangVienBarChart()
+	{
+		TenBieuDo = "Biểu đồ thống kê giảng viên";
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Đang làm", SoLuong = GiangVienActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Đang nghỉ làm", SoLuong = GiangVienDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Đã nghỉ", SoLuong = GiangVienNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task SinhVienBarChart()
+	{
+		TenBieuDo = "Biểu đồ thống kê sinh viên";
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Đang học", SoLuong = SinhVienActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Bảo lưu", SoLuong = SinhVienDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Đã nghỉ", SoLuong = SinhVienNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+	private async Task LopHocBarChart()
+	{
+		TenBieuDo = "Biểu đồ thống kê lớp học";
+		thongKes.Clear();
+		thongKes.Add(new ThongKe() { Name = "Hoạt động", SoLuong = LopHocActiveCount });
+		thongKes.Add(new ThongKe() { Name = "Tạm dừng hoạt động", SoLuong = LopHocDelayCount });
+		thongKes.Add(new ThongKe() { Name = "Dừng hoạt động", SoLuong = LopHocNonAcCount });
+		await jsRuntime.InvokeVoidAsync("GenerateBarChart", thongKes);
+	}
+}

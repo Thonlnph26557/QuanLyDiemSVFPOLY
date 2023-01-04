@@ -1,0 +1,183 @@
+﻿@page "/chuyennganhhep/chitiet/{idChuyenNganh}/{idChuyenNganhHep}"
+@using QLDSVFPOLY.BUS.ViewModels.ChuyenNganh
+@using QLDSVFPOLY.Blazor.Components;
+@using QLDSVFPOLY.Blazor.Repository.Interfaces
+@inject IToastService toastService
+@inject ISessionStorageService _SStorage
+@inject IJSRuntime JS
+
+
+<style>
+	#dd {
+		border: 2px black;
+		width: 400px;
+		height: 300px;
+		margin-left: 50px;
+	}
+</style>
+
+@if (updateVm == null)
+{
+	<LoadingIndicator></LoadingIndicator>
+}
+else
+{
+	<MudText Typo="Typo.h5">Danh sách chuyên ngành</MudText>
+	<EditForm class="m-4" Model="@updateVm">
+		<div style="float:left" class="w-25">
+			<MudSpacer></MudSpacer>
+			<MudImage Src="@updateVm.Ma" Elevation="25" Class="rounded-lg w-100" Style="background-color: black;" Fluid="true" />
+			<InputFile OnChange="@OnInputFileChanged"></InputFile>
+		</div>
+
+		<div style="float:left" class="w-75">
+			<div class="row pl-5">
+				<div class="col">
+		<DataAnnotationsValidator/>
+					<MudTextField Label="Mã" Variant="Variant.Outlined" T="string" @bind-Value="@updateVm.Ma" For="() => updateVm.Ma" />
+
+					<MudTextField Label="Tên" Variant="Variant.Outlined" T="string" Class="py-1" @bind-Value="@updateVm.TenChuyenNganh" For="() => updateVm.TenChuyenNganh" />
+
+					<MudSelect T="int" Label="Trạng thái" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="py-1" @bind-Value="@updateVm.TrangThai" For="() => updateVm.TrangThai">
+						<MudSelectItem T="int" Value="1">Hoạt động</MudSelectItem>
+						<MudSelectItem T="int" Value="2">Tạm dừng hoạt động</MudSelectItem>
+					</MudSelect>
+					<div style="float:right;" class="pt-1">
+						<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary" OnClick="@(()=>ShowConfirmSua(Guid.Parse(idChuyenNganhHep),updateVm))">Lưu</MudButton>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</EditForm>
+
+	<Confirmation ConfirmationMessage="Bạn có muốn sửa chuyên ngành không?" ConfirmationTitle="Thông báo" @ref="_confirmSua" ConfirmationChanged="UpdateCN"></Confirmation>
+
+@*	<Confirmation ConfirmationMessage="Are you sure to delete?"
+			  ConfirmationTitle="Delete Task"
+			  @ref="_confirmSua"
+			  ConfirmationChanged="UpdateCN">
+	</Confirmation>*@
+
+}
+@code {
+
+	[Parameter]
+	public string idChuyenNganh { set; get; }
+
+	[Parameter]
+	public string idChuyenNganhHep { set; get; }
+
+	//Su dung cho Update
+	private ChuyenNganhUpdateVM updateVm = new ChuyenNganhUpdateVM();
+
+	//Inject Repo cua ChuyenNganh
+	[Inject] private IChuyenNganhRepo chuyenNganhRepo { set; get; }
+
+	//Khai bao ra listChuyenNganh
+	private List<ChuyenNganhVM> listChuyenNganhs;
+
+	private ChuyenNganhSearchVM searchVM = new ChuyenNganhSearchVM();
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/fileSize.js");
+		await LoadDataUpdate();
+		updateVm.DuongDanAnh = defImg.DefaultAvatar();
+	}
+
+	private async Task LoadData()
+	{
+		listChuyenNganhs = await chuyenNganhRepo.GetAllActiveAsync(searchVM);
+
+		var chuyenNganhLon = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganh));
+		Guid idDaoTaoCN = chuyenNganhLon.IdDaoTao;
+		listChuyenNganhs = listChuyenNganhs.Where(c => c.IdDaoTao == idDaoTaoCN).ToList();
+	}
+
+	private async Task LoadDataUpdate()
+	{
+		var chuyenNganhHep = await chuyenNganhRepo.GetByIdAsync(Guid.Parse(idChuyenNganhHep));
+
+		updateVm.Ma = chuyenNganhHep.Ma;
+		updateVm.TenChuyenNganh = chuyenNganhHep.TenChuyenNganh;
+		updateVm.TrangThai = chuyenNganhHep.TrangThai;
+		updateVm.IdChuyenNganh = Guid.Parse(idChuyenNganh);
+		updateVm.DuongDanAnh = chuyenNganhHep.DuongDanAnh;
+		updateVm.TrangThai = chuyenNganhHep.TrangThai;
+	}
+
+
+
+	private async Task Clear()
+	{
+		updateVm.Ma = "";
+		updateVm.TenChuyenNganh = "";
+		updateVm.TrangThai = 1;
+	}
+
+
+	protected Confirmation _confirmSua { set; get; }
+
+	private Guid IdSua { set; get; }
+	private ChuyenNganhUpdateVM confirmchuyenNganhSua = new ChuyenNganhUpdateVM();
+
+
+	private async Task ShowConfirmSua(Guid suaId, ChuyenNganhUpdateVM chuyenNganh)
+	{
+		IdSua = suaId;
+		confirmchuyenNganhSua = chuyenNganh;
+		_confirmSua.show();
+	}
+
+	//public void OnDeleteTask(Guid deleteId)
+	//{
+	//	DeleteId = deleteId;
+	//	DeleteConfirmation.Show();
+	//}
+
+	private async Task UpdateCN(bool updateConfirm)
+	{
+		if (updateConfirm == true)
+		{
+			await chuyenNganhRepo.UpdateAsync(IdSua, confirmchuyenNganhSua);
+
+			toastService.ShowSuccess($"Sửa thành công");
+			await LoadData();
+		}
+		else
+		{
+			toastService.ShowError($"Sửa thất bại");
+		}
+
+	}
+	//check xem xác nhận xóa ko>
+	//public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+	//{
+	//	if (deleteConfirmed)
+	//	{
+	//		await TaskApiClient.DeleteTask(DeleteId);
+	//		// await GetTasks();
+	//	}
+	//}
+
+	DefaultImages defImg = new DefaultImages();
+	IJSObjectReference module;
+	record ImageDimensions(int Width, int Height);
+	private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		var streamRef = new DotNetStreamReference(file.OpenReadStream(file.Size));
+		var json = await module.InvokeAsync<string>("getImageDimensions", streamRef);
+		var dimensions = JsonSerializer.Deserialize<ImageDimensions>(json);
+		if (dimensions.Width > 250)
+		{
+			file = await file.RequestImageFileAsync(file.ContentType, 250, int.MaxValue);
+		}
+		var buffers = new byte[file.Size];
+		await file.OpenReadStream().ReadAsync(buffers);
+		string imageType = file.ContentType;
+		updateVm.Ma = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+	}
+}
