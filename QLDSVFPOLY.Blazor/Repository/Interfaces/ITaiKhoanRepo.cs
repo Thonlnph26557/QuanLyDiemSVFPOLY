@@ -4,7 +4,7 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
 {
     public interface ITaiKhoanRepo
     {
-        Task<DangNhapResponseVM> LoginAsync(DangNhapVM vm);
+        Task<DangNhapVM> DangNhapAsync(DangNhapVM input);
         Task<bool> UpdateAsync(DoiMatKhauVM vm);
     }
 }

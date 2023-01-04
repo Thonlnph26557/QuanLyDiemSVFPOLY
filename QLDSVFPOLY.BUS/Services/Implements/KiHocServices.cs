@@ -26,130 +26,34 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _iKiHocRepositories = new KiHocRepositories();
         }
 
-        //
-        private async Task GetListKiHocAsync()
+        public Task<bool> CreateAsync(KiHocCreateViewmodel obj)
         {
-            _listKiHocs = await _iKiHocRepositories.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<List<KiHocViewmodel>> GetAllAsync(KiHocSearchViewmodel obj)
+        public Task<List<KiHocViewmodel>> GetAllActiveAsync(KiHocSearchViewmodel obj)
         {
-            await GetListKiHocAsync();
-
-            List<KiHocViewmodel> listKiHocViewmodel = new List<KiHocViewmodel>();
-            listKiHocViewmodel = _listKiHocs.Select(c=> new KiHocViewmodel()
-            {
-                Id = c.Id,
-                Ten = c.Ten,
-                NamHoc = c.NamHoc,
-                NgayBatDau = c.NgayBatDau,
-                NgayKetThuc = c.NgayKetThuc,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-            }).ToList();
-
-            return listKiHocViewmodel;
+            throw new NotImplementedException();
         }
 
-        //
-        //Active = (TrangThai != 0)
-        public async Task<List<KiHocViewmodel>> GetAllActiveAsync(KiHocSearchViewmodel obj)
+        public Task<List<KiHocViewmodel>> GetAllAsync(KiHocSearchViewmodel obj)
         {
-            await GetListKiHocAsync();
-
-            List<KiHocViewmodel> listKiHocViewmodel = new List<KiHocViewmodel>();
-            listKiHocViewmodel = _listKiHocs.Where(c => c.TrangThai !=0).Select(c => new KiHocViewmodel()
-            {
-                Id = c.Id,
-                Ten = c.Ten,
-                NamHoc = c.NamHoc,
-                NgayBatDau = c.NgayBatDau,
-                NgayKetThuc = c.NgayKetThuc,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-            }).ToList();
-
-            return listKiHocViewmodel;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<KiHocViewmodel> GetByIdAsync(Guid id)
+        public Task<KiHocViewmodel> GetByIdAsync(Guid id)
         {
-            await GetListKiHocAsync();
-
-            KiHoc temp = _listKiHocs.FirstOrDefault(c => c.Id == id);
-
-            KiHocViewmodel result = new KiHocViewmodel()
-            {
-                Id = temp.Id,
-                Ten = temp.Ten,
-                NamHoc = temp.NamHoc,
-                NgayBatDau = temp.NgayBatDau,
-                NgayKetThuc = temp.NgayKetThuc,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> CreateAsync(KiHocCreateViewmodel obj)
+        public Task<bool> RemoveAsync(Guid id)
         {
-            var temp = new KiHoc()
-            {
-                Id = Guid.NewGuid(),
-                Ten = obj.Ten,
-                NamHoc = obj.NamHoc,
-                NgayBatDau = obj.NgayBatDau,
-                NgayKetThuc = obj.NgayKetThuc,
-                TrangThai = obj.TrangThai,
-                NgayTao = DateTime.Now
-            };
-
-            await _iKiHocRepositories.CreateAsync(temp);
-            await _iKiHocRepositories.SaveChangesAsync();
-
-            var _listKiHocs = await _iKiHocRepositories.GetAllAsync();
-            if (_listKiHocs.Any(c => temp.Id == c.Id)) return true;
-
-            return false;
-        }
-        
-        //
-        public async Task<bool> UpdateAsync(Guid id, KiHocUpdateViewmodel obj)
-        {
-            var _listKiHocs = await _iKiHocRepositories.GetAllAsync();
-
-            if (!_listKiHocs.Any(c => c.Id == id)) return false;
-
-            var temp = _listKiHocs.FirstOrDefault(temp => temp.Id == id);
-
-                temp.Ten = obj.Ten;
-                temp.NamHoc = obj.NamHoc;
-                temp.NgayBatDau = obj.NgayBatDau;
-                temp.NgayKetThuc = obj.NgayKetThuc;
-                temp.TrangThai = obj.TrangThai;
-
-            await _iKiHocRepositories.UpdateAsync(temp);
-            await _iKiHocRepositories.SaveChangesAsync();
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> RemoveAsync(Guid id)
+        public Task<bool> UpdateAsync(Guid id, KiHocUpdateViewmodel obj)
         {
-            var _listKiHocs = await _iKiHocRepositories.GetAllAsync();
-
-            if (!_listKiHocs.Any(c => c.Id == id)) return false;
-
-            await _iKiHocRepositories.RemoveAsync(id);
-            await _iKiHocRepositories.SaveChangesAsync();
-
-            return true;
+            throw new NotImplementedException();
         }
-
     }
 }

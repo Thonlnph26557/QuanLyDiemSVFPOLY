@@ -17,95 +17,12 @@ namespace QLDSVFPOLY.API.Controllers
     [ApiController]
     public class TaiKhoansController : ControllerBase
     {
-        ITaiKhoanServices _sv;
+        ITaiKhoanServices _iTaiKhoanServices;
         private IConfiguration _config;
         public TaiKhoansController(IConfiguration config)
         {
-            _sv = new TaiKhoanServices();
+            _iTaiKhoanServices = new TaiKhoanServices();
             _config = config;
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync(DoiMatKhauVM vm)
-        {
-            var result = await _sv.UpdateAsync(vm);
-            return Ok(result);
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> LoginAsync([FromBody] DangNhapVM vm)
-        //{
-        //    IActionResult response = Unauthorized();
-
-        //    var user = await XacThucTK(vm);
-
-        //    if (user != null)
-        //    {
-        //        var gen_token = await GenerateJWToken(user);
-        //        response = Ok(new { token = gen_token });
-        //        return Ok(new DangNhapResponseVM { user, Token = gen_token });
-        //    }
-        //    return response;
-        //}
-
-
-
-        [HttpGet]
-        public async Task<IActionResult> DangNhap(string TaiKhoan, string MatKhau, string ChucVu)
-        {
-            DangNhapVM vm = new DangNhapVM
-            {
-                TaiKhoan = TaiKhoan,
-                MatKhau = MatKhau,
-                ChucVu = ChucVu
-            };
-
-            var user = await XacThucTK(vm);
-            //user.TenHienThi = "Tenhienthitest";
-
-            if (user != null && user.Id != null)
-            {
-                var gen_token = await GenerateJWToken(user);
-                //response = Ok(new {token = gen_token} );
-                return Ok(new DangNhapResponseVM { 
-                    TenHienThi = user.TenHienThi, 
-                    ChucVu = user.ChucVu,
-                    IdDaoTao = user.IdDaoTao,
-                    Id = user.Id,
-                    Token = gen_token 
-                });
-            }
-            return Ok(new DangNhapResponseVM());
-        }
-
-
-        private async Task<DangNhapVM> XacThucTK(DangNhapVM tk)
-        {
-            DangNhapVM result = await _sv.DangNhapAsync(tk);
-            return result;
-        }
-
-        private async Task<string> GenerateJWToken(DangNhapVM tk)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                //new Claim(ClaimTypes.Name, tk.TenHienThi),
-                new Claim(JwtRegisteredClaimNames.Name, tk.TaiKhoan),
-                new Claim(ClaimTypes.Role, tk.ChucVu)
-            };
-
-            var token = new JwtSecurityToken
-                (
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(120),
-                signingCredentials: credentials
-                );
-            var EncodeToken = new JwtSecurityTokenHandler().WriteToken(token);
-            return EncodeToken;
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿
+        [Required(ErrorMessage = "Mã chuyên ngành không được để trống")]
+        [MaxLength(10, ErrorMessage = "Mã chuyên ngành không qua 10 tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
+
+         [Required(ErrorMessage = "Tên chuyên ngành không được để trống")]
+        [MaxLength(50, ErrorMessage = "Tên chuyên ngành không qua 50 tự")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]

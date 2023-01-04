@@ -34,144 +34,14 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _repoChuyenNganh = new ChuyenNganhRepository();
         }
 
-        
-
-        private async Task<bool> ValidateAsync(DangNhapVM input)
+        public Task<DangNhapVM> DangNhapAsync(DangNhapVM input)
         {
-            switch (input.ChucVu)
-            {
-                case "DaoTao":
-                    {
-                        var list = await _repoDaoTao.GetAllAsync();
-                        foreach (var i in list)
-                        {
-                            if (i.TenDangNhap == input.TaiKhoan && i.MatKhau == input.MatKhau)
-                            {
-                                TenHienThi = i.Ma;
-                                IdDaoTao = i.Id;
-                                Id = i.Id;
-                                return true;
-                            }
-                        }
-                        break;
-                    }
-                case "GiangVien":
-                    {
-                        var list = await _repoGiangVien.GetAllAsync();
-                        foreach (var i in list)
-                        {
-                            if (i.TenDangNhap == input.TaiKhoan && i.MatKhau == input.MatKhau)
-                            {
-                                TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
-                                IdDaoTao = i.IdDaoTao;
-                                Id = i.Id;
-                                return true;
-                            }
-                        }
-                        break;
-                    }
-                case "SinhVien":
-                    {
-                        var list = await _repoSinhVien.GetAllAsync();
-                        foreach (var i in list)
-                        {
-                            if (i.TenDangNhap == input.TaiKhoan && i.MatKhau == input.MatKhau)
-                            {
-                                TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
-                                List<ChuyenNganh> list_CN = await _repoChuyenNganh.GetAllAsync();
-                                IdDaoTao = list_CN.FirstOrDefault(c => c.IdChuyenNganh == i.IdChuyenNganh).IdDaoTao;
-                                Id = i.Id;
-                                return true;
-                            }
-                        }
-                        break;
-                    }
-                case "NhanVienDaoTao":
-                    {
-                        var list = await _repoNhanVienDaoTao.GetAllAsync();
-                        foreach (var i in list)
-                        {
-                            if (i.TenDangNhap == input.TaiKhoan && i.MatKhau == input.MatKhau)
-                            {
-                                TenHienThi = i.Ho + " " + i.TenDem + " " + i.Ten;
-                                IdDaoTao = i.IdDaoTao;
-                                Id = i.Id;
-                                return true;
-                            }
-                        }
-                        break;
-                    }
-            }
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<DangNhapVM> DangNhapAsync(DangNhapVM input)
+        public Task<bool> UpdateAsync(DoiMatKhauVM vm)
         {
-            var result = await ValidateAsync(input);
-            if (result) return new DangNhapVM
-            {
-                TenHienThi = (String.IsNullOrEmpty(TenHienThi) ? "Không có" : TenHienThi),
-                TaiKhoan = input.TaiKhoan,
-                ChucVu = input.ChucVu,
-                IdDaoTao = IdDaoTao,
-                Id = Id,
-            };
-            return null;
-        }
-
-        public async Task<bool> UpdateAsync(DoiMatKhauVM vm)
-        {
-            switch(vm.ChucVu)
-            {
-                case "DaoTao":
-                    {
-                        var list = await _repoDaoTao.GetAllAsync();
-                        var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
-                        if (temp != null)
-                        {
-                            temp.MatKhau = vm.MatKhauMoi;
-                            await _repoDaoTao.SaveChangesAsync();
-                            return true;
-                        }
-                        return false;
-                    }
-                case "GiangVien":
-                    {
-                        var list = await _repoGiangVien.GetAllAsync();
-                        var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
-                        if (temp != null)
-                        {
-                            temp.MatKhau = vm.MatKhauMoi;
-                            await _repoGiangVien.SaveChangesAsync();
-                            return true;
-                        }
-                        return false;
-                    }
-                case "NhanVienDaoTao":
-                    {
-                        var list = await _repoNhanVienDaoTao.GetAllAsync();
-                        var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
-                        if (temp != null)
-                        {
-                            temp.MatKhau = vm.MatKhauMoi;
-                            await _repoNhanVienDaoTao.SaveChangesAsync();
-                            return true;
-                        }
-                        return false;
-                    }
-                case "SinhVien":
-                    {
-                        var list = await _repoSinhVien.GetAllAsync();
-                        var temp = list.FirstOrDefault(c => c.TenDangNhap == vm.TaiKhoan && c.MatKhau == vm.MatKhau);
-                        if (temp != null) {
-                            temp.MatKhau = vm.MatKhauMoi;
-                            await _repoSinhVien.SaveChangesAsync();
-                            return true;
-                        }
-                        return false;
-                    }
-            }
-            return false;
+            throw new NotImplementedException();
         }
     }
 }

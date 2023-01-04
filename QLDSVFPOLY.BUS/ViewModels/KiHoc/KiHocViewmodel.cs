@@ -11,14 +11,5 @@ namespace QLDSVFPOLY.BUS.ViewModels.KiHoc
     //> public
     public class KiHocViewmodel
     {
-        public Guid Id { get; set; }
-        [Required(ErrorMessage = "Tên kì học không được để trống")]
-        [MaxLength(50, ErrorMessage = "Tên kì học tối đa 50 kí tự")]
-        public string Ten { get; set; }
-        public int NamHoc { get; set; }
-        public DateTime NgayBatDau { get; set; }
-        public DateTime NgayKetThuc { get; set; }
-        public DateTime NgayTao { get; set; }
-        public int TrangThai { get; set; }
     }
 }

@@ -22,108 +22,34 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _iChuyenNganhMonHocRepository = new ChuyenNganhMonHocRepository();
         }
 
-        public async Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
+        public Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
         {
-            obj.IdChuyenNganh = idChuyenNganh;
-            obj.IdMonHoc = idMonHoc;
-
-            var temp = new ChuyenNganhMonHoc()
-            {
-                IdChuyenNganh = obj.IdChuyenNganh,
-                IdMonHoc = obj.IdMonHoc,
-                NgayTao = obj.NgayTao,
-                TrangThai = obj.TrangThai,
-            };
-            await _iChuyenNganhMonHocRepository.CreateAsync(temp);
-            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
-
-            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
-
-            if (listChuyenNganhMH.Any(c => temp.IdChuyenNganh == c.IdChuyenNganh
-            && temp.IdMonHoc == c.IdMonHoc)) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync(ChuyenNganhMonHocSearchVM obj)
+        public Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync(ChuyenNganhMonHocSearchVM obj)
         {
-            await GetListChuyenNganhMonHocAsync();
-
-            List<ChuyenNganhMonHocVM> listChuyenNganhMonHocVM = _listChuyenNganhMonHoc.Where(c => c.TrangThai != 0).Select(c => new ChuyenNganhMonHocVM()
-            {
-                IdChuyenNganh = c.IdChuyenNganh,
-                IdMonHoc = c.IdMonHoc,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-            }).ToList();
-
-
-            return listChuyenNganhMonHocVM;
+            throw new NotImplementedException();
         }
 
-        private async Task GetListChuyenNganhMonHocAsync()
+        public Task<List<ChuyenNganhMonHocVM>> GetAllAsync(ChuyenNganhMonHocSearchVM obj)
         {
-            _listChuyenNganhMonHoc = await _iChuyenNganhMonHocRepository.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-
-        public async Task<List<ChuyenNganhMonHocVM>> GetAllAsync(ChuyenNganhMonHocSearchVM obj)
+        public Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            await GetListChuyenNganhMonHocAsync();
-
-            List<ChuyenNganhMonHocVM> listChuyenNganhMonHocVM = _listChuyenNganhMonHoc.Select(c => new ChuyenNganhMonHocVM()
-            {
-                IdChuyenNganh = c.IdChuyenNganh,
-                IdMonHoc = c.IdMonHoc,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai,
-            }).ToList();
-
-
-            return listChuyenNganhMonHocVM;
+            throw new NotImplementedException();
         }
 
-        public async Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            await GetListChuyenNganhMonHocAsync();
-
-            ChuyenNganhMonHoc temp = _listChuyenNganhMonHoc.FirstOrDefault(c => c.IdChuyenNganh == idChuyenNganh
-            && c.IdMonHoc == idMonHoc);
-
-            ChuyenNganhMonHocVM result = new ChuyenNganhMonHocVM()
-            {
-                IdChuyenNganh = idChuyenNganh,
-                IdMonHoc = idMonHoc,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public Task<bool> UpdateTrangThaiAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
-
-            if (!listChuyenNganhMH.Any(c => c.IdChuyenNganh == idChuyenNganh
-            && c.IdMonHoc == idMonHoc)) return false;
-
-            await _iChuyenNganhMonHocRepository.DeleteAsync(idChuyenNganh, idMonHoc);
-            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> UpdateTrangThaiAsync(Guid idChuyenNganh, Guid idMonHoc)
-        {
-            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
-            if (!listChuyenNganhMH.Any(c => c.IdChuyenNganh == idChuyenNganh && c.IdMonHoc == idMonHoc)) return false;
-
-            var temp = listChuyenNganhMH.FirstOrDefault(c => c.IdChuyenNganh == idChuyenNganh && c.IdMonHoc == idMonHoc);
-
-            temp.TrangThai = 0;
-
-            await _iChuyenNganhMonHocRepository.UpdateAsync(temp);
-            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

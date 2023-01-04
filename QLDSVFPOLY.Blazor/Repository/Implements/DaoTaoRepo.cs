@@ -15,85 +15,39 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        //
-        public async Task<List<DaoTaoVM>> GetAllAsync(DaoTaoSearchVM vm)
+        public Task<bool> CreateAsync(DaoTaoCreateVM obj)
         {
-            var queryStringParam = new Dictionary<string, string>();
-
-            //Add search Mã
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryStringParam.Add("Ma", vm.Ma);
-
-            //Add search DiaChi
-            if (!String.IsNullOrEmpty(vm.DiaChi))
-                queryStringParam.Add("DiaChi", vm.DiaChi);
-
-            //Add search Email
-            if (!String.IsNullOrEmpty(vm.Email))
-                queryStringParam.Add("Email", vm.Email);
-
-
-            //....
-            string url = QueryHelpers.AddQueryString("/api/DaoTaos/all", queryStringParam);
-            var result = await _httpClient.GetFromJsonAsync<List<DaoTaoVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<List<DaoTaoVM>> GetAllActiveAsync(DaoTaoSearchVM vm)
+        public Task<List<DaoTaoVM>> GetAllActiveAsync(DaoTaoSearchVM obj)
         {
-            var queryStringParam = new Dictionary<string, string>();
-
-            //Add search Mã
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryStringParam.Add("Ma", vm.Ma);
-
-            //Add search DiaChi
-            if (!String.IsNullOrEmpty(vm.DiaChi))
-                queryStringParam.Add("DiaChi", vm.DiaChi);
-
-            //Add search Email
-            if (!String.IsNullOrEmpty(vm.Email))
-                queryStringParam.Add("Email", vm.Email);
-
-
-            //....
-            string url = QueryHelpers.AddQueryString("/api/DaoTaos/allactive", queryStringParam);
-            var result = await _httpClient.GetFromJsonAsync<List<DaoTaoVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<DaoTaoVM> GetByIdAsync(Guid id)
+        public Task<List<DaoTaoVM>> GetAllAsync(DaoTaoSearchVM obj)
         {
-            var result = await _httpClient.GetFromJsonAsync<DaoTaoVM>($"/api/DaoTaos/{id}");
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> CreateAsync(DaoTaoCreateVM vm)
+        public Task<DaoTaoVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/DaoTaos", vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM vm)
+        public Task<bool> RemoveAsync(Guid id)
         {
-            var url = Path.Combine("/api/DaoTaos", id.ToString());
-            var result = await _httpClient.PutAsJsonAsync(url, vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> RemoveAsync(Guid id)
+        public Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj)
         {
-            var url = Path.Combine("/api/DaoTaos", id.ToString());
-            var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

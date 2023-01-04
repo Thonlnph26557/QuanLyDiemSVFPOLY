@@ -10,54 +10,11 @@ namespace QLDSVFPOLY.API.Controllers
     [ApiController]
     public class ChiTietDiemSosController : ControllerBase
     {
-        IChiTietDiemSoServices _sv;
+        IChiTietDiemSoServices _iChiTietDiemSoServices;
         public ChiTietDiemSosController()
         {
-            _sv = new ChiTietDiemSoServices();
+            _iChiTietDiemSoServices = new ChiTietDiemSoServices();
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] ChiTietDiemSoSearchVM obj)
-        {
-            var list = await _sv.GetAllAsync(obj);
-            return Ok(list);
-        }
-
-        [HttpGet("allactive")]
-        public async Task<IActionResult> GetAllActiveAsync([FromQuery] ChiTietDiemSoSearchVM obj)
-        {
-            var list = await _sv.GetAllActiveAsync(obj);
-            return Ok(list);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] Guid idDS, [FromQuery] Guid idLH, [FromQuery] Guid idSV)
-        {
-            var temp = await _sv.GetByIdAsync(idDS, idLH, idSV);
-            return Ok(temp);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ChiTietDiemSoCreateVM obj)
-        {
-            if (obj == null) return BadRequest();
-            var temp = await _sv.CreateAsync(obj);
-            return Ok(temp);
-        }
-
-        [HttpPut]
-        [Route("{idDS}/{idLH}/{idSV}")]
-        public async Task<IActionResult> UpdateAsync(Guid idDS, Guid idLH, Guid idSV, [FromBody] ChiTietDiemSoUpdateVM obj)
-        {
-            var temp = await _sv.UpdateAsync(idDS, idLH, idSV, obj);
-            return Ok(temp);
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> RemoveAsync([FromQuery] Guid idDS, [FromQuery] Guid idLH, [FromQuery] Guid idSV)
-        {
-            var temp = await _sv.RemoveAsync(idDS, idLH, idSV);
-            return Ok(temp);
-        }
     }
 }

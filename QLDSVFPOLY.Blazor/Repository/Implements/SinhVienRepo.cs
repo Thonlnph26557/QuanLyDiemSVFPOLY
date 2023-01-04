@@ -17,127 +17,39 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        //
-        public async Task<List<SinhVienVM>> GetAllAsync(SinhVienSearchVM vm)
+        public Task<bool> CreateAsync(SinhVienCreateVM obj)
         {
-            var queryStringParam = new Dictionary<string, string>();
-
-            //Add search Mã
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryStringParam.Add("Ma", vm.Ma);
-
-            //Add search Ho
-            if (!String.IsNullOrEmpty(vm.Ho))
-                queryStringParam.Add("Ho", vm.Ho);
-
-            //Add search TenDem
-            if (!String.IsNullOrEmpty(vm.TenDem))
-                queryStringParam.Add("TenDem", vm.TenDem);
-
-            //Add search Ten
-            if (!String.IsNullOrEmpty(vm.Ten))
-                queryStringParam.Add("Ten", vm.Ten);
-
-            //Add search DiaChi
-            if (!String.IsNullOrEmpty(vm.DiaChi))
-                queryStringParam.Add("DiaChi", vm.DiaChi);
-
-            //Add search SoDienThoai
-            if (!String.IsNullOrEmpty(vm.SoDienThoai))
-                queryStringParam.Add("SoDienThoai", vm.SoDienThoai);
-
-            //Add search Email
-            if (!String.IsNullOrEmpty(vm.Email))
-                queryStringParam.Add("Email", vm.Email);
-
-            ////Add search IdChuyenNganh
-            //if (vm.IdChuyenNganh.HasValue)
-            //    queryStringParam.Add("IdChuyenNganh", vm.IdChuyenNganh.ToString());
-
-
-            //....
-            string url = QueryHelpers.AddQueryString("/api/SinhViens/all", queryStringParam);
-
-            var result = await _httpClient.GetFromJsonAsync<List<SinhVienVM>>(url);
-
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM vm)
+        public Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM obj)
         {
-            var queryStringParam = new Dictionary<string, string>();
-
-            ////Add search Mã
-            //if (!String.IsNullOrEmpty(vm.Ma))
-            //    queryStringParam.Add("Ma", vm.Ma);
-
-            ////Add search Ho
-            //if (!String.IsNullOrEmpty(vm.Ho))
-            //    queryStringParam.Add("Ho", vm.Ho);
-
-            ////Add search TenDem
-            //if (!String.IsNullOrEmpty(vm.TenDem))
-            //    queryStringParam.Add("TenDem", vm.TenDem);
-
-            ////Add search Ten
-            //if (!String.IsNullOrEmpty(vm.Ten))
-            //    queryStringParam.Add("Ten", vm.Ten);
-
-            ////Add search DiaChi
-            //if (!String.IsNullOrEmpty(vm.DiaChi))
-            //    queryStringParam.Add("DiaChi", vm.DiaChi);
-
-            ////Add search SoDienThoai
-            //if (!String.IsNullOrEmpty(vm.SoDienThoai))
-            //    queryStringParam.Add("SoDienThoai", vm.SoDienThoai);
-
-            ////Add search Email
-            //if (!String.IsNullOrEmpty(vm.Email))
-            //    queryStringParam.Add("Email", vm.Email);
-
-            ////Add search IdChuyenNganh
-            //if (vm.IdChuyenNganh.HasValue)
-            //    queryStringParam.Add("IdChuyenNganh", vm.IdChuyenNganh.ToString());
-
-
-            //....
-            string url = QueryHelpers.AddQueryString("/api/SinhViens/allactive", queryStringParam);
-            var result = await _httpClient.GetFromJsonAsync<List<SinhVienVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<SinhVienVM> GetByIdAsync(Guid id)
+        public Task<List<SinhVienVM>> GetAllAsync(SinhVienSearchVM obj)
         {
-            var result = await _httpClient.GetFromJsonAsync<SinhVienVM>($"/api/SinhViens/{id}");
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> CreateAsync(SinhVienCreateVM vm)
+        public Task<SinhVienVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/SinhViens", vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM vm)
+        public Task<bool> RemoveAsync(Guid id)
         {
-            var url = Path.Combine("/api/SinhViens", id.ToString());
-            var result = await _httpClient.PutAsJsonAsync(url, vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> RemoveAsync(Guid id)
+        public Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
         {
-            var url = Path.Combine("/api/SinhViens", id.ToString());
-            var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

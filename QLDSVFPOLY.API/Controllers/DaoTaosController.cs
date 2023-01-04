@@ -12,70 +12,11 @@ namespace QLDSVFPOLY.API.Controllers
     public class DaoTaosController : ControllerBase
     {
         //
-        private readonly IDaoTaoServices _daoTaoServices;
-        private QLSVDbContext _qLSVDbContext;
-
+        private readonly IDaoTaoServices _iDaoTaoServices;
         //
         public DaoTaosController(IDaoTaoServices daoTaoServices)
         {
-            _daoTaoServices = daoTaoServices;
-            _qLSVDbContext = new QLSVDbContext();
+            _iDaoTaoServices = daoTaoServices;
         }
-
-        //lấy ra danh sách đào tạo còn hoạt động kết hợp tìm kiếm
-        [HttpGet("allactive")]
-        public async Task<IActionResult> GetAllDaoTaoActive([FromQuery] DaoTaoSearchVM search)
-        {
-            var listDaoTaoSearch = await _daoTaoServices.GetAllActiveAsync(search);
-
-            return Ok(listDaoTaoSearch);
-        }
-
-        //
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllDaoTao([FromQuery] DaoTaoSearchVM search)
-        {
-            var listDaoTaoSearch = await _daoTaoServices.GetAllAsync(search);
-
-            return Ok(listDaoTaoSearch);
-        }
-
-        // GetById ??? 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetDaoTaoById(Guid IdDaoTao)
-        {
-            var daoTao = await _daoTaoServices.GetByIdAsync(IdDaoTao);
-            return Ok(daoTao);
-        }
-
-        //Controller dc gọi khi thêm obj
-        [HttpPost]
-        public async Task<IActionResult> CreateDaoTao([FromBody] DaoTaoCreateVM daoTao)
-        {
-            if (daoTao == null)
-                return BadRequest();
-
-            var newDaoTao = await _daoTaoServices.CreateAsync(daoTao);
-
-            return Ok(newDaoTao);
-        }
-
-        //Controller dc gọi khi update obj
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDaoTao(Guid id, [FromBody] DaoTaoUpdateVM daoTao)
-        {
-            var result = await _daoTaoServices.UpdateAsync(id, daoTao);
-            return Ok(result);
-        }
-
-        //
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAsync(Guid id)
-        {
-            var temp = await _daoTaoServices.UpdateRemoveAsync(id);
-            return Ok(temp);
-        }
-
     }
 }

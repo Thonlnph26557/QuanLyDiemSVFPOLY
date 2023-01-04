@@ -12,61 +12,40 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
         {
             _httpClient = httpClient;
         }
-        public async Task<List<MonHocVM>> GetAllAsync(MonHocSearchVM vm)
+
+        public Task<bool> CreateAsync(MonHocCreateVM obj)
         {
-            var queryString = new Dictionary<string, string>();
-
-            //if (!String.IsNullOrEmpty(vm.Ma))
-            //    queryString.Add("Ma", vm.Ma);
-            //if (!String.IsNullOrEmpty(vm.Ten))
-            //    queryString.Add("TenNganhHoc", vm.Ten);
-
-
-            string url = QueryHelpers.AddQueryString("/api/Monhocs/all", queryString);
-            var result = await _httpClient.GetFromJsonAsync<List<MonHocVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<List<MonHocVM>> GetAllActiveAsync(MonHocSearchVM vm)
+        public Task<List<MonHocVM>> GetAllActiveAsync(MonHocSearchVM obj)
         {
-            var queryString = new Dictionary<string, string>();
-
-            //if (!String.IsNullOrEmpty(vm.Ma))
-            //    queryString.Add("Ma", vm.Ma);
-            //if (!String.IsNullOrEmpty(vm.Ten))
-            //    queryString.Add("TenNganhHoc", vm.Ten);
-
-
-            string url = QueryHelpers.AddQueryString("/api/Monhocs/allactive", queryString);
-            var result = await _httpClient.GetFromJsonAsync<List<MonHocVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<MonHocVM> GetByIdAsync(Guid id)
+        public Task<List<MonHocVM>> GetAllAsync(MonHocSearchVM obj)
         {
-            var result = await _httpClient.GetFromJsonAsync<MonHocVM>($"/api/MonHocs/{id}");
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> CreateAsync(MonHocCreateVM vm)
+        public Task<MonHocVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/MonHocs", vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
-        public async Task<bool> UpdateAsync(Guid id, MonHocUpdateVM vm)
+
+        public Task<bool> RemoveAsync(Guid id)
         {
-            var url = Path.Combine("/api/MonHocs", id.ToString());
-            var result = await _httpClient.PutAsJsonAsync(url, vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
-        public async Task<bool> RemoveAsync(Guid id)
+
+        public Task<bool> UpdateAsync(Guid id, MonHocUpdateVM obj)
         {
-            var url = Path.Combine("/api/MonHocs", id.ToString());
-            var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

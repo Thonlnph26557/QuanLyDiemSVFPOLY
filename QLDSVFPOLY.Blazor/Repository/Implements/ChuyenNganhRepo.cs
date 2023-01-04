@@ -15,75 +15,44 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public async Task<List<ChuyenNganhVM>> GetAllAsync(ChuyenNganhSearchVM vm)
+        public Task<bool> CreateAsync(ChuyenNganhCreateVM obj)
         {
-            var queryString = new Dictionary<string, string>();
-
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryString.Add("Ma", vm.Ma);
-            if (!String.IsNullOrEmpty(vm.TenChuyenNganh))
-                queryString.Add("TenNganhHoc", vm.TenChuyenNganh);
-            //if (vm.IdChuyenNganh.HasValue)
-            //    queryString.Add("IdChuyenNganh", vm.IdChuyenNganh.ToString());
-            //if (!String.IsNullOrEmpty(vm.TrangThai.ToString()))
-            //    queryString.Add("TrangThai", vm.TrangThai.ToString());
-
-
-            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhs/all", queryString);
-            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<List<ChuyenNganhVM>> GetAllActiveAsync(ChuyenNganhSearchVM vm)
+        public Task<List<ChuyenNganhVM>> GetAllActiveAsync(ChuyenNganhSearchVM obj)
         {
-            var queryString = new Dictionary<string, string>();
-
-            if (!String.IsNullOrEmpty(vm.Ma))
-                queryString.Add("Ma", vm.Ma);
-            if (!String.IsNullOrEmpty(vm.TenChuyenNganh))
-                queryString.Add("TenChuyenNganh", vm.TenChuyenNganh);
-            //if (vm.IdChuyenNganh.HasValue)
-            //    queryString.Add("IdChuyenNganh", vm.IdChuyenNganh.ToString());
-            //if (!String.IsNullOrEmpty(vm.TrangThai.ToString()))
-            //    queryString.Add("TrangThai", vm.TrangThai.ToString());
-
-            string url = QueryHelpers.AddQueryString("/api/ChuyenNganhs/allactive", queryString);
-            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>(url);
-            return result;
+            throw new NotImplementedException();
         }
 
-
-        public async Task<List<ChuyenNganhVM>> GetChuyenNganhHepByIdAsync(Guid id)
+        public Task<List<ChuyenNganhVM>> GetAllAsync(ChuyenNganhSearchVM obj)
         {
-            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>($"/api/ChuyenNganhs/chuyennganhhep/{id}");
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> CreateAsync(ChuyenNganhCreateVM vm)
+        public Task<ChuyenNganhVM> GetByIdAsync(Guid id)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/ChuyenNganhs", vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
-        }
-        public async Task<bool> UpdateAsync(Guid id, ChuyenNganhUpdateVM vm)
-        {
-            var url = Path.Combine("/api/ChuyenNganhs", id.ToString());
-            var result = await _httpClient.PutAsJsonAsync(url, vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
-        }
-        public async Task<bool> RemoveAsync(Guid id)
-        {
-            var url = Path.Combine("/api/ChuyenNganhs", id.ToString());
-            var result = await _httpClient.DeleteAsync(url);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<ChuyenNganhVM> GetByIdAsync(Guid id)
+        public Task<List<ChuyenNganhVM>> GetChuyenNganhHepById(Guid id)
         {
-            var result = await _httpClient.GetFromJsonAsync<ChuyenNganhVM>($"/api/ChuyenNganhs/{id}");
-            return result;
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateAsync(Guid id, ChuyenNganhUpdateVM obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateTrangThaiAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

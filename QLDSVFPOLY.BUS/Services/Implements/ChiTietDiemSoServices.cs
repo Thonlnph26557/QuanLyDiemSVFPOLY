@@ -23,130 +23,34 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _iChiTietDiemSoRepository = new ChiTietDiemSoRepository();
         }
 
-        private async Task GetListCTDiemSoAsync()
+        public Task<bool> CreateAsync(ChiTietDiemSoCreateVM obj)
         {
-            _listCTDiemSo = await _iChiTietDiemSoRepository.GetAllChiTietDiemSoAsync();
+            throw new NotImplementedException();
         }
 
-
-        public async Task<List<ChiTietDiemSoVM>> GetAllAsync(ChiTietDiemSoSearchVM obj)
+        public Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM obj)
         {
-            await GetListCTDiemSoAsync();
-
-            List<ChiTietDiemSoVM> listCTDiemSoVM = _listCTDiemSo.Select(c => new ChiTietDiemSoVM
-            {
-                IdChiTietLopHoc = c.IdChiTietLopHoc,
-                IdSinhVien = c.IdSinhVien,
-                IdDiemSo = c.IdDiemSo,
-                Diem = c.Diem,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai
-            }).ToList();
-
-
-                return listCTDiemSoVM;
-
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM obj)
+        public Task<List<ChiTietDiemSoVM>> GetAllAsync(ChiTietDiemSoSearchVM obj)
         {
-            await GetListCTDiemSoAsync();
-
-            List<ChiTietDiemSoVM> listCTDiemSoVM = _listCTDiemSo.Select(c => new ChiTietDiemSoVM
-            {
-                IdChiTietLopHoc = c.IdChiTietLopHoc,
-                IdSinhVien = c.IdSinhVien,
-                IdDiemSo = c.IdDiemSo,
-                Diem = c.Diem,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai
-            }).Where(c => c.TrangThai != 0).ToList();
-
-
-                return listCTDiemSoVM;
-
+            throw new NotImplementedException();
         }
 
-        public async Task<ChiTietDiemSoVM> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
+        public Task<ChiTietDiemSoVM> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
         {
-            await GetListCTDiemSoAsync();
-
-            ChiTietDiemSo temp = _listCTDiemSo.FirstOrDefault(c => c.IdDiemSo == idDiemSo
-            && c.IdSinhVien == idSinhVien
-            && c.IdChiTietLopHoc == idLopHoc);
-
-            ChiTietDiemSoVM result = new ChiTietDiemSoVM()
-            {
-                IdChiTietLopHoc = idLopHoc,
-                IdSinhVien = idSinhVien,
-                IdDiemSo = idDiemSo,
-                Diem = temp.Diem,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-
-            return result;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> CreateAsync(ChiTietDiemSoCreateVM obj)
+        public Task<bool> RemoveAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
         {
-            var temp = new ChiTietDiemSo()
-            {
-                IdChiTietLopHoc = obj.IdChiTietLopHoc,
-                IdSinhVien = obj.IdSinhVien,
-                Diem = obj.Diem,
-                IdDiemSo = obj.IdDiemSo,
-                NgayTao = DateTime.Now,
-                TrangThai = obj.TrangThai,
-            };
-            await _iChiTietDiemSoRepository.CreateAsync(temp);
-            await _iChiTietDiemSoRepository.SaveChangesAsync();
-
-            var listCtDiemSo = await _iChiTietDiemSoRepository.GetAllChiTietDiemSoAsync();
-
-            if (listCtDiemSo.Any(c => obj.IdDiemSo == c.IdDiemSo
-            && obj.IdSinhVien == c.IdSinhVien
-            && obj.IdChiTietLopHoc == c.IdChiTietLopHoc)) return true;
-            return false;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien, ChiTietDiemSoUpdateVM obj)
+        public Task<bool> UpdateAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien, ChiTietDiemSoUpdateVM obj)
         {
-            await GetListCTDiemSoAsync();
-
-            var temp = _listCTDiemSo.FirstOrDefault(c =>
-            c.IdSinhVien == idSinhVien
-            && c.IdDiemSo == idDiemSo
-            && c.IdChiTietLopHoc == idLopHoc);
-
-            if (temp == null) return false;
-            else
-            {
-                temp.Diem = obj.Diem;
-                temp.IdSinhVien = obj.IdSinhVien;
-                temp.IdDiemSo = obj.IdDiemSo;
-                temp.IdChiTietLopHoc = obj.IdChiTietLopHoc;
-            }
-
-            await _iChiTietDiemSoRepository.UpdateAsync(temp);
-            await _iChiTietDiemSoRepository.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> RemoveAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
-        {
-            await GetListCTDiemSoAsync();
-
-            var temp = _listCTDiemSo.FirstOrDefault(c =>
-            c.IdSinhVien == idSinhVien
-            && c.IdSinhVien == idSinhVien
-            && c.IdChiTietLopHoc == idLopHoc);
-
-            temp.TrangThai = 0;
-
-            await _iChiTietDiemSoRepository.SaveChangesAsync();
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

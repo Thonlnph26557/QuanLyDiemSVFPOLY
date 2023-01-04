@@ -22,189 +22,39 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _iGiangVienRepositories = new GiangVienRepository();
         }
 
-        //
-        private async Task GetListAsync()
+        public Task<bool> CreateAsync(GiangVienCreateVM createVm)
         {
-            _listGiangViens = await _iGiangVienRepositories.GetAllAsync();
-        }
-        //
-        public async Task<List<GiangVienVM>> GetAllAsync(GiangVienSearchVM searchVm)
-        {
-            await GetListAsync();
-
-            List<GiangVienVM> listGiangVienViewmodel = new List<GiangVienVM>();
-            listGiangVienViewmodel = _listGiangViens.Select(c => new GiangVienVM()
-            {
-                Id = c.Id,
-                Ma = c.Ma,
-                IdDaoTao = c.IdDaoTao,
-                Ho = c.Ho,
-                TenDem = c.TenDem,
-                Ten = c.Ten,
-                GioiTinh = c.GioiTinh,
-                NgaySinh = c.NgaySinh,
-                DiaChi = c.DiaChi,
-                SoDienThoai = c.SoDienThoai,
-                Email = c.Email,
-                TenDangNhap = c.TenDangNhap,
-                MatKhau = c.MatKhau,
-                DuongDanAnh = c.DuongDanAnh,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai
-            }).ToList();
-
-
-
-            return listGiangVienViewmodel;
+            throw new NotImplementedException();
         }
 
-        //Active = (TrangThai != 0)
-        public async Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienSearchVM searchVm)
+        public Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienSearchVM searchVm)
         {
-            await GetListAsync();
-
-            List<GiangVienVM> listGiangVienViewmodel = new List<GiangVienVM>();
-            listGiangVienViewmodel = _listGiangViens.Where(c => c.TrangThai != 0).Select(c => new GiangVienVM()
-            {
-                Id = c.Id,
-                Ma = c.Ma,
-                IdDaoTao = c.IdDaoTao,
-                Ho = c.Ho,
-                TenDem = c.TenDem,
-                Ten = c.Ten,
-                GioiTinh = c.GioiTinh,
-                NgaySinh = c.NgaySinh,
-                DiaChi = c.DiaChi,
-                SoDienThoai = c.SoDienThoai,
-                Email = c.Email,
-                TenDangNhap = c.TenDangNhap,
-                MatKhau = c.MatKhau,
-                DuongDanAnh = c.DuongDanAnh,
-                NgayTao = c.NgayTao,
-                TrangThai = c.TrangThai
-            }).ToList();
-
-
-
-            return listGiangVienViewmodel;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<GiangVienVM> GetByIdAsync(Guid id)
+        public Task<List<GiangVienVM>> GetAllAsync(GiangVienSearchVM searchVm)
         {
-            await GetListAsync();
-
-            GiangVien temp = _listGiangViens.FirstOrDefault(c => c.Id == id);
-
-            GiangVienVM result = new GiangVienVM()
-            {
-                Id = temp.Id,
-                Ma = temp.Ma,
-                IdDaoTao = temp.IdDaoTao,
-                Ho = temp.Ho,
-                TenDem = temp.TenDem,
-                Ten = temp.Ten,
-                GioiTinh = temp.GioiTinh,
-                NgaySinh = temp.NgaySinh,
-                DiaChi = temp.DiaChi,
-                SoDienThoai = temp.SoDienThoai,
-                Email = temp.Email,
-                TenDangNhap = temp.TenDangNhap,
-                MatKhau = temp.MatKhau,
-                DuongDanAnh = temp.DuongDanAnh,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-
-            return result;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> CreateAsync(GiangVienCreateVM createVm)
+        public Task<GiangVienVM> GetByIdAsync(Guid id)
         {
-            createVm.Id = Guid.NewGuid();
-
-            var temp = new GiangVien()
-            {
-                Id = createVm.Id,
-                Ma = createVm.Ma,
-                IdDaoTao = createVm.IdDaoTao,
-                Ho = createVm.Ho,
-                TenDem = createVm.TenDem,
-                Ten = createVm.Ten,
-                GioiTinh = createVm.GioiTinh,
-                NgaySinh = createVm.NgaySinh,
-                DiaChi = createVm.DiaChi,
-                SoDienThoai = createVm.SoDienThoai,
-                Email = createVm.Email,
-                TenDangNhap = createVm.TenDangNhap,
-                MatKhau = createVm.MatKhau,
-                DuongDanAnh = createVm.DuongDanAnh,
-                NgayTao = createVm.NgayTao,
-                TrangThai = createVm.TrangThai
-            };
-
-            await _iGiangVienRepositories.CreateAsync(temp);
-            await _iGiangVienRepositories.SaveChangesAsync();
-
-            var _listGiangViens = await _iGiangVienRepositories.GetAllAsync();
-            if (_listGiangViens.Any(c => temp.Id == c.Id)) return true;
-
-            return false;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM updateVm)
+        public Task<bool> RemoveAsync(Guid id)
         {
-            var _listGiangViens = await _iGiangVienRepositories.GetAllAsync();
-            if (!_listGiangViens.Any(c => c.Id == id)) return false;
-
-            var temp = _listGiangViens.FirstOrDefault(c => c.Id == id);
-
-            temp.Ma = updateVm.Ma;
-            temp.IdDaoTao = updateVm.IdDaoTao;
-            temp.GioiTinh = updateVm.GioiTinh;
-            temp.NgaySinh = updateVm.NgaySinh;
-            temp.DiaChi = updateVm.DiaChi;
-            temp.SoDienThoai = updateVm.SoDienThoai;
-            //temp.MatKhau = updateVm.MatKhau;
-            temp.DuongDanAnh = updateVm.DuongDanAnh;
-            temp.NgayTao = updateVm.NgayTao;
-            temp.TrangThai = updateVm.TrangThai;
-            temp.Ho = updateVm.Ho;
-            temp.TenDem = updateVm.TenDem;
-            temp.Ten = updateVm.Ten;
-
-            await _iGiangVienRepositories.UpdateAsync(temp);
-            await _iGiangVienRepositories.SaveChangesAsync();
-            return true;
+            throw new NotImplementedException();
         }
 
-        //
-        public async Task<bool> RemoveAsync(Guid id)
+        public Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM updateVm)
         {
-            var _listGiangViens = await _iGiangVienRepositories.GetAllAsync();
-
-            if (!_listGiangViens.Any(c => c.Id == id)) return false;
-
-            await _iGiangVienRepositories.RemoveAsync(id);
-            await _iGiangVienRepositories.SaveChangesAsync();
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateTrangThaiAsync(Guid id)
+        public Task<bool> UpdateTrangThaiAsync(Guid id)
         {
-            var _listGiangViens = await _iGiangVienRepositories.GetAllAsync();
-            if (!_listGiangViens.Any(c => c.Id == id)) return false;
-
-            var temp = _listGiangViens.FirstOrDefault(c => c.Id == id);
-
-            temp.TrangThai = 0;
-
-            await _iGiangVienRepositories.UpdateAsync(temp);
-            await _iGiangVienRepositories.SaveChangesAsync();
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

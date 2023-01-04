@@ -13,29 +13,14 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public async Task<DangNhapResponseVM> LoginAsync(DangNhapVM vm)
+        public Task<DangNhapVM> DangNhapAsync(DangNhapVM input)
         {
-            var queryString = new Dictionary<string, string>();
-
-            if (!String.IsNullOrEmpty(vm.TaiKhoan))
-                queryString.Add("TaiKhoan", vm.TaiKhoan);
-            if (!String.IsNullOrEmpty(vm.MatKhau))
-                queryString.Add("MatKhau", vm.MatKhau);
-            if (!String.IsNullOrEmpty(vm.ChucVu))
-                queryString.Add("ChucVu", vm.ChucVu);
-
-            string url = QueryHelpers.AddQueryString("/api/TaiKhoans", queryString);
-
-            var result = await _httpClient.GetFromJsonAsync<DangNhapResponseVM>(url);
-            if (result != null) return result;
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateAsync(DoiMatKhauVM vm)
+        public Task<bool> UpdateAsync(DoiMatKhauVM vm)
         {
-            var result = await _httpClient.PutAsJsonAsync("api/TaiKhoans", vm);
-            if (result.IsSuccessStatusCode) return true;
-            return false;
+            throw new NotImplementedException();
         }
     }
 }
