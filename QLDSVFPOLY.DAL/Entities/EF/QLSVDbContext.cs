@@ -2,7 +2,7 @@
 using QLDSVFPOLY.DAL.Configurations;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using QLDSVFPOLY.DAL.Extensions;
+//using QLDSVFPOLY.DAL.Extensions;
 
 namespace QLDSVFPOLY.DAL.Entities.EF
 {
@@ -26,18 +26,17 @@ namespace QLDSVFPOLY.DAL.Entities.EF
             modelBuilder.ApplyConfiguration(new GiangVienConfigurations());
             modelBuilder.ApplyConfiguration(new KiHocConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietLopHocConfigurations());
-            modelBuilder.ApplyConfiguration(new LopHocConfigurations());
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChuyenNganhMonHocConfigurations());
             modelBuilder.ApplyConfiguration(new NhanVienDaoTaoConfigurations());
-            modelBuilder.SeedData();
+            //modelBuilder.SeedData();
         }
 
         //thay đổi đường dẫn để kết nối SQL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"SERVER=DESKTOP-BDIPTIR;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
+            optionsBuilder.UseSqlServer(@"SERVER=DESKTOP-CCPL472;DATABASE=DA1_DB;Integrated Security=True;Encrypt=False;");
         }
 
 
@@ -48,7 +47,6 @@ namespace QLDSVFPOLY.DAL.Entities.EF
         public DbSet<SinhVien> SinhViens { get; set; }
         public DbSet<GiangVien> GiangViens { get; set; }
         public DbSet<KiHoc> KiHocs { get; set; }
-        public DbSet<LopHoc> LopHocs { get; set; }
         public DbSet<ChiTietDiemSo> ChiTietDiemSos { get; set; }
         public DbSet<DiemSo> DiemSos { get; set; }
         public DbSet<ChiTietLopHoc> ChiTietLopHocs { get; set; }

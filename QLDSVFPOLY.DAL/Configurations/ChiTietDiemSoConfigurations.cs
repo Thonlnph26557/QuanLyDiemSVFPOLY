@@ -17,6 +17,8 @@ namespace QLDSVFPOLY.DAL.Configurations
             builder.HasKey(x => new { x.IdChiTietLopHoc, x.IdDiemSo, x.IdSinhVien });
 
             builder.Property(x => x.Diem).IsRequired();
+            builder.Property(x => x.DiemToiThieu);
+            builder.Property(x => x.TrongSo);
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
 

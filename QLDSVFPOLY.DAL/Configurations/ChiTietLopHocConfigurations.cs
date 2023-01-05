@@ -21,10 +21,10 @@ namespace QLDSVFPOLY.DAL.Configurations
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.TrangThai).IsRequired();
 
-            builder.HasOne(x => x.LopHoc).WithMany(x => x.ChiTietLopHoc).HasForeignKey(x => x.IdLopHoc).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(x => x.GiangVien).WithMany(x => x.ChiTietLopHoc).HasForeignKey(x => x.IdGiangVien).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(x => x.KiHoc).WithMany(x => x.ChiTietLopHocs).HasForeignKey(x => x.IdKiHoc).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(x => x.MonHoc).WithMany(x => x.ChiTietLopHocs).HasForeignKey(x => x.IdMonHoc).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.DaoTao).WithMany(x => x.ChiTietLopHocs).HasForeignKey(x => x.IdDaoTao);
+            builder.HasOne(x => x.GiangVien).WithMany(x => x.ChiTietLopHoc).HasForeignKey(x => x.IdGiangVien);
+            builder.HasOne(x => x.KiHoc).WithMany(x => x.ChiTietLopHocs).HasForeignKey(x => x.IdKiHoc);
+            builder.HasOne(x => x.MonHoc).WithMany(x => x.ChiTietLopHocs).HasForeignKey(x => x.IdMonHoc);
         }
     }
 }

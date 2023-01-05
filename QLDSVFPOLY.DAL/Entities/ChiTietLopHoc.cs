@@ -9,10 +9,12 @@ namespace QLDSVFPOLY.DAL.Entities
     public class ChiTietLopHoc
     {
         public Guid Id { get; set; }
+        public Guid IdDaoTao { get; set; }
         public Guid IdLopHoc { get; set; }
         public Guid IdMonHoc { get; set; }
         public Guid IdGiangVien { get; set; }
         public Guid IdKiHoc { get; set; }
+        public string Ten { get; set; }
         public int SoLuongSinhVien { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
@@ -23,7 +25,7 @@ namespace QLDSVFPOLY.DAL.Entities
 
         public MonHoc MonHoc { get; set; }
 
-        public LopHoc LopHoc { get; set; }
+        public DaoTao DaoTao { get; set; }
 
         public KiHoc KiHoc { get; set; }
 

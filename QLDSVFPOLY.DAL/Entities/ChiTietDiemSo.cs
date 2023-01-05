@@ -12,6 +12,8 @@ namespace QLDSVFPOLY.DAL.Entities
         public Guid IdSinhVien { get; set; }
         public Guid IdDiemSo { get; set; }
         public double Diem { get; set; }
+        public double TrongSo { get; set; }
+        public double DiemToiThieu { get; set; }
         public DateTime NgayTao { get; set; }
         public int TrangThai { get; set; }
 

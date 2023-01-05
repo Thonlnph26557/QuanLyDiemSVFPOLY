@@ -19,7 +19,7 @@ namespace QLDSVFPOLY.DAL.Entities
         public int TrangThai { get; set; }
 
         public List<ChuyenNganh> ChuyenNganhs { get; set; }
-        public List<LopHoc> LopHocs { get; set; }
+        public List<ChiTietLopHoc> ChiTietLopHocs { get; set; }
         public List<GiangVien> GiangViens { get; set; }
         public List<NhanVienDaoTao> NhanVienDaoTaos { get; set; }
     }
