@@ -1,6 +1,5 @@
 ﻿using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.KiHoc;
-using QLDSVFPOLY.BUS.ViewModels.LopHoc;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
 using QLDSVFPOLY.DAL.Entities;

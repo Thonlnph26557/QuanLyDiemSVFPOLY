@@ -1,5 +1,4 @@
 ﻿using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc;
-using QLDSVFPOLY.BUS.ViewModels.LopHoc;
 using QLDSVFPOLY.DAL.Entities;
 using System;
 using System.Collections.Generic;

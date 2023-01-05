@@ -1,5 +1,4 @@
 ﻿using QLDSVFPOLY.BUS.ViewModels.KiHoc;
-using QLDSVFPOLY.BUS.ViewModels.LopHoc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
