@@ -1,6 +1,5 @@
 ﻿using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc;
-using QLDSVFPOLY.BUS.ViewModels.LopHoc;
 using QLDSVFPOLY.DAL.Entities;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
@@ -18,7 +17,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         IChiTietLopHocRepositories _iChiTietLopHocRepositories;
         IGiangVienRepository _iGiangVienRepositories;
         IKiHocRepositories _iKiHocRepositories;
-        ILopHocRepository _iLopHocRepositories;
 
         List<ChiTietLopHoc> _listChiTietLopHocs;
 
@@ -29,7 +27,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _iChiTietLopHocRepositories = new ChiTietLopHocRepositories();
             _iGiangVienRepositories = new GiangVienRepository();
             _iKiHocRepositories = new KiHocRepositories();
-            _iLopHocRepositories = new LopHocRepository();
         }
 
         public Task<bool> CreateAsync(ChiTietLopHocCreateVM obj)
