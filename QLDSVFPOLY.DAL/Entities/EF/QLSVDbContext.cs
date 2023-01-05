@@ -29,7 +29,9 @@ namespace QLDSVFPOLY.DAL.Entities.EF
             modelBuilder.ApplyConfiguration(new DiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChiTietDiemSoConfigurations());
             modelBuilder.ApplyConfiguration(new ChuyenNganhMonHocConfigurations());
-            modelBuilder.ApplyConfiguration(new NhanVienDaoTaoConfigurations());
+            modelBuilder.ApplyConfiguration(new NguoiDungConfigurations());
+            modelBuilder.ApplyConfiguration(new ChucVuConfigurations());
+            modelBuilder.ApplyConfiguration(new NguoiDungChucVuConfigurations());
             //modelBuilder.SeedData();
         }
 
@@ -51,7 +53,9 @@ namespace QLDSVFPOLY.DAL.Entities.EF
         public DbSet<DiemSo> DiemSos { get; set; }
         public DbSet<ChiTietLopHoc> ChiTietLopHocs { get; set; }
         public DbSet<ChuyenNganhMonHoc> ChuyenNganhMonHocs { get; set; }
-        public DbSet<NhanVienDaoTao> NhanVienDaoTaos { get; set; }
+        public DbSet<NguoiDung> NguoiDungs { get; set; }
+        public DbSet<ChucVu> ChucVus { get; set; }
+        public DbSet<NguoiDungChucVu> NguoiDungChucVus { get; set; }
     }
 }
 

@@ -8,29 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\DanhSachDiemSinhVien\QuanLiChiTietDiemSo.razor" />
-    <Content Remove="Pages\ChiTietLopHoc\ChinhSuaSinhVienTrongLop.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\GiangVien\ChiTiet.razor" />
-    <None Include="Pages\GiangVien\ChiTietGiangVien.razor" />
-    <None Include="Pages\GiangVien\HienThi.razor" />
-    <None Include="Pages\GiangVien\HienThiGiangVien.razor" />
-    <None Include="Pages\GiangVien\ThemGiangVien.razor" />
-    <None Include="Pages\GiangVien\ThemMoi.razor" />
-    <None Include="Pages\MonHoc\ChinhSuaMonHoc.razor" />
-    <None Include="Pages\MonHoc\DanhSachMonHoc.razor" />
-    <None Include="Pages\NhanVienDaoTao\ChiTietNhanVienDaoTao.razor" />
-    <None Include="Pages\NhanVienDaoTao\HienThiNhanVienDaoTao.razor" />
-    <None Include="Pages\NhanVienDaoTao\ThemNhanVienDaoTao.razor" />
-    <None Include="Pages\SinhVien\ChiTietSinhVien.razor" />
-    <None Include="Pages\SinhVien\HienThiSinhVien.razor" />
-    <None Include="Pages\SinhVien\ThemSinhVien.razor" />
+    <Compile Remove="Pages\**" />
+    <Content Remove="Pages\**" />
+    <EmbeddedResource Remove="Pages\**" />
+    <None Remove="Pages\**" />
   </ItemGroup>
 
   <ItemGroup>

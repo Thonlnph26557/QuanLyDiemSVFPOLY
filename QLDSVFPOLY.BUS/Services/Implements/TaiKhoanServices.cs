@@ -15,7 +15,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class TaiKhoanServices : ITaiKhoanServices
     {
-        INhanVienDaoTaoRepository _repoNhanVienDaoTao;
         IGiangVienRepository _repoGiangVien;
         IDaoTaoRepository _repoDaoTao;
         ISinhVienRepository _repoSinhVien;
@@ -29,7 +28,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             _repoDaoTao = new DaoTaoRepository();
             _repoGiangVien = new GiangVienRepository();
-            _repoNhanVienDaoTao = new NhanVienDaoTaoRepository();
             _repoSinhVien = new SinhVienRepository();
             _repoChuyenNganh = new ChuyenNganhRepository();
         }

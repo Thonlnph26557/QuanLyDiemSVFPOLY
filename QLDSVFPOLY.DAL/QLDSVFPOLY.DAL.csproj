@@ -10,6 +10,8 @@
     <Compile Remove="Configurations\LopHocConfigurations.cs" />
     <Compile Remove="Entities\LopHoc.cs" />
     <Compile Remove="Extensions\ModelBuilderExtensions.cs" />
+    <Compile Remove="Repositories\Implements\NhanVienDaoTaoRepository.cs" />
+    <Compile Remove="Repositories\Interfaces\INhanVienDaoTaoRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

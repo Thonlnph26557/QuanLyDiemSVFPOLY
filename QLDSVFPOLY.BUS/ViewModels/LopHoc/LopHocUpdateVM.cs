@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLDSVFPOLY.BUS.ViewModels.NhanVienDaoTao
+namespace QLDSVFPOLY.BUS.ViewModels.LopHoc
 {
-    public class NhanVienDaoTaoUpdateVM
+    public class LopHocUpdateVM
     {
-  
     }
 }

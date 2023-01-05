@@ -27,7 +27,6 @@ builder.Services.AddTransient<IChiTietLopHocServices, ChiTietLopHocServices>();
 builder.Services.AddTransient<IChiTietDiemSoServices, ChiTietDiemSoServices>();
 builder.Services.AddTransient<ITaiKhoanServices, TaiKhoanServices>();
 builder.Services.AddTransient<ISinhVienServices, SinhVienServices>();
-builder.Services.AddTransient<INhanVienDaoTaoServices, NhanVienDaoTaoServices>();
 builder.Services.AddTransient<IDaoTaoServices, DaoTaoServices>();
 
 

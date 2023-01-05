@@ -35,7 +35,6 @@ builder.Services.AddTransient<IChiTietLopHocRepo, ChiTietLopHocRepo>();
 builder.Services.AddTransient<IChiTietDiemSoRepo, ChiTietDiemSoRepo>();
 builder.Services.AddTransient<ITaiKhoanRepo, TaiKhoanRepo>();
 builder.Services.AddTransient<ISinhVienRepo, SinhVienRepo>();
-builder.Services.AddTransient<INhanVienDaoTaoRepo, NhanVienDaoTaoRepo>();
 builder.Services.AddTransient<IDaoTaoRepo, DaoTaoRepo>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
