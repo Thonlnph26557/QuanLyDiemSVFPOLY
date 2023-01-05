@@ -27,8 +27,6 @@ namespace QLDSVFPOLY.DAL.Configurations
             builder.Property(x => x.DiaChi).IsRequired().IsUnicode().HasMaxLength(50);
             builder.Property(x => x.SoDienThoai).IsRequired().HasMaxLength(11);
             builder.Property(x => x.Email).IsRequired().IsUnicode(false).HasMaxLength(50);
-            builder.Property(x => x.TenDangNhap).IsRequired().IsUnicode(false).HasMaxLength(50);
-            builder.Property(x => x.MatKhau).IsRequired().IsUnicode(false).HasMaxLength(50);
             builder.Property(x => x.NgayTao).IsRequired();
             builder.Property(x => x.DuongDanAnh).IsRequired().HasMaxLength(int.MaxValue);
             builder.Property(x => x.TrangThai).IsRequired();
