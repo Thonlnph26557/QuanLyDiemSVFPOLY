@@ -28,7 +28,6 @@ builder.Services.AddTransient<IChuyenNganhRepo, ChuyenNganhRepo>();
 builder.Services.AddTransient<IChuyenNganhMonHocRepo, ChuyenNganhMonHocRepo>();
 builder.Services.AddTransient<IKiHocRepo, KiHocRepo>();
 builder.Services.AddTransient<IMonHocRepo, MonHocRepo>();
-builder.Services.AddTransient<ILopHocRepos, LopHocRepos>();
 builder.Services.AddTransient<IGiangVienRepo, GiangVienRepo>();
 builder.Services.AddTransient<IDiemSoRepo, DiemSoRepo>();
 builder.Services.AddTransient<IChiTietLopHocRepo, ChiTietLopHocRepo>();
