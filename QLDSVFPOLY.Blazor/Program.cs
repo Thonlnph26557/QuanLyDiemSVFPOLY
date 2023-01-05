@@ -25,17 +25,17 @@ builder.Services.AddScoped(c => new HttpClient
 builder.Services.AddMudServices();
 builder.Services.AddTransient<IMonHocRepo, MonHocRepo>();
 builder.Services.AddTransient<IChuyenNganhRepo, ChuyenNganhRepo>();
-builder.Services.AddTransient<IChuyenNganhMonHocRepos, ChuyenNganhMonHocRepos>();
-builder.Services.AddTransient<IKiHocRepos, KiHocRepos>();
+builder.Services.AddTransient<IChuyenNganhMonHocRepo, ChuyenNganhMonHocRepo>();
+builder.Services.AddTransient<IKiHocRepo, KiHocRepo>();
 builder.Services.AddTransient<IMonHocRepo, MonHocRepo>();
 builder.Services.AddTransient<ILopHocRepos, LopHocRepos>();
-builder.Services.AddTransient<IGiangVienRepos, GiangVienRepos>();
-builder.Services.AddTransient<IDiemSoRepos, DiemSoRepos>();
-builder.Services.AddTransient<IChiTietLopHocRepos, ChiTietLopHocRepos>();
+builder.Services.AddTransient<IGiangVienRepo, GiangVienRepo>();
+builder.Services.AddTransient<IDiemSoRepo, DiemSoRepo>();
+builder.Services.AddTransient<IChiTietLopHocRepo, ChiTietLopHocRepo>();
 builder.Services.AddTransient<IChiTietDiemSoRepo, ChiTietDiemSoRepo>();
 builder.Services.AddTransient<ITaiKhoanRepo, TaiKhoanRepo>();
 builder.Services.AddTransient<ISinhVienRepo, SinhVienRepo>();
-builder.Services.AddTransient<INhanVienDaoTaoRepos, NhanVienDaoTaoRepos>();
+builder.Services.AddTransient<INhanVienDaoTaoRepo, NhanVienDaoTaoRepo>();
 builder.Services.AddTransient<IDaoTaoRepo, DaoTaoRepo>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
