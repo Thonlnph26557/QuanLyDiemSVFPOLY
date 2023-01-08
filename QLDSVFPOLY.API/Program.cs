@@ -3,6 +3,7 @@ using QLDSVFPOLY.BUS.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using QLDSVFPOLY.BUS.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddTransient<ITaiKhoanServices, TaiKhoanServices>();
 builder.Services.AddTransient<ISinhVienServices, SinhVienServices>();
 builder.Services.AddTransient<IDaoTaoServices, DaoTaoServices>();
 
-
+builder.Services.AddApplication();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

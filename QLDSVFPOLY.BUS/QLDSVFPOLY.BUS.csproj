@@ -1,28 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Services\Implements\TestServices.cs" />
-    <Compile Remove="Services\Interfaces\ITestServices.cs" />
-    <Compile Remove="Utilities\Utility.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Services\Implements\TestServices.cs" />
+		<Compile Remove="Services\Interfaces\ITestServices.cs" />
+		<Compile Remove="Utilities\Utility.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="4.1.5" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\QLDSVFPOLY.DAL\QLDSVFPOLY.DAL.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\QLDSVFPOLY.DAL\QLDSVFPOLY.DAL.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Utilities\" />
+	</ItemGroup>
+
 
 </Project>
