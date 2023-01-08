@@ -6,46 +6,56 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
 {
     public class GiangVienRepo : IGiangVienRepo
     {
-        public HttpClient _httpClient { get; set; }
+        HttpClient _httpClient;
 
         public GiangVienRepo(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public Task<List<GiangVienVM>> GetAllAsync(GiangVienSearchVM searchVm)
+        public async Task<List<GiangVienVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var queryStringParam = new Dictionary<string, string>();
+            string url = QueryHelpers.AddQueryString("/api/GiangViens/GetAllAsync", queryStringParam);
+            var result = await _httpClient.GetFromJsonAsync<List<GiangVienVM>>(url);
+            return result;
         }
 
-        public Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienSearchVM searchVm)
+        public async Task<List<GiangVienVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            var queryStringParam = new Dictionary<string, string>();
+            string url = QueryHelpers.AddQueryString("/api/GiangViens/GetAllActiveAsync", queryStringParam);
+            var result = await _httpClient.GetFromJsonAsync<List<GiangVienVM>>(url);
+            return result;
         }
 
-        public Task<GiangVienVM> GetByIdAsync(Guid id)
+        public async Task<GiangVienVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<GiangVienVM>($"/api/GiangViens/{id}");
+            return result;
         }
 
-        public Task<bool> CreateAsync(GiangVienCreateVM createVm)
+        public async Task<bool> CreateAsync(GiangVienCreateVM obj)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("/api/GiangViens", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM updateVm)
+        public async Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM obj)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/GiangViens", id.ToString());
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateTrangThaiAsync(Guid id)
-        {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/GiangViens", id.ToString());
+            var result = await _httpClient.DeleteAsync(url);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }

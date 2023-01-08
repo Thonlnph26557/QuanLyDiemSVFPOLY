@@ -9,14 +9,13 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IGiangVienServices
     {
-        Task<List<GiangVienVM>> GetAllAsync(GiangVienSearchVM searchVm);
-        Task<List<GiangVienVM>> GetAllActiveAsync(GiangVienSearchVM searchVm);
+        Task<List<GiangVienVM>> GetAllAsync();
+        Task<List<GiangVienVM>> GetAllActiveAsync();
         Task<GiangVienVM> GetByIdAsync(Guid id);
 
-        Task<bool> CreateAsync(GiangVienCreateVM createVm);
-        Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM updateVm);
+        Task<bool> CreateAsync(GiangVienCreateVM obj);
+        Task<bool> UpdateAsync(Guid id, GiangVienUpdateVM obj);
         Task<bool> RemoveAsync(Guid id);
-        Task<bool> UpdateTrangThaiAsync(Guid id);
 
     }
 }
