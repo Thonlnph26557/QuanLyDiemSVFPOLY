@@ -10,12 +10,12 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
     public interface IKiHocServices
     {
 
-        Task<List<KiHocViewmodel>> GetAllAsync(KiHocSearchViewmodel obj);
-        Task<List<KiHocViewmodel>> GetAllActiveAsync(KiHocSearchViewmodel obj);
-        Task<KiHocViewmodel> GetByIdAsync(Guid id);
+        Task<List<KiHocVM>> GetAllAsync();
+        Task<List<KiHocVM>> GetAllActiveAsync();
+        Task<KiHocVM> GetByIdAsync(Guid id);
 
-        Task<bool> CreateAsync(KiHocCreateViewmodel obj);
-        Task<bool> UpdateAsync(Guid id, KiHocUpdateViewmodel obj);
+        Task<bool> CreateAsync(KiHocCreateVM obj);
+        Task<bool> UpdateAsync(Guid id, KiHocUpdateVM obj);
         Task<bool> RemoveAsync(Guid id);
     }
 }

@@ -14,9 +14,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
     public class ChiTietLopHocServices : IChiTietLopHocServices
     {
         //
-        IChiTietLopHocRepositories _iChiTietLopHocRepositories;
+        IChiTietLopHocRepository _iChiTietLopHocRepositories;
         IGiangVienRepository _iGiangVienRepositories;
-        IKiHocRepositories _iKiHocRepositories;
+        IKiHocRepository _iKiHocRepositories;
 
         List<ChiTietLopHoc> _listChiTietLopHocs;
 
@@ -24,9 +24,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         //
         public ChiTietLopHocServices()
         {
-            _iChiTietLopHocRepositories = new ChiTietLopHocRepositories();
+            _iChiTietLopHocRepositories = new ChiTietLopHocRepository();
             _iGiangVienRepositories = new GiangVienRepository();
-            _iKiHocRepositories = new KiHocRepositories();
+            _iKiHocRepositories = new KiHocRepository();
         }
 
         public Task<bool> CreateAsync(ChiTietLopHocCreateVM obj)
