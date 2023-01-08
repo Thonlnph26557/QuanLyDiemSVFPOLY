@@ -9,5 +9,18 @@ namespace QLDSVFPOLY.BUS.ViewModels.GiangVien
 {
     public class GiangVienCreateVM
     {
+        public string Ma { get; set; }
+        public Guid IdDaoTao { get; set; }
+        public string Ho { get; set; }
+        public string TenDem { get; set; }
+        public string Ten { get; set; }
+        public int GioiTinh { get; set; }
+        public DateTime NgaySinh { get; set; }
+        public string DiaChi { get; set; }
+        public string SoDienThoai { get; set; }
+        public string Email { get; set; }
+        public string DuongDanAnh { get; set; }
+        public DateTime NgayTao { get; set; }
+        public int TrangThai { get; set; }
     }
 }
