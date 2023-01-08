@@ -9,6 +9,5 @@ namespace QLDSVFPOLY.Blazor.Repository.Interfaces
         Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc);
         Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc);
         Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc);
-        Task<bool> UpdateTrangThaiAsync(Guid idChuyenNganh, Guid idMonHoc);
     }
 }
