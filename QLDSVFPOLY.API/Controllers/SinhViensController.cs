@@ -15,7 +15,7 @@ namespace QLDSVFPOLY.API.Controllers
         private readonly ISinhVienServices _iSinhVienServices;
 
         //
-        public SinhViensController(SinhVienServices SinhVienServices)
+        public SinhViensController(ISinhVienServices SinhVienServices)
         {
             _iSinhVienServices = SinhVienServices ?? throw new ArgumentNullException(nameof(SinhVienServices)); ;
         }

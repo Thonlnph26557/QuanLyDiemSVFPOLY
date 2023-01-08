@@ -12,49 +12,50 @@ namespace QLDSVFPOLY.API.Controllers
     {
         private readonly INguoiDungChucVuServices _iNguoiDungChucVuServices;
 
-        public NguoiDungChucVusController(NguoiDungChucVuServices NguoiDungChucVuServices)
+        public NguoiDungChucVusController(INguoiDungChucVuServices NguoiDungChucVuServices)
         {
             _iNguoiDungChucVuServices = NguoiDungChucVuServices ?? throw new ArgumentNullException(nameof(NguoiDungChucVuServices)); ;
         }
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var listChucVus = await _iNguoiDungChucVuServices.GetAllAsync();
-            return Ok(listChucVus);
+            var listObjectVM = await _iNguoiDungChucVuServices.GetAllAsync();
+            return Ok(listObjectVM);
         }
 
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listNguoiDungChucVus = await _iNguoiDungChucVuServices.GetAllActiveAsync();
-            return Ok(listNguoiDungChucVus);
+            var listObjectVM = await _iNguoiDungChucVuServices.GetAllActiveAsync();
+            return Ok(listObjectVM);
         }
 
         //GetById
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetByIdAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu)
         {
-            var nguoiDungNguoiDunghucVu = await _iNguoiDungChucVuServices.GetByIdAsync(idNguoiDung,idChucVu);
-            return Ok(nguoiDungNguoiDunghucVu);
+            var objVM = await _iNguoiDungChucVuServices.GetByIdAsync(idNguoiDung,idChucVu);
+            return Ok(objVM);
         }
+
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] NguoiDungChucVuCreateVM nguoiDungChucVu)
+        public async Task<IActionResult> CreateAsync([FromBody] NguoiDungChucVuCreateVM obj, Guid idNguoiDung, Guid idChucVu)
         {
-            if (nguoiDungChucVu == null) return BadRequest();
-            var newNguoiDungChucVu = await _iNguoiDungChucVuServices.CreateAsync(nguoiDungChucVu);
-            return Ok(newNguoiDungChucVu);
+            if (obj == null) return BadRequest();
+            var newObjCreateVM = await _iNguoiDungChucVuServices.CreateAsync(obj, idNguoiDung, idChucVu);
+            return Ok(newObjCreateVM);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu)
         {
             var result = await _iNguoiDungChucVuServices.UpdateAsync(idNguoiDung, idChucVu);
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu)
         {
             var result = await _iNguoiDungChucVuServices.DeleteAsync(idNguoiDung, idChucVu);

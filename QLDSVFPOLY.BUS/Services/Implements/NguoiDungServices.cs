@@ -66,27 +66,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<NguoiDungVM> GetByIdAsync(Guid id)
         {
-            await GetListNguoiDungAsync();
-            NguoiDung temp = _listNguoiDungs.FirstOrDefault(c => c.Id == id);
-
-            NguoiDungVM objVM = new NguoiDungVM()
+            try
             {
-                Id = temp.Id,
-                Email = temp.Email,
-                MatKhau = temp.MatKhau,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-            return objVM;
+                await GetListNguoiDungAsync();
+                var obj = _listNguoiDungs.FirstOrDefault(c => c.Id == id);
+                var objVM = _mapper.Map<NguoiDungVM>(obj);
+                return objVM;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> RemoveAsync(Guid id)
         {
             var _listNguoiDungs = await _iNguoiDungRepository.GetAllAsync();
-            if (!_listNguoiDungs.Any(c => c.Id == id)) return false;
-            await _iNguoiDungRepository.RemoveAsync(id);
-            await _iNguoiDungRepository.SaveChangesAsync();
 
+            if (!_listNguoiDungs.Any(c => c.Id == id)) return false;
+
+            var temp = _listNguoiDungs.FirstOrDefault(temp => temp.Id == id);
+            temp.TrangThai = 0;
+
+            await _iNguoiDungRepository.UpdateAsync(temp);
+            await _iNguoiDungRepository.SaveChangesAsync();
             return true;
         }
 

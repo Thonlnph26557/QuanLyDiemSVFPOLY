@@ -12,7 +12,7 @@ namespace QLDSVFPOLY.API.Controllers
     {
         private readonly INguoiDungServices _iNguoiDungServices;
 
-        public NguoiDungsController(NguoiDungServices NguoiDungServices)
+        public NguoiDungsController(INguoiDungServices NguoiDungServices)
         {
             _iNguoiDungServices = NguoiDungServices ?? throw new ArgumentNullException(nameof(NguoiDungServices)); ;
         }
