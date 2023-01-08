@@ -9,8 +9,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IChuyenNganhMonHocServices
     {
-        Task<List<ChuyenNganhMonHocVM>> GetAllAsync(ChuyenNganhMonHocSearchVM obj);
-        Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync(ChuyenNganhMonHocSearchVM obj);
+        Task<List<ChuyenNganhMonHocVM>> GetAllAsync();
+        Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync();
         Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc);
         Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc);
         Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc);

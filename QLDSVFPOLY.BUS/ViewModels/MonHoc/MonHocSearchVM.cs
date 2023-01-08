@@ -8,5 +8,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.MonHoc
 {
     public class MonHocSearchVM
     {
+        public string? Ma { get; set; }
+        public string? Ten { get; set; }
     }
 }
