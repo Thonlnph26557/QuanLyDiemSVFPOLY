@@ -12,34 +12,45 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateAsync(KiHocCreateViewmodel obj)
+        public async Task<bool> CreateAsync(KiHocCreateVM obj)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("/api/KiHocs", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<List<KiHocViewmodel>> GetAllActiveAsync(KiHocSearchViewmodel obj)
+        public async  Task<List<KiHocVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<KiHocVM>>("/api/KiHocs/GetAllActiveAsync");
+            return result;
         }
 
-        public Task<List<KiHocViewmodel>> GetAllAsync(KiHocSearchViewmodel obj)
+        public async Task<List<KiHocVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<KiHocVM>>("/api/KiHocs/GetAllAsync");
+            return result;
         }
 
-        public Task<KiHocViewmodel> GetByIdAsync(Guid id)
+        public async Task<KiHocVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<KiHocVM>($"/api/KiHocs/{id}");
+            return result;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/KiHocs", id.ToString());
+            var result = await _httpClient.DeleteAsync(url);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateAsync(Guid id, KiHocUpdateViewmodel obj)
+        public async Task<bool> UpdateAsync(Guid id, KiHocUpdateVM obj)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/KiHocs", id.ToString());
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }
