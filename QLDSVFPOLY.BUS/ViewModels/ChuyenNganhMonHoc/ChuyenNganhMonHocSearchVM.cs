@@ -8,5 +8,7 @@ namespace QLDSVFPOLY.BUS.ViewModels.ChuyenNganhMonHoc
 {
     public class ChuyenNganhMonHocSearchVM
     {
+        public DateTime? NgayTao { get; set; }
+        public int? TrangThai { get; set; }
     }
 }

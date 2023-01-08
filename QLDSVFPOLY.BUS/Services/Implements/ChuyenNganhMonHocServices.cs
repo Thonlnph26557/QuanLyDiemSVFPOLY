@@ -1,5 +1,9 @@
-﻿using QLDSVFPOLY.BUS.Services.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.ChuyenNganhMonHoc;
+using QLDSVFPOLY.BUS.ViewModels.MonHoc;
 using QLDSVFPOLY.DAL.Entities;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
@@ -13,43 +17,103 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class ChuyenNganhMonHocServices : IChuyenNganhMonHocServices
     {
+        //
         IChuyenNganhMonHocRepository _iChuyenNganhMonHocRepository;
 
-        List<ChuyenNganhMonHoc> _listChuyenNganhMonHoc;
+        List<ChuyenNganhMonHoc> _listChuyenNganhMonHocs;
 
-        public ChuyenNganhMonHocServices()
+        private readonly IMapper _mapper;
+
+        public ChuyenNganhMonHocServices(IMapper mapper)
         {
             _iChuyenNganhMonHocRepository = new ChuyenNganhMonHocRepository();
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
+        private async Task GetListChuyenNganhMonHocAsync()
         {
-            throw new NotImplementedException();
+            _listChuyenNganhMonHocs = await _iChuyenNganhMonHocRepository.GetAllAsync();
         }
 
-        public Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync(ChuyenNganhMonHocSearchVM obj)
+        public async Task<List<ChuyenNganhMonHocVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            await GetListChuyenNganhMonHocAsync();
+
+            List<ChuyenNganhMonHocVM> listChuyenNganhMonHocVM = _listChuyenNganhMonHocs.AsQueryable().ProjectTo<ChuyenNganhMonHocVM>(_mapper.ConfigurationProvider).ToList();
+
+            return listChuyenNganhMonHocVM;
         }
 
-        public Task<List<ChuyenNganhMonHocVM>> GetAllAsync(ChuyenNganhMonHocSearchVM obj)
+        public async Task<List<ChuyenNganhMonHocVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            await GetListChuyenNganhMonHocAsync();
+
+            List<ChuyenNganhMonHocVM> listChuyenNganhMonHocVM = _listChuyenNganhMonHocs.AsQueryable().ProjectTo<ChuyenNganhMonHocVM>(_mapper.ConfigurationProvider).Where(x => x.TrangThai != 0).ToList();
+
+            return listChuyenNganhMonHocVM;
         }
 
-        public Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<ChuyenNganhMonHocVM> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var obj = await _listChuyenNganhMonHocs.AsQueryable().SingleOrDefaultAsync(c => c.IdChuyenNganh == idChuyenNganh);
+                var objModel = _mapper.Map<ChuyenNganhMonHocVM>(obj);
+                return objModel;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
         {
-            throw new NotImplementedException();
+            obj.IdChuyenNganh = idChuyenNganh;
+            obj.IdMonHoc = idMonHoc;
+
+            var temp = new ChuyenNganhMonHoc()
+            {
+                IdChuyenNganh = obj.IdChuyenNganh,
+                IdMonHoc = obj.IdMonHoc,
+                NgayTao = obj.NgayTao,
+                TrangThai = obj.TrangThai,
+            };
+            await _iChuyenNganhMonHocRepository.CreateAsync(temp);
+            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
+
+            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
+
+            if (listChuyenNganhMH.Any(c => temp.IdChuyenNganh == c.IdChuyenNganh
+            && temp.IdMonHoc == c.IdMonHoc)) return true;
+            return false;
         }
 
-        public Task<bool> UpdateTrangThaiAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<bool> UpdateTrangThaiAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
-            throw new NotImplementedException();
+            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
+            if (!listChuyenNganhMH.Any(c => c.IdChuyenNganh == idChuyenNganh && c.IdMonHoc == idMonHoc)) return false;
+
+            var temp = listChuyenNganhMH.FirstOrDefault(c => c.IdChuyenNganh == idChuyenNganh && c.IdMonHoc == idMonHoc);
+
+            temp.TrangThai = 0;
+
+            await _iChuyenNganhMonHocRepository.UpdateAsync(temp);
+            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
+            return true;
         }
+
+        public async Task<bool> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
+        {
+            var listChuyenNganhMH = await _iChuyenNganhMonHocRepository.GetAllAsync();
+
+            if (!listChuyenNganhMH.Any(c => c.IdChuyenNganh == idChuyenNganh
+            && c.IdMonHoc == idMonHoc)) return false;
+
+            await _iChuyenNganhMonHocRepository.RemoveAsync(idChuyenNganh, idMonHoc);
+            await _iChuyenNganhMonHocRepository.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

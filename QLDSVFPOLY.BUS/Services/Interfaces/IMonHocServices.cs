@@ -9,12 +9,11 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IMonHocServices
     {
-        Task<List<MonHocVM>> GetAllAsync(MonHocSearchVM obj);
-        Task<List<MonHocVM>> GetAllActiveAsync(MonHocSearchVM obj);
+        Task<List<MonHocVM>> GetAllAsync();
+        Task<List<MonHocVM>> GetAllActiveAsync();
         Task<MonHocVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(MonHocCreateVM obj);
-        Task<bool> UpdateAsync(Guid id,MonHocUpdateVM obj);
-        Task<bool> UpdateRemoveAsync(Guid id);
+        Task<bool> UpdateAsync(Guid id, MonHocUpdateVM obj);
         Task<bool> RemoveAsync(Guid id);
     }
 }
