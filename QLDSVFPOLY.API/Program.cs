@@ -30,7 +30,7 @@ builder.Services.AddTransient<ITaiKhoanServices, TaiKhoanServices>();
 builder.Services.AddTransient<ISinhVienServices, SinhVienServices>();
 builder.Services.AddTransient<IDaoTaoServices, DaoTaoServices>();
 
-//3 bang moi
+//3 bang moi.
 builder.Services.AddTransient<IChucVuServices, ChucVuServices>();
 builder.Services.AddTransient<INguoiDungServices, NguoiDungServices>();
 builder.Services.AddTransient<INguoiDungChucVuServices, NguoiDungChucVuServices>();
