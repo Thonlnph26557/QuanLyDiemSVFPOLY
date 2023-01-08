@@ -15,39 +15,51 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateAsync(ChuyenNganhCreateVM obj)
+        public async Task<bool> CreateAsync(ChuyenNganhCreateVM obj)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("api/ChuyenNganhs", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<List<ChuyenNganhVM>> GetAllActiveAsync(ChuyenNganhSearchVM obj)
+        public async Task<List<ChuyenNganhVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>("/api/ChuyenNganhs/GetAllActiveAsync");
+            return result;
         }
 
-        public Task<List<ChuyenNganhVM>> GetAllAsync(ChuyenNganhSearchVM obj)
+        public async Task<List<ChuyenNganhVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>("/api/ChuyenNganhs/GetAllAsync");
+            return result;
         }
 
-        public Task<ChuyenNganhVM> GetByIdAsync(Guid id)
+        public async Task<ChuyenNganhVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<ChuyenNganhVM>($"/api/ChuyenNganhs/{id}");
+            return result;
         }
 
-        public Task<List<ChuyenNganhVM>> GetChuyenNganhHepById(Guid id)
+        public async Task<List<ChuyenNganhVM>> GetChuyenNganhHepById(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<ChuyenNganhVM>>($"/api/ChuyenNganhs/GetChuyenNganhHepById/{id}");
+            return result;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/ChuyenNganhs", id.ToString());
+            var result = await _httpClient.DeleteAsync(url);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateAsync(Guid id, ChuyenNganhUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, ChuyenNganhUpdateVM obj)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/ChuyenNganhs", id.ToString());
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
         public Task<bool> UpdateTrangThaiAsync(Guid id)

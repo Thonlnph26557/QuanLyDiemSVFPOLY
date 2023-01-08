@@ -15,39 +15,46 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateAsync(DaoTaoCreateVM obj)
+        public async Task<bool> CreateAsync(DaoTaoCreateVM obj)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("api/DaoTaos", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<List<DaoTaoVM>> GetAllActiveAsync(DaoTaoSearchVM obj)
+        public async Task<List<DaoTaoVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<DaoTaoVM>>("/api/DaoTaos/GetAllActiveAsync");
+            return result;
         }
 
-        public Task<List<DaoTaoVM>> GetAllAsync(DaoTaoSearchVM obj)
+        public async Task<List<DaoTaoVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<List<DaoTaoVM>>("/api/DaoTaos/GetAllAsync");
+            return result;
         }
 
-        public Task<DaoTaoVM> GetByIdAsync(Guid id)
+        public async Task<DaoTaoVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<DaoTaoVM>($"/api/DaoTaos/{id}");
+            return result;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/DaoTaos", id.ToString());
+            var result = await _httpClient.DeleteAsync(url);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj)
         {
-            throw new NotImplementedException();
+           var url = Path.Combine("/api/DaoTaos", id.ToString());
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateRemoveAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

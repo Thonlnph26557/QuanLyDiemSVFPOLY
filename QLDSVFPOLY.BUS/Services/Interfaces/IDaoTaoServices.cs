@@ -9,8 +9,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IDaoTaoServices
     {
-        Task<List<DaoTaoVM>> GetAllAsync(DaoTaoSearchVM obj);
-        Task<List<DaoTaoVM>> GetAllActiveAsync(DaoTaoSearchVM obj);
+        Task<List<DaoTaoVM>> GetAllAsync();
+        Task<List<DaoTaoVM>> GetAllActiveAsync();
         Task<DaoTaoVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(DaoTaoCreateVM obj);
         Task<bool> UpdateAsync(Guid id, DaoTaoUpdateVM obj);

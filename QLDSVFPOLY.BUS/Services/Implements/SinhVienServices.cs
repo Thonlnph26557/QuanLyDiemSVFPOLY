@@ -8,54 +8,135 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class SinhVienServices : ISinhVienServices
     {
         //
-        ISinhVienRepository _repos;
+        ISinhVienRepository _iSinhVienRepository;
+
         List<SinhVien> _listSinhViens;
 
+        private readonly IMapper _mapper;
         //
-        public SinhVienServices()
+        public SinhVienServices(IMapper mapper)
         {
-            _repos = new SinhVienRepository();
+            _iSinhVienRepository = new SinhVienRepository();
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task<bool> CreateAsync(SinhVienCreateVM obj)
+        private async Task GetListSinhVienAsync()
         {
-            throw new NotImplementedException();
+            _listSinhViens = await _iSinhVienRepository.GetAllAsync();
         }
 
-        public Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM obj)
+        public async Task<bool> CreateAsync(SinhVienCreateVM obj)
         {
-            throw new NotImplementedException();
+            var temp = new SinhVien()
+            {
+                Id = Guid.NewGuid(),
+                Ma = obj.Ma,
+                Ho = obj.Ho,
+                TenDem = obj.TenDem,
+                Ten = obj.Ten,
+                GioiTinh = obj.GioiTinh,
+                NgaySinh = obj.NgaySinh,
+                DiaChi = obj.DiaChi,
+                SoDienThoai = obj.SoDienThoai,
+                Email = obj.Email,
+                DuongDanAnh = obj.DuongDanAnh,
+                NgayTao = DateTime.Now,
+                TrangThai = obj.TrangThai,
+                IdChuyenNganh = obj.IdChuyenNganh,
+            };
+            await _iSinhVienRepository.CreateAsync(temp);
+            await _iSinhVienRepository.SaveChangesAsync();
+
+            var listSinhViens = await _iSinhVienRepository.GetAllAsync();
+            if (listSinhViens.Any(c => c.Id == temp.Id)) return true;
+            return false;
         }
 
-        public Task<List<SinhVienVM>> GetAllAsync(SinhVienSearchVM obj)
+        public async Task<List<SinhVienVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            await GetListSinhVienAsync();
+
+            List<SinhVienVM> listObjectVM = _listSinhViens.AsQueryable().ProjectTo<SinhVienVM>(_mapper.ConfigurationProvider).Where(x => x.TrangThai != 0).ToList();
+
+            return listObjectVM;
         }
 
-        public Task<SinhVienVM> GetByIdAsync(Guid id)
+        public async Task<List<SinhVienVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            await GetListSinhVienAsync();
+
+            List<SinhVienVM> listObjectVM = _listSinhViens.AsQueryable().ProjectTo<SinhVienVM>(_mapper.ConfigurationProvider).ToList();
+
+            return listObjectVM;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<SinhVienVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await GetListSinhVienAsync();
+            SinhVien temp = _listSinhViens.FirstOrDefault(c => c.Id == id);
+
+            SinhVienVM objVM = new SinhVienVM()
+            {
+                Id = temp.Id,
+                Ma = temp.Ma,
+                Ho = temp.Ho,
+                TenDem = temp.TenDem,
+                Ten = temp.Ten,
+                GioiTinh = temp.GioiTinh,
+                NgaySinh = temp.NgaySinh,
+                DiaChi = temp.DiaChi,
+                SoDienThoai = temp.SoDienThoai,
+                Email = temp.Email,
+                DuongDanAnh = temp.DuongDanAnh,
+                NgayTao = temp.NgayTao,
+                TrangThai = temp.TrangThai,
+                IdChuyenNganh = temp.IdChuyenNganh,
+            };
+            return objVM;
         }
 
-        public Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var _listSinhViens = await _iSinhVienRepository.GetAllAsync();
+            if(!_listSinhViens.Any(c => c.Id == id)) return false;
+            await _iSinhVienRepository.RemoveAsync(id);
+            await _iSinhVienRepository.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<bool> UpdateRemoveAsync(Guid id)
+        public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
         {
-            throw new NotImplementedException();
+            var _listSinhViens = await _iSinhVienRepository.GetAllAsync();
+
+            if (!_listSinhViens.Any(c => c.Id == id)) return false;
+
+            var temp = _listSinhViens.FirstOrDefault(temp => temp.Id == id);
+            temp.Ma = obj.Ma;
+            temp.Ho = obj.Ho;
+            temp.TenDem = obj.TenDem;
+            temp.Ten = obj.Ten;
+            temp.GioiTinh = obj.GioiTinh;
+            temp.NgaySinh = obj.NgaySinh;
+            temp.DiaChi = obj.DiaChi;
+            temp.SoDienThoai = obj.SoDienThoai;
+            temp.Email = obj.Email;
+            temp.DuongDanAnh = obj.DuongDanAnh;
+            temp.NgayTao = obj.NgayTao;
+            temp.TrangThai = obj.TrangThai;
+            temp.IdChuyenNganh = obj.IdChuyenNganh;
+
+            await _iSinhVienRepository.UpdateAsync(temp);
+            await _iSinhVienRepository.SaveChangesAsync();
+            return true;
         }
     }
 }

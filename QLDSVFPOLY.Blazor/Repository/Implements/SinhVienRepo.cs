@@ -17,39 +17,49 @@ namespace QLDSVFPOLY.Blazor.Repository.Implements
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateAsync(SinhVienCreateVM obj)
+        public async Task<bool> CreateAsync(SinhVienCreateVM obj)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("/api/SinhViens", obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<List<SinhVienVM>> GetAllActiveAsync(SinhVienSearchVM obj)
+        public async Task<List<SinhVienVM>> GetAllActiveAsync()
         {
-            throw new NotImplementedException();
+            var queryStringParam = new Dictionary<string, string>();
+            string url = QueryHelpers.AddQueryString("/api/SinhViens/GetAllActiveAsync", queryStringParam);
+            var result = await _httpClient.GetFromJsonAsync<List<SinhVienVM>>(url);
+            return result;
         }
 
-        public Task<List<SinhVienVM>> GetAllAsync(SinhVienSearchVM obj)
+        public async Task<List<SinhVienVM>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var queryStringParam = new Dictionary<string, string>();
+            string url = QueryHelpers.AddQueryString("/api/SinhViens/GetAllAsync", queryStringParam);
+            var result = await _httpClient.GetFromJsonAsync<List<SinhVienVM>>(url);
+            return result;
         }
 
-        public Task<SinhVienVM> GetByIdAsync(Guid id)
+        public async Task<SinhVienVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<SinhVienVM>($"/api/SinhViens/{id}");
+            return result;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/SinhViens", id.ToString());
+            var result = await _httpClient.DeleteAsync(url);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
 
-        public Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateRemoveAsync(Guid id)
-        {
-            throw new NotImplementedException();
+            var url = Path.Combine("/api/SinhViens", id.ToString());
+            var result = await _httpClient.PutAsJsonAsync(url, obj);
+            if (result.IsSuccessStatusCode) return true;
+            return false;
         }
     }
 }
