@@ -57,7 +57,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             try
             {
-                var obj = await _listChuyenNganhMonHocs.AsQueryable().SingleOrDefaultAsync(c => c.IdChuyenNganh == idChuyenNganh);
+                await GetListChuyenNganhMonHocAsync();
+
+                var obj = _listChuyenNganhMonHocs.FirstOrDefault(c => c.IdChuyenNganh == idChuyenNganh);
                 var objModel = _mapper.Map<ChuyenNganhMonHocVM>(obj);
                 return objModel;
             }
@@ -67,11 +69,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             }
         }
 
-        public async Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<bool> CreateAsync(ChuyenNganhMonHocCreateVM obj)
         {
-            obj.IdChuyenNganh = idChuyenNganh;
-            obj.IdMonHoc = idMonHoc;
-
             var temp = new ChuyenNganhMonHoc()
             {
                 IdChuyenNganh = obj.IdChuyenNganh,

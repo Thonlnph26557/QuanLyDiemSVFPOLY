@@ -26,7 +26,7 @@ namespace QLDSVFPOLY.DAL.Repositories.Implements
             return obj;
         }
 
-        public async Task<ChuyenNganhMonHoc> DeleteAsync(Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<ChuyenNganhMonHoc> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc)
         {
             var tempobj = _qLSVDbContext.ChuyenNganhMonHocs.FirstOrDefault(c => c.IdChuyenNganh == idChuyenNganh
                                                                  && c.IdMonHoc == idMonHoc);
