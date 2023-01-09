@@ -21,46 +21,46 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var listGiangViens = await _iGiangVienServices.GetAllAsync();
-            return Ok(listGiangViens);
+            var listObjectVM = await _iGiangVienServices.GetAllAsync();
+            return Ok(listObjectVM);
         }
 
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listGiangViens = await _iGiangVienServices.GetAllActiveAsync();
-            return Ok(listGiangViens);
+            var listObjectVM = await _iGiangVienServices.GetAllActiveAsync();
+            return Ok(listObjectVM);
         }
 
         //GetById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var GiangVien = await _iGiangVienServices.GetByIdAsync(id);
-            return Ok(GiangVien);
+            var objVM = await _iGiangVienServices.GetByIdAsync(id);
+            return Ok(objVM);
         }
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] GiangVienCreateVM GiangVien)
+        public async Task<IActionResult> CreateAsync([FromBody] GiangVienCreateVM obj)
         {
-            if (GiangVien == null) return BadRequest();
-            var newGiangVien = await _iGiangVienServices.CreateAsync(GiangVien);
-            return Ok(newGiangVien);
+            if (obj == null) return BadRequest();
+            var newObjCreateVM = await _iGiangVienServices.CreateAsync(obj);
+            return Ok(newObjCreateVM);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] GiangVienUpdateVM GiangVien)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] GiangVienUpdateVM obj)
         {
-            var result = await _iGiangVienServices.UpdateAsync(id, GiangVien);
-            return Ok(result);
+            var objVM = await _iGiangVienServices.UpdateAsync(id, obj);
+            return Ok(objVM);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var result = await _iGiangVienServices.RemoveAsync(id);
-            return Ok(result);
+            var objRemoveVM = await _iGiangVienServices.RemoveAsync(id);
+            return Ok(objRemoveVM);
         }
     }
 }

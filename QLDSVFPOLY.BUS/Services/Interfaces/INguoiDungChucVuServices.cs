@@ -12,8 +12,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<List<NguoiDungChucVuVM>> GetAllAsync();
         Task<List<NguoiDungChucVuVM>> GetAllActiveAsync();
         Task<NguoiDungChucVuVM> GetByIdAsync(Guid idNguoiDung, Guid idChucVu);
-        Task<bool> CreateAsync(NguoiDungChucVuCreateVM obj, Guid idNguoiDung, Guid idChucVu);
-        Task<bool> UpdateAsync(Guid idNguoiDung, Guid idChucVu);
+        Task<bool> CreateAsync(NguoiDungChucVuCreateVM obj,Guid idNguoiDung, Guid idChucVu);
+        Task<bool> UpdateAsync(Guid idNguoiDung, Guid idChucVu, NguoiDungChucVuUpdateVM obj);
         Task<bool> DeleteAsync(Guid idNguoiDung, Guid idChucVu);
     }
 }

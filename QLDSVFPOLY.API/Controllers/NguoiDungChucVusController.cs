@@ -49,17 +49,17 @@ namespace QLDSVFPOLY.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu)
+        public async Task<IActionResult> UpdateAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu, [FromBody] NguoiDungChucVuUpdateVM obj)
         {
-            var result = await _iNguoiDungChucVuServices.UpdateAsync(idNguoiDung, idChucVu);
-            return Ok(result);
+            var objVM = await _iNguoiDungChucVuServices.UpdateAsync(idNguoiDung, idChucVu,obj);
+            return Ok(objVM);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync([FromQuery] Guid idNguoiDung, [FromQuery] Guid idChucVu)
         {
-            var result = await _iNguoiDungChucVuServices.DeleteAsync(idNguoiDung, idChucVu);
-            return Ok(result);
+            var objRemoveVM = await _iNguoiDungChucVuServices.DeleteAsync(idNguoiDung, idChucVu);
+            return Ok(objRemoveVM);
         }
     }
 }

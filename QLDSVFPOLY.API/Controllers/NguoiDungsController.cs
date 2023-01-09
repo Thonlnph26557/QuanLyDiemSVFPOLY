@@ -19,46 +19,46 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var listNguoiDungs = await _iNguoiDungServices.GetAllAsync();
-            return Ok(listNguoiDungs);
+            var listObjectVM = await _iNguoiDungServices.GetAllAsync();
+            return Ok(listObjectVM);
         }
 
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listNguoiDungs = await _iNguoiDungServices.GetAllActiveAsync();
-            return Ok(listNguoiDungs);
+            var listObjectVM = await _iNguoiDungServices.GetAllActiveAsync();
+            return Ok(listObjectVM);
         }
 
         //GetById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var nguoiDung = await _iNguoiDungServices.GetByIdAsync(id);
-            return Ok(nguoiDung);
+            var objVM = await _iNguoiDungServices.GetByIdAsync(id);
+            return Ok(objVM);
         }
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] NguoiDungCreateVM nguoiDung)
+        public async Task<IActionResult> CreateAsync([FromBody] NguoiDungCreateVM obj)
         {
-            if (nguoiDung == null) return BadRequest();
-            var newNguoiDung = await _iNguoiDungServices.CreateAsync(nguoiDung);
-            return Ok(newNguoiDung);
+            if (obj == null) return BadRequest();
+            var newObjCreateVM = await _iNguoiDungServices.CreateAsync(obj);
+            return Ok(newObjCreateVM);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] NguoiDungUpdateVM nguoiDung)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] NguoiDungUpdateVM obj)
         {
-            var result = await _iNguoiDungServices.UpdateAsync(id, nguoiDung);
-            return Ok(result);
+            var objVM = await _iNguoiDungServices.UpdateAsync(id, obj);
+            return Ok(objVM);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var result = await _iNguoiDungServices.RemoveAsync(id);
-            return Ok(result);
+            var objRemoveVM = await _iNguoiDungServices.RemoveAsync(id);
+            return Ok(objRemoveVM);
         }
     }
 }

@@ -22,46 +22,46 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var listSinhViens = await _iSinhVienServices.GetAllAsync();
-            return Ok(listSinhViens);
+            var listObjectVM = await _iSinhVienServices.GetAllAsync();
+            return Ok(listObjectVM);
         }
 
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listSinhViens = await _iSinhVienServices.GetAllActiveAsync();
-            return Ok(listSinhViens);
+            var listObjectVM = await _iSinhVienServices.GetAllActiveAsync();
+            return Ok(listObjectVM);
         }
 
         //GetById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var sinhVien = await _iSinhVienServices.GetByIdAsync(id);
-            return Ok(sinhVien);
+            var objVM = await _iSinhVienServices.GetByIdAsync(id);
+            return Ok(objVM);
         }
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] SinhVienCreateVM sinhVien)
+        public async Task<IActionResult> CreateAsync([FromBody] SinhVienCreateVM obj)
         {
-            if (sinhVien == null) return BadRequest();
-            var newSinhVien = await _iSinhVienServices.CreateAsync(sinhVien);
-            return Ok(newSinhVien);
+            if (obj == null) return BadRequest();
+            var newObjCreateVM = await _iSinhVienServices.CreateAsync(obj);
+            return Ok(newObjCreateVM);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] SinhVienUpdateVM sinhVien)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] SinhVienUpdateVM obj)
         {
-            var result = await _iSinhVienServices.UpdateAsync(id, sinhVien);
-            return Ok(result);
+            var objVM = await _iSinhVienServices.UpdateAsync(id, obj);
+            return Ok(objVM);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var result = await _iSinhVienServices.RemoveAsync(id);
-            return Ok(result);
+            var objRemoveVM = await _iSinhVienServices.RemoveAsync(id);
+            return Ok(objRemoveVM);
         }
     }
 }

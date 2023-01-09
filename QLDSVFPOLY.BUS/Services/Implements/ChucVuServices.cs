@@ -42,8 +42,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _iChucVuRepository.CreateAsync(temp);
             await _iChucVuRepository.SaveChangesAsync();
 
-            var listChucVus = await _iChucVuRepository.GetAllAsync();
-            if (listChucVus.Any(c => c.Id == temp.Id)) return true;
+            var listObjectVM = await _iChucVuRepository.GetAllAsync();
+            if (listObjectVM.Any(c => c.Id == temp.Id)) return true;
             return false;
         }
 
@@ -81,11 +81,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> RemoveAsync(Guid id)
         {
-            var _listChucVus = await _iChucVuRepository.GetAllAsync();
+            var listObjectVM = await _iChucVuRepository.GetAllAsync();
 
-            if (!_listChucVus.Any(c => c.Id == id)) return false;
+            if (!listObjectVM.Any(c => c.Id == id)) return false;
 
-            var temp = _listChucVus.FirstOrDefault(temp => temp.Id == id);
+            var temp = listObjectVM.FirstOrDefault(temp => temp.Id == id);
             temp.TrangThai = 0;
 
             await _iChucVuRepository.UpdateAsync(temp);
@@ -95,11 +95,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> UpdateAsync(Guid id, ChucVuUpdateVM obj)
         {
-            var _listChucVus = await _iChucVuRepository.GetAllAsync();
+            var listObjectVM = await _iChucVuRepository.GetAllAsync();
 
-            if (!_listChucVus.Any(c => c.Id == id)) return false;
+            if (!listObjectVM.Any(c => c.Id == id)) return false;
 
-            var temp = _listChucVus.FirstOrDefault(temp => temp.Id == id);
+            var temp = listObjectVM.FirstOrDefault(temp => temp.Id == id);
             temp.Ten = obj.Ten;
             temp.NgayTao = obj.NgayTao;
             temp.TrangThai = obj.TrangThai;

@@ -20,46 +20,46 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var listChucVus = await _iChucVuServices.GetAllAsync();
-            return Ok(listChucVus);
+            var listObjectVM = await _iChucVuServices.GetAllAsync();
+            return Ok(listObjectVM);
         }
 
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listChucVus = await _iChucVuServices.GetAllActiveAsync();
-            return Ok(listChucVus);
+            var listObjectVM = await _iChucVuServices.GetAllActiveAsync();
+            return Ok(listObjectVM);
         }
 
         //GetById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var chucVu = await _iChucVuServices.GetByIdAsync(id);
-            return Ok(chucVu);
+            var objVM = await _iChucVuServices.GetByIdAsync(id);
+            return Ok(objVM);
         }
 
         //Controller đc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ChucVuCreateVM chucVu)
+        public async Task<IActionResult> CreateAsync([FromBody] ChucVuCreateVM obj)
         {
-            if (chucVu == null) return BadRequest();
-            var newChucVu = await _iChucVuServices.CreateAsync(chucVu);
-            return Ok(newChucVu);
+            if (obj == null) return BadRequest();
+            var newObjCreateVM = await _iChucVuServices.CreateAsync(obj);
+            return Ok(newObjCreateVM);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChucVuUpdateVM chucVu)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChucVuUpdateVM obj)
         {
-            var result = await _iChucVuServices.UpdateAsync(id, chucVu);
-            return Ok(result);
+            var objVM = await _iChucVuServices.UpdateAsync(id, obj);
+            return Ok(objVM);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var result = await _iChucVuServices.RemoveAsync(id);
-            return Ok(result);
+            var objRemoveVM = await _iChucVuServices.RemoveAsync(id);
+            return Ok(objRemoveVM);
         }
     }
 }

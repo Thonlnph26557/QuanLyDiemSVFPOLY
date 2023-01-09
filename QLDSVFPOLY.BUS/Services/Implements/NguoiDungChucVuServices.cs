@@ -29,7 +29,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             _listNguoiDungChucVus = await _iNguoiDungChucVuRepository.GetAllAsync();
         }
-        public async Task<bool> CreateAsync(NguoiDungChucVuCreateVM obj, Guid idNguoiDung, Guid idChucVu)
+        public async Task<bool> CreateAsync(NguoiDungChucVuCreateVM obj,Guid idNguoiDung, Guid idChucVu)
         {
             obj.IdNguoiDung = idNguoiDung;
             obj.IdChucVu = idChucVu;
@@ -43,8 +43,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _iNguoiDungChucVuRepository.CreateAsync(temp);
             await _iNguoiDungChucVuRepository.SaveChangesAsync();
 
-            var listNguoiDungChucVus = await _iNguoiDungChucVuRepository.GetAllAsync();
-            if (listNguoiDungChucVus.Any(c => temp.IdNguoiDung == c.IdNguoiDung && temp.IdChucVu == c.IdChucVu)) return true;
+            var listObjectVM = await _iNguoiDungChucVuRepository.GetAllAsync();
+            if (listObjectVM.Any(c => temp.IdNguoiDung == c.IdNguoiDung && temp.IdChucVu == c.IdChucVu)) return true;
             return false;
         }
 
@@ -82,11 +82,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> DeleteAsync(Guid idNguoiDung, Guid idChucVu)
         {
-            var _listNguoiDungChucVus = await _iNguoiDungChucVuRepository.GetAllAsync();
+            var listObjectVM = await _iNguoiDungChucVuRepository.GetAllAsync();
 
-            if (!_listNguoiDungChucVus.Any(c => c.IdNguoiDung == idNguoiDung && c.IdChucVu == idChucVu)) return false;
+            if (!listObjectVM.Any(c => c.IdNguoiDung == idNguoiDung && c.IdChucVu == idChucVu)) return false;
 
-            var temp = _listNguoiDungChucVus.FirstOrDefault(temp => temp.IdNguoiDung == idNguoiDung && temp.IdChucVu == idChucVu);
+            var temp = listObjectVM.FirstOrDefault(temp => temp.IdNguoiDung == idNguoiDung && temp.IdChucVu == idChucVu);
 
             temp.TrangThai = 0;
             await _iNguoiDungChucVuRepository.UpdateAsync(temp);
@@ -94,14 +94,14 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             return true;
         }
 
-        public async Task<bool> UpdateAsync(Guid idNguoiDung, Guid idChucVu)
+        public async Task<bool> UpdateAsync(Guid idNguoiDung, Guid idChucVu, NguoiDungChucVuUpdateVM obj)
         {
-            var _listNguoiDungChucVus = await _iNguoiDungChucVuRepository.GetAllAsync();
+            var listObjectVM = await _iNguoiDungChucVuRepository.GetAllAsync();
 
-            if (!_listNguoiDungChucVus.Any(c => c.IdNguoiDung == idNguoiDung && c.IdChucVu == idChucVu)) return false;
+            if (!listObjectVM.Any(c => c.IdNguoiDung == idNguoiDung && c.IdChucVu == idChucVu)) return false;
 
-            var temp = _listNguoiDungChucVus.FirstOrDefault(temp => temp.IdNguoiDung == idNguoiDung && temp.IdChucVu == idChucVu);
-            temp.TrangThai = 0;
+            var temp = listObjectVM.FirstOrDefault(temp => temp.IdNguoiDung == idNguoiDung && temp.IdChucVu == idChucVu);
+            temp.TrangThai = obj.TrangThai;
             await _iNguoiDungChucVuRepository.UpdateAsync(temp);
             await _iNguoiDungChucVuRepository.SaveChangesAsync();
             return true;

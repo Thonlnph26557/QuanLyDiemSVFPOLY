@@ -55,8 +55,8 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             await _iSinhVienRepository.CreateAsync(temp);
             await _iSinhVienRepository.SaveChangesAsync();
 
-            var listSinhViens = await _iSinhVienRepository.GetAllAsync();
-            if (listSinhViens.Any(c => c.Id == temp.Id)) return true;
+            var listObjectVM = await _iSinhVienRepository.GetAllAsync();
+            if (listObjectVM.Any(c => c.Id == temp.Id)) return true;
             return false;
         }
 
@@ -95,11 +95,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> RemoveAsync(Guid id)
         {
-            var _listSinhViens = await _iSinhVienRepository.GetAllAsync();
+            var listObjectVM = await _iSinhVienRepository.GetAllAsync();
 
-            if (!_listSinhViens.Any(c => c.Id == id)) return false;
+            if (!listObjectVM.Any(c => c.Id == id)) return false;
 
-            var temp = _listSinhViens.FirstOrDefault(temp => temp.Id == id);
+            var temp = listObjectVM.FirstOrDefault(temp => temp.Id == id);
            
             temp.TrangThai = 0;
            
@@ -110,11 +110,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
         {
-            var _listSinhViens = await _iSinhVienRepository.GetAllAsync();
+            var listObjectVM = await _iSinhVienRepository.GetAllAsync();
 
-            if (!_listSinhViens.Any(c => c.Id == id)) return false;
+            if (!listObjectVM.Any(c => c.Id == id)) return false;
 
-            var temp = _listSinhViens.FirstOrDefault(temp => temp.Id == id);
+            var temp = listObjectVM.FirstOrDefault(temp => temp.Id == id);
             temp.Ma = obj.Ma;
             temp.Ho = obj.Ho;
             temp.TenDem = obj.TenDem;
