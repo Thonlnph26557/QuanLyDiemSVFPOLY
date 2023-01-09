@@ -13,7 +13,7 @@ namespace QLDSVFPOLY.API.Controllers
         private readonly IChucVuServices _iChucVuServices;
 
         //
-        public ChucVusController(ChucVuServices ChucVuServices)
+        public ChucVusController(IChucVuServices ChucVuServices)
         {
             _iChucVuServices = ChucVuServices ?? throw new ArgumentNullException(nameof(ChucVuServices)); ;
         }

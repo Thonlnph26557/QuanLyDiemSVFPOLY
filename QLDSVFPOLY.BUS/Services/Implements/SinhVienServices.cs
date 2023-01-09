@@ -80,36 +80,31 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<SinhVienVM> GetByIdAsync(Guid id)
         {
-            await GetListSinhVienAsync();
-            SinhVien temp = _listSinhViens.FirstOrDefault(c => c.Id == id);
-
-            SinhVienVM objVM = new SinhVienVM()
+            try
             {
-                Id = temp.Id,
-                Ma = temp.Ma,
-                Ho = temp.Ho,
-                TenDem = temp.TenDem,
-                Ten = temp.Ten,
-                GioiTinh = temp.GioiTinh,
-                NgaySinh = temp.NgaySinh,
-                DiaChi = temp.DiaChi,
-                SoDienThoai = temp.SoDienThoai,
-                Email = temp.Email,
-                DuongDanAnh = temp.DuongDanAnh,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-                IdChuyenNganh = temp.IdChuyenNganh,
-            };
-            return objVM;
+                await GetListSinhVienAsync();
+                var obj = _listSinhViens.FirstOrDefault(c => c.Id == id);
+                var objVM = _mapper.Map<SinhVienVM>(obj);
+                return objVM;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> RemoveAsync(Guid id)
         {
             var _listSinhViens = await _iSinhVienRepository.GetAllAsync();
-            if(!_listSinhViens.Any(c => c.Id == id)) return false;
-            await _iSinhVienRepository.RemoveAsync(id);
-            await _iSinhVienRepository.SaveChangesAsync();
 
+            if (!_listSinhViens.Any(c => c.Id == id)) return false;
+
+            var temp = _listSinhViens.FirstOrDefault(temp => temp.Id == id);
+           
+            temp.TrangThai = 0;
+           
+            await _iSinhVienRepository.UpdateAsync(temp);
+            await _iSinhVienRepository.SaveChangesAsync();
             return true;
         }
 

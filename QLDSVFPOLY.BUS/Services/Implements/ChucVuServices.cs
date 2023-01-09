@@ -66,26 +66,30 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
         public async Task<ChucVuVM> GetByIdAsync(Guid id)
         {
-            await GetListChucVuAsync();
-            ChucVu temp = _listChucVus.FirstOrDefault(c => c.Id == id);
-
-            ChucVuVM objVM = new ChucVuVM()
+            try
             {
-                Id = temp.Id,
-                Ten = temp.Ten,
-                NgayTao = temp.NgayTao,
-                TrangThai = temp.TrangThai,
-            };
-            return objVM;
+                await GetListChucVuAsync();
+                var obj = _listChucVus.FirstOrDefault(c => c.Id == id);
+                var objVM = _mapper.Map<ChucVuVM>(obj);
+                return objVM;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> RemoveAsync(Guid id)
         {
             var _listChucVus = await _iChucVuRepository.GetAllAsync();
-            if (!_listChucVus.Any(c => c.Id == id)) return false;
-            await _iChucVuRepository.RemoveAsync(id);
-            await _iChucVuRepository.SaveChangesAsync();
 
+            if (!_listChucVus.Any(c => c.Id == id)) return false;
+
+            var temp = _listChucVus.FirstOrDefault(temp => temp.Id == id);
+            temp.TrangThai = 0;
+
+            await _iChucVuRepository.UpdateAsync(temp);
+            await _iChucVuRepository.SaveChangesAsync();
             return true;
         }
 
