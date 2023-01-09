@@ -24,7 +24,7 @@ namespace QLDSVFPOLY.API.Controllers
             return Ok(listObjectVM);
         }
 
-        //lấy ra danh sách giảng viên còn hoạt động kết hợp tìm kiếm
+        //lấy ra danh sách CNMH còn hoạt động kết hợp tìm kiếm
         [HttpGet("GetAllActiveAsync")]
         public async Task<IActionResult> GetAllActiveAsync()
         {
@@ -43,17 +43,17 @@ namespace QLDSVFPOLY.API.Controllers
 
         //Controller dc gọi khi thêm obj
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ChuyenNganhMonHocCreateVM obj, Guid idChuyenNganh, Guid idMonHoc)
+        public async Task<IActionResult> CreateAsync([FromBody] ChuyenNganhMonHocCreateVM obj)
         {
             if (obj == null) return BadRequest();
 
-            var newObjCreateVM = await _iChuyenNganhMonHocServices.CreateAsync(obj, idChuyenNganh, idMonHoc);
+            var newObjCreateVM = await _iChuyenNganhMonHocServices.CreateAsync(obj);
 
             return Ok(newObjCreateVM);
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        
         public async Task<IActionResult> RemoveAsync([FromQuery] Guid idChuyenNganh, [FromQuery] Guid idMonHoc)
         {
             var objRemoveVM = await _iChuyenNganhMonHocServices.RemoveAsync(idChuyenNganh, idMonHoc);
