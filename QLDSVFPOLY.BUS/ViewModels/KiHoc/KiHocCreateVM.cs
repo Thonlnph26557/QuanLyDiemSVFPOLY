@@ -11,10 +11,8 @@ namespace QLDSVFPOLY.BUS.ViewModels.KiHoc
     //> public
     public class KiHocCreateVM
     {
-        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Tên kì học không được để trống")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$", ErrorMessage = "Không điền các kí tự đặc biệt")]
         [MaxLength(50, ErrorMessage = "Tên kì học tối đa 50 kí tự")]
         public string Ten { get; set; }
         

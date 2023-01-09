@@ -88,7 +88,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             try
             {
-                var obj = await _listKiHocs.AsQueryable().SingleOrDefaultAsync(c => c.Id == id);
+                await GetListKiHocAsync();
+
+                var obj = _listKiHocs.FirstOrDefault(c => c.Id == id);
                 var objVM = _mapper.Map<KiHocVM>(obj);
                 return objVM;
             }
@@ -104,7 +106,11 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             if (!_listKiHocs.Any(c => c.Id == id)) return false;
 
-            await _iKiHocRepository.RemoveAsync(id);
+            var temp = _listKiHocs.FirstOrDefault(temp => temp.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _iKiHocRepository.UpdateAsync(temp);
             await _iKiHocRepository.SaveChangesAsync();
 
             return true;

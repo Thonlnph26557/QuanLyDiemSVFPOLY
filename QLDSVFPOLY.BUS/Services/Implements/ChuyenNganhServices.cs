@@ -87,7 +87,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             try
             {
-                var obj = await _listChuyenNganh.AsQueryable().SingleOrDefaultAsync(c => c.Id == id);
+                var obj = _listChuyenNganh.FirstOrDefault(c => c.Id == id);
                 var objVM = _mapper.Map<ChuyenNganhVM>(obj);
                 return objVM;
             }
