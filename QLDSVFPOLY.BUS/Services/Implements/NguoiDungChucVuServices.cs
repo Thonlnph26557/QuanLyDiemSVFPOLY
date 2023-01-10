@@ -102,6 +102,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             var temp = listObjectVM.FirstOrDefault(temp => temp.IdNguoiDung == idNguoiDung && temp.IdChucVu == idChucVu);
             temp.TrangThai = obj.TrangThai;
+
             await _iNguoiDungChucVuRepository.UpdateAsync(temp);
             await _iNguoiDungChucVuRepository.SaveChangesAsync();
             return true;
