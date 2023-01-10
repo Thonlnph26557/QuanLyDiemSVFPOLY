@@ -10,7 +10,6 @@ namespace QLDSVFPOLY.DAL.Entities
     {
         public Guid Id { get; set; }
         public Guid IdDaoTao { get; set; }
-        public Guid IdLopHoc { get; set; }
         public Guid IdMonHoc { get; set; }
         public Guid IdGiangVien { get; set; }
         public Guid IdKiHoc { get; set; }

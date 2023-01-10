@@ -60,7 +60,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             {
                Id = Guid.NewGuid(),
                IdDaoTao = obj.IdDaoTao,
-               IdLopHoc = obj.IdLopHoc,
                IdMonHoc = obj.IdMonHoc,
                IdGiangVien = obj.IdGiangVien,
                IdKiHoc = obj.IdKiHoc,
@@ -86,7 +85,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             var temp = _listObj.FirstOrDefault(c => c.Id == id);
 
-            temp.IdLopHoc = obj.IdLopHoc;
             temp.IdMonHoc = obj.IdMonHoc;
             temp.IdGiangVien = obj.IdGiangVien;
             temp.IdKiHoc = obj.IdKiHoc;
