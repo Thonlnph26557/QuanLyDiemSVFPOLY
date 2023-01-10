@@ -19,44 +19,27 @@ namespace QLDSVFPOLY.DAL.Repositories.Implements
             _qLSVDbContext = new QLSVDbContext();
         }
 
-
-        public async Task<ChiTietDiemSo> DeleteAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
-        {
-            var tempobj = _qLSVDbContext.ChiTietDiemSos.FirstOrDefault(c => c.IdDiemSo == idDiemSo
-                                                                 && c.IdChiTietLopHoc == idLopHoc
-                                                                 && c.IdSinhVien == idSinhVien);
-            _qLSVDbContext.Remove(tempobj);
-            await _qLSVDbContext.SaveChangesAsync();
-            return tempobj;
-        }
-
-        public async Task<List<ChiTietDiemSo>> GetAllChiTietDiemSoAsync()
+        public async Task<List<ChiTietDiemSo>> GetAllAsync()
         {
             return await _qLSVDbContext.ChiTietDiemSos.ToListAsync();
         }
 
-        public async Task<ChiTietDiemSo> UpdateAsync(ChiTietDiemSo obj)
-        {
-            var tempobj = _qLSVDbContext.ChiTietDiemSos.Where(x => x.IdDiemSo == obj.IdDiemSo && x.IdSinhVien == obj.IdSinhVien && x.IdChiTietLopHoc == obj.IdChiTietLopHoc).FirstOrDefault();
-
-            _qLSVDbContext.Update(tempobj);
-            await _qLSVDbContext.SaveChangesAsync();
-            return tempobj;
-        }
-
         public async Task<ChiTietDiemSo> CreateAsync(ChiTietDiemSo obj)
         {
-            await _qLSVDbContext.AddAsync(obj);
-            await _qLSVDbContext.SaveChangesAsync();
-            return obj;
+            return (await _qLSVDbContext.ChiTietDiemSos.AddAsync(obj)).Entity;
         }
 
-        public async Task<ChiTietDiemSo> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
+        public async Task<ChiTietDiemSo> UpdateAsync(ChiTietDiemSo obj)
         {
-            var tempobj = await _qLSVDbContext.ChiTietDiemSos.FirstOrDefaultAsync(c => c.IdDiemSo == idDiemSo
-                                                                && c.IdChiTietLopHoc == idLopHoc
-                                                                && c.IdSinhVien == idSinhVien);
-            return tempobj;
+            return await (Task.FromResult(_qLSVDbContext.ChiTietDiemSos.Update(obj).Entity));
+        }
+
+        public async Task<ChiTietDiemSo> RemoveAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien)
+        {
+            var tempobj = _qLSVDbContext.ChiTietDiemSos.FirstOrDefault(c => c.IdDiemSo == idDiemSo
+                                                                 && c.IdChiTietLopHoc == idLopHoc
+                                                                 && c.IdSinhVien == idSinhVien);
+            return await (Task.FromResult(_qLSVDbContext.ChiTietDiemSos.Remove(tempobj).Entity));
         }
 
         public async Task SaveChangesAsync()

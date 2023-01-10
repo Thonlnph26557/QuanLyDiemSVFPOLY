@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc;
+using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc;
 
 namespace QLDSVFPOLY.API.Controllers
 {
@@ -9,11 +10,55 @@ namespace QLDSVFPOLY.API.Controllers
     [ApiController]
     public class ChiTietLopHocsController : ControllerBase
     {
-        private readonly IChiTietLopHocServices _iChiTietLopHocServices;
+        private readonly IChiTietLopHocServices _svChiTietLopHoc;
 
-        public ChiTietLopHocsController(IChiTietLopHocServices iChiTietLopHocServices)
+        public ChiTietLopHocsController(IChiTietLopHocServices svChiTietLopHoc)
         {
-            _iChiTietLopHocServices = iChiTietLopHocServices;
+            _svChiTietLopHoc = svChiTietLopHoc;
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllAsync(ChiTietLopHocSearchVM searchVM)
+        {
+            var listVM = await _svChiTietLopHoc.GetAllAsync(searchVM);
+            return Ok(listVM);
+        }
+
+        [HttpGet("allactive")]
+        public async Task<IActionResult> GetAllActiveAsync(ChiTietLopHocSearchVM searchVM)
+        {
+            var listVM = await _svChiTietLopHoc.GetAllActiveAsync(searchVM);
+            return Ok(listVM);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var vm = await _svChiTietLopHoc.GetByIdAsync(id);
+            return Ok(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] ChiTietLopHocCreateVM createVM)
+        {
+            if (createVM == null) return BadRequest();
+            var temp = await _svChiTietLopHoc.CreateAsync(createVM);
+            return Ok(temp);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] ChiTietLopHocUpdateVM updateVM)
+        {
+            if (updateVM == null) return BadRequest();
+            var temp = await _svChiTietLopHoc.UpdateAsync(id, updateVM);
+            return Ok(temp);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveAsync(Guid id)
+        {
+            var temp = await _svChiTietLopHoc.RemoveByUpdateAsync(id);
+            return Ok(temp);
         }
     }
 }
