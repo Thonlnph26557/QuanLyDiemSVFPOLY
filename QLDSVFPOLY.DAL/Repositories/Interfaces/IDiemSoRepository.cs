@@ -9,11 +9,10 @@ namespace QLDSVFPOLY.DAL.Repositories.Interfaces
 {
     public interface IDiemSoRepository
     {
+        Task<List<DiemSo>> GetAllAsync();
         Task<DiemSo> CreateAsync(DiemSo obj);
         Task<DiemSo> UpdateAsync(DiemSo obj);
-        Task<DiemSo> DeleteAsync(Guid id);
-        Task<List<DiemSo>> GetAllDiemSoAsync();
-        Task<DiemSo> GetById(Guid id);
+        Task<DiemSo> RemoveAsync(Guid id);
         Task SaveChangesAsync();
     }
 }

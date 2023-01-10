@@ -9,11 +9,10 @@ namespace QLDSVFPOLY.DAL.Repositories.Interfaces
 {
     public interface IChiTietDiemSoRepository
     {
+        Task<List<ChiTietDiemSo>> GetAllAsync();
         Task<ChiTietDiemSo> CreateAsync(ChiTietDiemSo obj);
         Task<ChiTietDiemSo> UpdateAsync(ChiTietDiemSo obj);
-        Task<ChiTietDiemSo> DeleteAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien);
-        Task<List<ChiTietDiemSo>> GetAllChiTietDiemSoAsync();
-        Task<ChiTietDiemSo> GetByIdAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien);
+        Task<ChiTietDiemSo> RemoveAsync(Guid idDiemSo, Guid idLopHoc, Guid idSinhVien);
         Task SaveChangesAsync();
     }
 }

@@ -1,5 +1,9 @@
-﻿using QLDSVFPOLY.BUS.Services.Interfaces;
+﻿using AutoMapper.QueryableExtensions;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using QLDSVFPOLY.BUS.Services.Interfaces;
 using QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc;
+using QLDSVFPOLY.BUS.ViewModels.DiemSo;
 using QLDSVFPOLY.DAL.Entities;
 using QLDSVFPOLY.DAL.Repositories.Implements;
 using QLDSVFPOLY.DAL.Repositories.Interfaces;
@@ -13,50 +17,113 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class ChiTietLopHocServices : IChiTietLopHocServices
     {
-        //
-        IChiTietLopHocRepository _iChiTietLopHocRepositories;
-        IGiangVienRepository _iGiangVienRepositories;
-        IKiHocRepository _iKiHocRepositories;
+        IMapper _mapper;
+        IChiTietLopHocRepository _repo;
+        List<ChiTietLopHoc> _listObj;
 
-        List<ChiTietLopHoc> _listChiTietLopHocs;
-
-
-        //
-        public ChiTietLopHocServices()
+        public ChiTietLopHocServices(IMapper mapper)
         {
-            _iChiTietLopHocRepositories = new ChiTietLopHocRepository();
-            _iGiangVienRepositories = new GiangVienRepository();
-            _iKiHocRepositories = new KiHocRepository();
+            _repo = new ChiTietLopHocRepository();
+            _mapper = mapper;
         }
 
-        public Task<bool> CreateAsync(ChiTietLopHocCreateVM obj)
+        private async Task GetListAsync()
         {
-            throw new NotImplementedException();
+            _listObj = await _repo.GetAllAsync();
         }
 
-        public Task<List<ChiTietLopHocVM>> GetAllActiveAsync(ChiTietLopHocSearchVM obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllAsync(ChiTietLopHocSearchVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            List<ChiTietLopHocVM> listVM = _listObj.AsQueryable().ProjectTo<ChiTietLopHocVM>(_mapper.ConfigurationProvider).ToList();
+            return listVM;
         }
 
-        public Task<List<ChiTietLopHocVM>> GetAllAsync(ChiTietLopHocSearchVM obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllActiveAsync(ChiTietLopHocSearchVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            List<ChiTietLopHocVM> listVM = _listObj.AsQueryable().ProjectTo<ChiTietLopHocVM>(_mapper.ConfigurationProvider).Where(c => c.TrangThai != 0).ToList();
+            return listVM;
         }
 
-        public Task<ChiTietLopHocVM> GetByIdAsync(Guid id)
+        public async Task<ChiTietLopHocVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            var obj = _listObj.FirstOrDefault(c => c.Id == id);
+            var objVM = _mapper.Map<ChiTietLopHocVM>(obj);
+            return objVM;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> CreateAsync(ChiTietLopHocCreateVM obj)
         {
-            throw new NotImplementedException();
+            var temp = new ChiTietLopHoc()
+            {
+               Id = Guid.NewGuid(),
+               IdDaoTao = obj.IdDaoTao,
+               IdLopHoc = obj.IdLopHoc,
+               IdMonHoc = obj.IdMonHoc,
+               IdGiangVien = obj.IdGiangVien,
+               IdKiHoc = obj.IdKiHoc,
+               Ten = obj.Ten,
+               SoLuongSinhVien = obj.SoLuongSinhVien,
+               NgayTao = DateTime.Now,
+               TrangThai = obj.TrangThai
+            };
+
+            await _repo.CreateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            await GetListAsync();
+            if (_listObj.Any(c => c.Id == temp.Id)) return true;
+            return false;
+
         }
 
-        public Task<bool> UpdateAsync(Guid id, ChiTietLopHocUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, ChiTietLopHocUpdateVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            var temp = _listObj.FirstOrDefault(c => c.Id == id);
+
+            temp.IdLopHoc = obj.IdLopHoc;
+            temp.IdMonHoc = obj.IdMonHoc;
+            temp.IdGiangVien = obj.IdGiangVien;
+            temp.IdKiHoc = obj.IdKiHoc;
+            temp.Ten = obj.Ten;
+            temp.SoLuongSinhVien = obj.SoLuongSinhVien;
+            temp.TrangThai = obj.TrangThai;
+
+            await _repo.UpdateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RemoveAsync(Guid id)
+        {
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            await _repo.RemoveAsync(id);
+            await _repo.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RemoveByUpdateAsync(Guid id)
+        {
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            var temp = _listObj.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _repo.UpdateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using QLDSVFPOLY.DAL.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QLDSVFPOLY.BUS.ViewModels.ChiTietLopHoc
 {
-    public class ChiTietLopHocVM
+    public class ChiTietLopHocSearchVM
     {
         public Guid Id { get; set; }
         public Guid IdDaoTao { get; set; }

@@ -10,48 +10,115 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using System.Net.WebSockets;
 
 namespace QLDSVFPOLY.BUS.Services.Implements
 {
     public class DiemSoServices : IDiemSoServices
     {
-        IDiemSoRepository _iDiemSoRepository;
-        List<DiemSo> _listDiemSo;
+        IMapper _mapper;
+        IDiemSoRepository _repo;
+        List<DiemSo> _listObj;
 
-
-        public DiemSoServices()
+        public DiemSoServices(IMapper mapper)
         {
-            _iDiemSoRepository = new DiemSoRepository();
+            _repo = new DiemSoRepository();
+            _mapper = mapper;
         }
 
-        public Task<bool> CreateAsync(DiemSoCreateVM obj)
+        private async Task GetListAsync()
         {
-            throw new NotImplementedException();
+            _listObj = await _repo.GetAllAsync();
         }
 
-        public Task<List<DiemSoVM>> GetAllActiveAsync(DiemSoSearchVM obj)
+        public async Task<List<DiemSoVM>> GetAllAsync(DiemSoSearchVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            List<DiemSoVM> listVM = _listObj.AsQueryable().ProjectTo<DiemSoVM>(_mapper.ConfigurationProvider).ToList();
+            return listVM;
         }
 
-        public Task<List<DiemSoVM>> GetAllAsync(DiemSoSearchVM obj)
+        public async Task<List<DiemSoVM>> GetAllActiveAsync(DiemSoSearchVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            List<DiemSoVM> listVM = _listObj.AsQueryable().ProjectTo<DiemSoVM>(_mapper.ConfigurationProvider).Where(c => c.TrangThai != 0).ToList();
+            return listVM;
         }
 
-        public Task<DiemSoVM> GetByIdAsync(Guid id)
+        public async Task<DiemSoVM> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            var obj = _listObj.FirstOrDefault(c => c.Id == id);
+            var objVM = _mapper.Map<DiemSoVM>(obj);
+            return objVM;
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<bool> CreateAsync(DiemSoCreateVM obj)
         {
-            throw new NotImplementedException();
+            var temp = new DiemSo()
+            {
+                Id = Guid.NewGuid(),
+                IdMonHoc = obj.IdMonHoc,
+                TrongSo = obj.TrongSo,
+                DiemToiThieu = obj.DiemToiThieu,
+                TenDauDiem = obj.TenDauDiem,
+                NgayTao = DateTime.Now,
+                TrangThai = obj.TrangThai,
+            };
+
+            await _repo.CreateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            await GetListAsync();
+            if (_listObj.Any(c => c.Id == temp.Id)) return true;
+            return false;
+
         }
 
-        public Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM obj)
+        public async Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM obj)
         {
-            throw new NotImplementedException();
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            var temp = _listObj.FirstOrDefault(c => c.Id == id);
+
+            temp.TrongSo = obj.TrongSo;
+            temp.DiemToiThieu = obj.DiemToiThieu;
+            temp.TenDauDiem = obj.TenDauDiem;
+            temp.TrangThai = obj.TrangThai;
+
+            await _repo.UpdateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RemoveAsync(Guid id)
+        {
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            await _repo.RemoveAsync(id);
+            await _repo.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RemoveByUpdateAsync(Guid id)
+        {
+            await GetListAsync();
+            if (!_listObj.Any(c => c.Id == id)) return false;
+
+            var temp = _listObj.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _repo.UpdateAsync(temp);
+            await _repo.SaveChangesAsync();
+
+            return true;
         }
     }
 }
