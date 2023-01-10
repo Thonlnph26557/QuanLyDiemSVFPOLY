@@ -72,7 +72,7 @@ namespace QLDSVFPOLY.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync(Guid id)
         {
-            var objRemoveVM = await _iMonHocRepository.RemoveAsync(id);
+            var objRemoveVM = await _iMonHocRepository.UpdateRemoveAsync(id);
             return Ok(objRemoveVM);
         }
 

@@ -14,6 +14,7 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
         Task<MonHocVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(MonHocCreateVM obj);
         Task<bool> UpdateAsync(Guid id, MonHocUpdateVM obj);
+        Task<bool> UpdateRemoveAsync(Guid id);
         Task<bool> RemoveAsync(Guid id);
     }
 }

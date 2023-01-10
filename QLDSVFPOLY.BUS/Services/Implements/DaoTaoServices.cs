@@ -92,9 +92,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             try
             {
-                var obj = await _listDaoTaos.AsQueryable().SingleOrDefaultAsync(c => c.Id == id);
-                var objModel = _mapper.Map<DaoTaoVM>(obj);
-                return objModel;
+                var obj = _listDaoTaos.FirstOrDefault(c => c.Id == id);
+                var objVM = _mapper.Map<DaoTaoVM>(obj);
+                return objVM;
             }
             catch
             {

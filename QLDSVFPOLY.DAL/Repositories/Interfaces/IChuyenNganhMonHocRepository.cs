@@ -11,7 +11,7 @@ namespace QLDSVFPOLY.DAL.Repositories.Interfaces
     {
         Task<ChuyenNganhMonHoc> CreateAsync(ChuyenNganhMonHoc obj);
         Task<ChuyenNganhMonHoc> UpdateAsync(ChuyenNganhMonHoc obj);
-        Task<ChuyenNganhMonHoc> DeleteAsync(Guid idChuyenNganh, Guid idMonHoc);
+        Task<ChuyenNganhMonHoc> RemoveAsync(Guid idChuyenNganh, Guid idMonHoc);
         Task<List<ChuyenNganhMonHoc>> GetAllAsync();
         Task<ChuyenNganhMonHoc> GetByIdAsync(Guid idChuyenNganh, Guid idMonHoc);
         Task SaveChangesAsync();

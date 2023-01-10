@@ -57,7 +57,9 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         {
             try
             {
-                var obj = await _listMonHocs.AsQueryable().SingleOrDefaultAsync(c => c.Id == id);
+                await GetListMonHocAsync();
+
+                var obj = _listMonHocs.FirstOrDefault(c => c.Id == id);
                 var objModel = _mapper.Map<MonHocVM>(obj);
                 return objModel;
             }
@@ -108,6 +110,23 @@ namespace QLDSVFPOLY.BUS.Services.Implements
 
             return true;
         }
+
+        public async Task<bool> UpdateRemoveAsync(Guid id)
+        {
+            var listMonHoc = await _iMonHocRepository.GetAllAsync();
+
+            if (!listMonHoc.Any(c => c.Id == id)) return false;
+
+            var temp = listMonHoc.FirstOrDefault(c => c.Id == id);
+
+            temp.TrangThai = 0;
+
+            await _iMonHocRepository.UpdateAsync(temp);
+            await _iMonHocRepository.SaveChangesAsync();
+
+            return true;
+        }
+
 
         public async Task<bool> RemoveAsync(Guid id)
         {

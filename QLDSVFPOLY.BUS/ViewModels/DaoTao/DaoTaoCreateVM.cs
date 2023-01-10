@@ -10,7 +10,6 @@ namespace QLDSVFPOLY.BUS.ViewModels.DaoTao
     //> public
     public class DaoTaoCreateVM
     {
-        public Guid Id { get; set; }
         public string Ma { get; set; }
         public string DiaChi { get; set; }
         public string SoDienThoai { get; set; }
