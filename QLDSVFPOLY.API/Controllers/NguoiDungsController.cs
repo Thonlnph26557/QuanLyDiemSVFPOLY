@@ -11,7 +11,6 @@ namespace QLDSVFPOLY.API.Controllers
     public class NguoiDungsController : ControllerBase
     {
         private readonly INguoiDungServices _iNguoiDungServices;
-
         public NguoiDungsController(INguoiDungServices NguoiDungServices)
         {
             _iNguoiDungServices = NguoiDungServices ?? throw new ArgumentNullException(nameof(NguoiDungServices)); ;

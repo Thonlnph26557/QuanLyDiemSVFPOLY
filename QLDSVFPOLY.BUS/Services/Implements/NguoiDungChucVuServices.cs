@@ -91,6 +91,7 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             temp.TrangThai = 0;
             await _iNguoiDungChucVuRepository.UpdateAsync(temp);
             await _iNguoiDungChucVuRepository.SaveChangesAsync();
+
             return true;
         }
 

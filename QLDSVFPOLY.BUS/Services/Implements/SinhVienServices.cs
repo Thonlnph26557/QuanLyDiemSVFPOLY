@@ -111,7 +111,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
         public async Task<bool> UpdateAsync(Guid id, SinhVienUpdateVM obj)
         {
             var listObjectVM = await _iSinhVienRepository.GetAllAsync();
-
             if (!listObjectVM.Any(c => c.Id == id)) return false;
 
             var temp = listObjectVM.FirstOrDefault(temp => temp.Id == id);

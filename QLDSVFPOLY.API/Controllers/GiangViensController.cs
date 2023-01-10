@@ -13,7 +13,6 @@ namespace QLDSVFPOLY.API.Controllers
     {
         private readonly IGiangVienServices _iGiangVienServices;
 
-        //
         public GiangViensController(IGiangVienServices GiangVienServices)
         {
             _iGiangVienServices = GiangVienServices ?? throw new ArgumentNullException(nameof(GiangVienServices)); ;

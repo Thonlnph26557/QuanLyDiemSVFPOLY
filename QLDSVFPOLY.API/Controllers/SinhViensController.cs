@@ -47,6 +47,7 @@ namespace QLDSVFPOLY.API.Controllers
         {
             if (obj == null) return BadRequest();
             var newObjCreateVM = await _iSinhVienServices.CreateAsync(obj);
+
             return Ok(newObjCreateVM);
         }
 

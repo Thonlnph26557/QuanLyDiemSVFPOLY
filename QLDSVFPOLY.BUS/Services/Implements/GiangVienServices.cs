@@ -56,7 +56,6 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             if (listObjectVM.Any(c => c.Id == temp.Id)) return true;
             return false;
         }
-
         public async Task<List<GiangVienVM>> GetAllActiveAsync()
         {
             await GetListGiangVienAsync();
