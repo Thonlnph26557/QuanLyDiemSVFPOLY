@@ -9,8 +9,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IDiemSoServices
     {
-        Task<List<DiemSoVM>> GetAllAsync(DiemSoSearchVM obj);
-        Task<List<DiemSoVM>> GetAllActiveAsync(DiemSoSearchVM obj);
+        Task<List<DiemSoVM>> GetAllAsync();
+        Task<List<DiemSoVM>> GetAllActiveAsync();
         Task<DiemSoVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(DiemSoCreateVM obj);
         Task<bool> UpdateAsync(Guid id, DiemSoUpdateVM obj);

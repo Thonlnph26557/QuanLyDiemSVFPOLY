@@ -9,8 +9,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
 {
     public interface IChiTietDiemSoServices
     {
-        Task<List<ChiTietDiemSoVM>> GetAllAsync(ChiTietDiemSoSearchVM obj);
-        Task<List<ChiTietDiemSoVM>> GetAllActiveAsync(ChiTietDiemSoSearchVM obj);
+        Task<List<ChiTietDiemSoVM>> GetAllAsync();
+        Task<List<ChiTietDiemSoVM>> GetAllActiveAsync();
         Task<ChiTietDiemSoVM> GetByIdAsync(Guid idCTLH, Guid idSinhVien, Guid idDiemSo);
         Task<bool> CreateAsync(ChiTietDiemSoCreateVM obj);
         Task<bool> UpdateAsync(Guid idCTLH, Guid idSinhVien, Guid idDiemSo, ChiTietDiemSoUpdateVM obj);
