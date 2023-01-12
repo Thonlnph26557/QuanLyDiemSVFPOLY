@@ -11,8 +11,8 @@ namespace QLDSVFPOLY.BUS.Services.Interfaces
     public interface IChiTietLopHocServices
     {
 
-        Task<List<ChiTietLopHocVM>> GetAllAsync(ChiTietLopHocSearchVM obj);
-        Task<List<ChiTietLopHocVM>> GetAllActiveAsync(ChiTietLopHocSearchVM obj);
+        Task<List<ChiTietLopHocVM>> GetAllAsync();
+        Task<List<ChiTietLopHocVM>> GetAllActiveAsync();
         Task<ChiTietLopHocVM> GetByIdAsync(Guid id);
         Task<bool> CreateAsync(ChiTietLopHocCreateVM obj);
         Task<bool> UpdateAsync(Guid id, ChiTietLopHocUpdateVM obj);

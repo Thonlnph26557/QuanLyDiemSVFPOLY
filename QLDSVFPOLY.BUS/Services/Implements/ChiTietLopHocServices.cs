@@ -32,14 +32,14 @@ namespace QLDSVFPOLY.BUS.Services.Implements
             _listObj = await _repo.GetAllAsync();
         }
 
-        public async Task<List<ChiTietLopHocVM>> GetAllAsync(ChiTietLopHocSearchVM obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllAsync()
         {
             await GetListAsync();
             List<ChiTietLopHocVM> listVM = _listObj.AsQueryable().ProjectTo<ChiTietLopHocVM>(_mapper.ConfigurationProvider).ToList();
             return listVM;
         }
 
-        public async Task<List<ChiTietLopHocVM>> GetAllActiveAsync(ChiTietLopHocSearchVM obj)
+        public async Task<List<ChiTietLopHocVM>> GetAllActiveAsync()
         {
             await GetListAsync();
             List<ChiTietLopHocVM> listVM = _listObj.AsQueryable().ProjectTo<ChiTietLopHocVM>(_mapper.ConfigurationProvider).Where(c => c.TrangThai != 0).ToList();

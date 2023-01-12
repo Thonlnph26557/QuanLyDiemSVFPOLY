@@ -17,17 +17,17 @@ namespace QLDSVFPOLY.API.Controllers
             _svChiTietLopHoc = svChiTietLopHoc;
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync(ChiTietLopHocSearchVM searchVM)
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var listVM = await _svChiTietLopHoc.GetAllAsync(searchVM);
+            var listVM = await _svChiTietLopHoc.GetAllAsync();
             return Ok(listVM);
         }
 
-        [HttpGet("allactive")]
-        public async Task<IActionResult> GetAllActiveAsync(ChiTietLopHocSearchVM searchVM)
+        [HttpGet("GetAllActiveAsync")]
+        public async Task<IActionResult> GetAllActiveAsync()
         {
-            var listVM = await _svChiTietLopHoc.GetAllActiveAsync(searchVM);
+            var listVM = await _svChiTietLopHoc.GetAllActiveAsync();
             return Ok(listVM);
         }
 
