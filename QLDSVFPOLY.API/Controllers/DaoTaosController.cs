@@ -37,9 +37,9 @@ namespace QLDSVFPOLY.API.Controllers
         }
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetByIdAsync(Guid IdDaoTao)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            var objVM = await _iDaoTaoServices.GetByIdAsync(IdDaoTao);
+            var objVM = await _iDaoTaoServices.GetByIdAsync(id);
             return Ok(objVM);
         }
 
